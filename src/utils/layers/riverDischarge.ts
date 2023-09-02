@@ -17,10 +17,22 @@ export function getRiverDischargeLayer() {
         } as any
     });
 
-    //Animation logic - basic as anything!
+    let lastTimestamp = 0;
     let offset = 0;
-    window.setInterval(() => {
-        offset++;
+    const stepDuration = 70; // 100ms
+
+    function animate(timestamp: number) {
+        if (!lastTimestamp) {
+            lastTimestamp = timestamp;
+        }
+
+        const elapsed = timestamp - lastTimestamp;
+
+        if (elapsed >= stepDuration) {
+            offset++;
+            lastTimestamp = timestamp;
+        }
+
         geojsonlayer.renderer = new SimpleRenderer({
             symbol: new CIMSymbol({
                 data: {
@@ -35,12 +47,12 @@ export function getRiverDischargeLayer() {
                                     {
                                         type: "CIMGeometricEffectDashes",
                                         offsetAlongLine: offset,
-                                        dashTemplate: [3, 2, 3, 2], // width of dashes and spacing between the dashes
+                                        dashTemplate: [3, 5, 3, 5], // width of dashes and spacing between the dashes
                                         lineDashEnding: "NoConstraint"
                                     }
                                 ],
                                 enable: true, // must be set to true in order for the symbol layer to be visible
-                                capStyle: "Butt",
+                                capStyle: "Round",
                                 joinStyle: "Round",
                                 width: 2,
                                 color: [115, 63, 46, 255]
@@ -49,7 +61,7 @@ export function getRiverDischargeLayer() {
                                 // lighter green line layer that surrounds the dashes
                                 type: "CIMSolidStroke",
                                 enable: true,
-                                capStyle: "Butt",
+                                capStyle: "Round",
                                 joinStyle: "Round",
                                 width: 3,
                                 color: [170, 93, 68, 255]
@@ -58,7 +70,7 @@ export function getRiverDischargeLayer() {
                                 // darker green outline around the line symbol
                                 type: "CIMSolidStroke",
                                 enable: true,
-                                capStyle: "Butt",
+                                capStyle: "Round",
                                 joinStyle: "Round",
                                 width: 6,
                                 color: [115, 63, 46, 255]
@@ -68,7 +80,12 @@ export function getRiverDischargeLayer() {
                 }
             })
         });
-    }, 100);
+
+        requestAnimationFrame(animate); // Call animate again on the next frame
+    }
+
+    // Start the animation
+    requestAnimationFrame(animate);
 
     return geojsonlayer;
 }
