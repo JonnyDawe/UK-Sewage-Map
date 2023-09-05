@@ -7,6 +7,7 @@ import esriMap from "@arcgis/core/Map";
 import * as symbolUtils from "@arcgis/core/symbols/support/symbolUtils";
 import esriMapView from "@arcgis/core/views/MapView";
 import Locate from "@arcgis/core/widgets/Locate.js";
+import Popup from "@arcgis/core/widgets/Popup.js";
 import Search from "@arcgis/core/widgets/Search";
 import LocatorSearchSource from "@arcgis/core/widgets/Search/LocatorSearchSource";
 import { SymbolAnimationManager } from "arcgis-animate-markers-plugin";
@@ -58,11 +59,12 @@ export async function initialiseMapview(
         highlightOptions: {
             fillOpacity: 0,
             haloOpacity: 1
-        }
+        },
+        popup: new Popup({
+            collapseEnabled: false,
+            highlightEnabled: false
+        })
     });
-
-    mapView.popup.collapseEnabled = false;
-    mapView.popup.highlightEnabled = false;
 
     initialiseMapViewWidgets(mapView);
 
