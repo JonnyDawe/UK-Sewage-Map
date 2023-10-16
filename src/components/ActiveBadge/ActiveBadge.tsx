@@ -1,15 +1,15 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { Badge } from "@radix-ui/themes";
 
 const PulseDot = styled.span`
     border-radius: 100%;
-    background-color: hsl(10, 90%, 50%);
+    background-color: var(--accent-a9);
     width: 4px;
     display: inline-block;
     height: 4px;
-    margin-bottom: 2px;
     vertical-align: middle;
     margin-right: 4px;
-    box-shadow: 0 0 0 0 hsl(10, 90%, 50%);
+    box-shadow: 0 0 0 0 var(--accent-a9);
     transform: scale(1);
 
     @media (prefers-reduced-motion: no-preference) {
@@ -36,19 +36,10 @@ const PulseDot = styled.span`
 
 function PulsatingBadge({ children }: React.PropsWithChildren) {
     return (
-        <div
-            css={`
-                border-radius: 99999px;
-                background-color: hsl(0, 100%, 97%);
-                padding: 0px 8px;
-                border: hsl(0, 100%, 90%) solid 1px;
-                color: hsl(10, 90%, 50%);
-                font-size: 0.7rem;
-            `}
-        >
+        <Badge color="red" radius="full">
             <PulseDot></PulseDot>
             {children}
-        </div>
+        </Badge>
     );
 }
 

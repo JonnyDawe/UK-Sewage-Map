@@ -1,8 +1,6 @@
-import "@esri/calcite-components/dist/components/calcite-slider";
-
 import WebTileLayer from "@arcgis/core/layers/WebTileLayer.js";
 import React from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import useSWR from "swr";
 
 import { Config, RAINVIEWERCOVERAGEURL, RainviewerItem } from "./config";
@@ -13,6 +11,7 @@ import {
     generateTileID,
     getRoundUpUnixTs
 } from "./Utils";
+import { Flex } from "@radix-ui/themes";
 
 // fetch task for Rainviewer
 async function fetchTimePaths(url: string) {
@@ -162,7 +161,7 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
     }, [smoothShowHideMapTask, currentTimePath]);
 
     return (
-        <Wrapper>
+        <Flex direction={"column"} gap={"5"}>
             {radarTimePaths && currentTimePath && (
                 <TimeSlider
                     timePathList={timePathList}
@@ -171,14 +170,8 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
                 ></TimeSlider>
             )}
             {generateColorLegend(colorScheme)}
-        </Wrapper>
+        </Flex>
     );
 };
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-`;
 
 export default RainRadar;

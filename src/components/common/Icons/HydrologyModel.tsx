@@ -3,14 +3,14 @@ export function HydrologyModelIcon() {
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M24.7556 1H7.48631C3.90402 1 1 3.90402 1 7.48631V24.7556C1 28.3379 3.90402 31.242 7.48631 31.242H24.7556C28.3379 31.242 31.242 28.3379 31.242 24.7556V7.48631C31.242 3.90402 28.3379 1 24.7556 1Z"
-                fill="#EAF6FF"
-                stroke="#0954A5"
+                fill="var(--blue-a4, #EAF6FF)"
+                stroke="var(--river-blue,#0954A5)"
                 strokeWidth="1.16315"
                 strokeLinejoin="round"
             />
             <path
                 d="M11.9373 5.64098C11.4687 11.2477 16.9909 13.7251 19.3763 13.6023C21.7617 13.4796 23.7443 15.1805 22.2571 17.186C20.77 19.1914 12.9086 15.4767 11.8267 24.3968"
-                stroke="#0954A5"
+                stroke="var(--river-blue,#0954A5)"
                 strokeWidth="1.16315"
                 strokeLinecap="round"
             />
@@ -22,40 +22,40 @@ export function HydrologyModelIcon() {
             />
             <path
                 d="M10.8625 15.801L14.4747 15.8156L12.6756 12.3247L10.8625 15.801Z"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="0.983243"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M12.6687 15.8083V17.0576"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="0.983243"
                 strokeLinecap="round"
             />
             <path
                 d="M6.75977 19.5968L10.3719 19.6114L8.57282 16.1205L6.75977 19.5968Z"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="0.983243"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M8.56592 19.604V20.8533"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="0.983243"
                 strokeLinecap="round"
             />
             <path
                 d="M5.8938 12.8277L9.50593 12.8423L7.70685 9.35141L5.8938 12.8277Z"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="0.983243"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
             <path
                 d="M7.69995 12.835V14.0843"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="0.983243"
                 strokeLinecap="round"
             />
@@ -77,13 +77,13 @@ export function HydrologyModelIcon() {
             />
             <path
                 d="M19.5947 7.99742L21.6144 5.89142L23.603 7.99742"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="1.04822"
                 strokeLinecap="round"
             />
             <path
                 d="M22.6086 6.94442L23.9137 5.66577L25.9955 8.09771"
-                stroke="#52A9FF"
+                stroke="var(--light-river-blue,#52A9FF)"
                 strokeWidth="1.04822"
                 strokeLinecap="round"
             />

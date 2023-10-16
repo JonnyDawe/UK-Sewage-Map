@@ -1,12 +1,12 @@
 import * as PrimitiveDialog from "@radix-ui/react-dialog";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 const Overlay = styled(PrimitiveDialog.Overlay)`
     background-color: var(--blackA9);
     position: fixed;
     inset: 0;
     @media (prefers-reduced-motion: no-preference) {
-        animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+        animation: overlayShow 500ms cubic-bezier(0.16, 1, 0.3, 1);
     }
     @keyframes overlayShow {
         from {
@@ -19,7 +19,7 @@ const Overlay = styled(PrimitiveDialog.Overlay)`
 `;
 
 const Content = styled(PrimitiveDialog.Content)`
-    background-color: white;
+    background-color: var(--color-panel-solid);
     border-radius: 6px;
     box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
     position: fixed;
@@ -47,17 +47,13 @@ const Content = styled(PrimitiveDialog.Content)`
             transform: translate(-50%, -50%) scale(1);
         }
     }
-
-    i {
-        color: var(--river-blue);
-    }
 `;
 
 const CloseCornerButton = styled(PrimitiveDialog.Close)`
     background-color: unset;
     border: unset;
-    height: 16px;
-    width: 16px;
+    height: 20px;
+    width: 20px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;

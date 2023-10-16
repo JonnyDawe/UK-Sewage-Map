@@ -287,5 +287,5 @@
 }
 
 .esri-popup__main-container {
-    width: var(--map-popup-width, 340px);
+    width: var(--map-popup-width, 440px);
 }

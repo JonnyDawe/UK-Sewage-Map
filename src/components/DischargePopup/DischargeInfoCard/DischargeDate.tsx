@@ -1,16 +1,28 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { AlertStatus, DischargeInterval } from "../types";
 import { getDischargeDateObject } from "../utils";
+import { Text } from "@radix-ui/themes";
+
+function getBGColorFromAlertStatus(alertStatus: AlertStatus): string {
+    switch (alertStatus) {
+        case "Discharging":
+            return "--red-a3";
+        case "Recent Discharge":
+            return "--orange-a3";
+        case "Not Discharging":
+            return "--green-a3";
+    }
+}
 
 function getColorFromAlertStatus(alertStatus: AlertStatus): string {
     switch (alertStatus) {
         case "Discharging":
-            return "--danger";
+            return "--red-a11";
         case "Recent Discharge":
-            return "--warning";
+            return "--orange-a11";
         case "Not Discharging":
-            return "--good";
+            return "--green-a11";
     }
 }
 
@@ -26,15 +38,6 @@ const Container = styled.div`
     align-items: center;
 `;
 
-const SmallText = styled.p`
-    font-size: 0.9rem;
-    line-height: 1;
-`;
-const LargeText = styled.p`
-    font-size: 1.6rem;
-    line-height: 1.1;
-`;
-
 type DischargeDateProps = {
     alertStatus: AlertStatus;
     dischargeInterval: DischargeInterval;
@@ -46,11 +49,12 @@ export function DischargeDate({ alertStatus, dischargeInterval }: DischargeDateP
             <Container
                 style={
                     {
-                        "--backgroundcardcolor": "var(--good)"
+                        "--backgroundcardcolor": `var(${getBGColorFromAlertStatus(alertStatus)})`,
+                        color: `var(${getColorFromAlertStatus(alertStatus)})`
                     } as React.CSSProperties
                 }
             >
-                <LargeText>N/A</LargeText>
+                <Text size={"8"}>N/A</Text>
             </Container>
         );
     }
@@ -59,20 +63,17 @@ export function DischargeDate({ alertStatus, dischargeInterval }: DischargeDateP
         <Container
             style={
                 {
-                    "--backgroundcardcolor": `var(${getColorFromAlertStatus(alertStatus)})`
+                    "--backgroundcardcolor": `var(${getBGColorFromAlertStatus(alertStatus)})`,
+                    color: `var(${getColorFromAlertStatus(alertStatus)})`
                 } as React.CSSProperties
             }
         >
             <>
-                <SmallText>
-                    {getDischargeDateObject(dischargeInterval.end ?? Date.now()).month}
-                </SmallText>
-                <LargeText>
+                <Text>{getDischargeDateObject(dischargeInterval.end ?? Date.now()).month}</Text>
+                <Text size={"6"}>
                     {getDischargeDateObject(dischargeInterval.end ?? Date.now()).day}
-                </LargeText>
-                <SmallText>
-                    {getDischargeDateObject(dischargeInterval.end ?? Date.now()).year}
-                </SmallText>
+                </Text>
+                <Text>{getDischargeDateObject(dischargeInterval.end ?? Date.now()).year}</Text>
             </>
         </Container>
     );

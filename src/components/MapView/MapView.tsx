@@ -1,6 +1,6 @@
 import React from "react";
-import styled from "styled-components";
-
+import styled from "@emotion/styled";
+import * as promiseUtils from "@arcgis/core/core/promiseUtils";
 import MapOverlay from "./MapOverlay";
 
 const MapContainer = styled.div`
@@ -11,9 +11,9 @@ const MapContainer = styled.div`
     height: 100%;
 `;
 
-async function loadMap(container: HTMLDivElement) {
-    const { initialiseMapview } = await import("./mapviewlogic");
-    return initialiseMapview(container);
+async function loadMap(container: HTMLDivElement, signal?: AbortSignal) {
+    const { initialiseMapview } = await import("../../utils/map/initialisemap");
+    return initialiseMapview(container, signal);
 }
 
 function MapView() {
@@ -22,16 +22,26 @@ function MapView() {
 
     React.useEffect(() => {
         let asyncCleanup: Promise<() => void>;
+        let abortController: AbortController = new AbortController();
 
         // runs after the first render
         if (mapRef.current) {
-            asyncCleanup = loadMap(mapRef.current).then(({ app, cleanup }) => {
-                setMapView(app.view ?? null);
-                return cleanup;
-            });
+            asyncCleanup = loadMap(mapRef.current, abortController.signal)
+                .then(({ app, cleanup }) => {
+                    setMapView(app.view ?? null);
+                    return cleanup;
+                })
+                .catch((error) => {
+                    if (!promiseUtils.isAbortError(error)) {
+                        throw error;
+                    } else {
+                        return () => {};
+                    }
+                });
         }
 
         return () => {
+            abortController.abort();
             asyncCleanup && asyncCleanup.then((cleanup) => cleanup());
         };
     }, [mapRef]);

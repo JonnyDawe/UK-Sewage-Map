@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { Flex, Grid, Text } from "@radix-ui/themes";
 
 import { rainColorCodes } from "./config";
 
@@ -58,12 +59,6 @@ export const getRoundUpUnixTs = (): number => {
     return roundDate / 1000;
 };
 
-const LegendWrapper = styled.div`
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 4px;
-`;
-
 const ColorGrid = styled.div`
     flex-grow: 1;
     display: grid;
@@ -80,21 +75,20 @@ const ColorGrid = styled.div`
 export const generateColorLegend = (code: string) => {
     const colorList = rainColorCodes[code];
 
-    const tableRender = (
-        <ColorGrid>
-            {colorList.map((c: string) => {
-                return (
-                    <div key={`${code}-${c}`} style={{ backgroundColor: c, gridRow: "1" }}></div>
-                );
-            })}
-        </ColorGrid>
-    );
-
     return (
-        <LegendWrapper>
-            <small>Light</small>
-            {tableRender}
-            <small>Heavy</small>
-        </LegendWrapper>
+        <Flex gap={"2"}>
+            <Text size={"1"}>Light</Text>
+            <Grid grow={"1"} columns={`${colorList.length ?? 0}`}>
+                {colorList.map((c: string) => {
+                    return (
+                        <div
+                            key={`${code}-${c}`}
+                            style={{ backgroundColor: c, gridRow: "1" }}
+                        ></div>
+                    );
+                })}
+            </Grid>
+            <Text size={"1"}>Heavy</Text>
+        </Flex>
     );
 };

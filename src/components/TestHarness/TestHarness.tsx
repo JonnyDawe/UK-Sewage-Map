@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import GlobalStyles from "../App/GlobalStyles";
 import { PopUpBody } from "../DischargePopup/PopUpContent/PopUpBody";

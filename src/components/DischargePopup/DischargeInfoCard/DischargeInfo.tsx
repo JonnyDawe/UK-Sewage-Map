@@ -1,8 +1,8 @@
 import * as Separator from "@radix-ui/react-separator";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { useUTCTime } from "../../../hooks/useUTCTime";
-import PulsatingBadge from "../../ActiveBadge";
+import PulsatingBadge from "../../ActiveBadge/ActiveBadge";
 import { AlertStatus, DischargeInterval } from "../types";
 import { formatShortDate, getFormattedTimeInterval } from "../utils";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import Footer from "../Footer/Footer";
 import InformationModal from "../Modal/InformationModal";

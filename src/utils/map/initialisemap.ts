@@ -12,10 +12,10 @@ import Search from "@arcgis/core/widgets/Search";
 import LocatorSearchSource from "@arcgis/core/widgets/Search/LocatorSearchSource";
 import { SymbolAnimationManager } from "arcgis-animate-markers-plugin";
 
-import { getDischargePointLayer } from "../../utils/layers/dischargeSources";
-import { getRiverDischargeLayer } from "../../utils/layers/riverDischarge";
-import { getThamesTidalLayer } from "../../utils/layers/thamesTidalPolygon";
-import { MarkerHoverPopAnimation } from "../../utils/MarkerHoverPopAnimation";
+import { getDischargePointLayer } from "../layers/dischargeSources";
+import { getRiverDischargeLayer } from "../layers/riverDischarge";
+import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
+import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
 
@@ -23,15 +23,20 @@ interface MapApp {
     view?: esriMapView;
     map?: esriMap;
 }
-const app: MapApp = {};
-let handler: IHandle;
 
 export async function initialiseMapview(
-    mapElement: HTMLDivElement
+    mapElement: HTMLDivElement,
+    signal?: AbortSignal
 ): Promise<{ cleanup: () => void; app: MapApp }> {
-    if (app.view) {
-        app.view.destroy();
-        delete app.view;
+    signal?.addEventListener("abort", () => {
+        cleanup();
+    });
+
+    const app: MapApp = {};
+
+    function cleanup() {
+        app.map?.destroy();
+        app.view?.destroy();
     }
 
     const dischargeSourceLayer = getDischargePointLayer();
@@ -175,9 +180,4 @@ function initialiseOverlayDiv(mapView: esriMapView) {
     OverlayWrapper.id = "__MapOverlay";
     OverlayWrapper.classList.add("mapoverlay");
     mapView.ui.add(OverlayWrapper, "manual");
-}
-
-function cleanup() {
-    handler?.remove();
-    app.view?.destroy();
 }

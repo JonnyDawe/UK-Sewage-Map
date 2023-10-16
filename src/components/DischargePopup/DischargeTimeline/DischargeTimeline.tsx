@@ -1,5 +1,5 @@
 import { Chart } from "react-google-charts";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import useSWR from "swr";
 
 import { DischargeHistoricalDataJSON } from "../types";
@@ -12,6 +12,35 @@ import {
     getFormattedTimeInterval,
     isDateWithinLast6Months
 } from "../utils";
+import { Text } from "@radix-ui/themes";
+
+const CustomChart = styled(Chart)`
+    svg {
+        // Background Color
+        g:nth-child(2) {
+            rect {
+                fill: var(--gray-a2);
+            }
+            path {
+                stroke: var(--gray-4);
+            }
+        }
+
+        // Text
+        g:nth-child(3) {
+            text {
+                fill: var(--gray-12);
+            }
+        }
+
+        // Fill
+        g:nth-child(5) {
+            rect {
+                fill: var(--brown-10);
+            }
+        }
+    }
+`;
 
 function processDataForLocation(jsonData: DischargeHistoricalDataJSON, locationName: string) {
     const dischargeData = getDischargeDataForLocation(jsonData, locationName);
@@ -62,9 +91,9 @@ function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
     return `<div
             style="  
             min-width:160px;
-            background-color: white;
+            background-color: var(--color-panel-solid);
+            color: var(--gray-12);
             padding: 5px;
-            box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);"
         >
             <h2 style="font-size:1.1rem; margin-bottom:4px">${startFormatted.day} ${
         startFormatted.month
@@ -118,10 +147,10 @@ function Timeline({ locationName }: { locationName: string }) {
 
     return (
         <TimeLineWrapper>
-            <p>
+            <Text size={"2"}>
                 Discharge events from the last <b>6 months</b>
-            </p>
-            <Chart
+            </Text>
+            <CustomChart
                 chartType="Timeline"
                 data={locationData.dischargeChartData}
                 width="100%"
@@ -141,7 +170,7 @@ function Timeline({ locationName }: { locationName: string }) {
                     tooltip: { html: true },
                     avoidOverlappingGridLines: false
                 }}
-            ></Chart>
+            ></CustomChart>
             <SubText>
                 Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
             </SubText>
