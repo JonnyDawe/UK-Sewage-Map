@@ -59,7 +59,7 @@ const InformationModal = () => {
                             </VisuallyHidden>
                         </Dialog.Description>
 
-                        <Box position={"relative"} p={"4"} style={{ overflow: "hidden" }}>
+                        <Box position={"relative"} p={"5"} style={{ overflow: "hidden" }}>
                             <BackgroundWave
                                 fill="var(--blue-4)"
                                 paused={prefersReducedMotion}
