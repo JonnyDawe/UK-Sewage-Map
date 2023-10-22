@@ -9,7 +9,6 @@ const Theme = styled(ThemePrimitive)`
     height: 100%;
     width: 100%;
     background-color: transparent;
-    display: contents;
 `;
 
 function GenericTheme({ children, className }: React.PropsWithChildren<{ className?: string }>) {

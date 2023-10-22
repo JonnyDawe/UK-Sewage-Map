@@ -100,8 +100,7 @@ export async function initialiseMapview(
     reactiveUtils.watch(
         () => mapView.popup?.selectedFeature,
         async (graphic) => {
-            if (graphic?.layer === dischargeSourceLayer) {
-                console.log(mapView.extent);
+            if (graphic?.layer === dischargeSourceLayer || graphic?.layer === null) {
                 mapView.popup.viewModel.location = mapView.popup.selectedFeature
                     .geometry as __esri.Point;
                 const selectedAnimatedGraphic = symbolAnimationManager.getAnimatedGraphic({
@@ -119,9 +118,10 @@ export async function initialiseMapview(
                         ? window.visualViewport.height * 0.25
                         : 0;
                 }
-                await mapView.goTo({ target: mapView.popup.selectedFeature, zoom: 12 });
                 graphic.symbol = await symbolUtils.getDisplayedSymbol(graphic);
                 MarkerPopEffectManager.activeGraphic = graphic;
+
+                mapView.goTo({ target: mapView.popup.selectedFeature, zoom: 12 });
             }
         }
     );

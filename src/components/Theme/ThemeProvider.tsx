@@ -12,7 +12,7 @@ function isColorMode(value: string): value is colorMode {
     return value === "light" || value === "dark";
 }
 
-const loadEsriStylesheet = (href: string) => {
+const createEsriStylesheet = (href: string) => {
     const linkElement = document.createElement("link");
     linkElement.type = "text/css";
     linkElement.rel = "stylesheet";
@@ -64,11 +64,11 @@ const AppThemeProvider = ({
         }
 
         if (colorMode === "light") {
-            loadEsriStylesheet(
+            createEsriStylesheet(
                 "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css"
             );
         } else {
-            loadEsriStylesheet(
+            createEsriStylesheet(
                 "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
             );
         }
@@ -86,15 +86,17 @@ const AppThemeProvider = ({
 
     const toggleColorMode = () => {
         const newTheme = colorMode === "light" ? "dark" : "light";
+        const existingLink = document.getElementById("themeStylesheet");
+        if (!existingLink) return;
+
         setColorMode(newTheme);
+
         if (newTheme === "light") {
-            loadEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css"
-            );
+            (existingLink as HTMLLinkElement).href =
+                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css";
         } else {
-            loadEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
-            );
+            (existingLink as HTMLLinkElement).href =
+                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css";
         }
     };
 
