@@ -26,6 +26,7 @@ interface MapApp {
 
 export async function initialiseMapview(
     mapElement: HTMLDivElement,
+    theme: "light" | "dark",
     signal?: AbortSignal
 ): Promise<{ cleanup: () => void; app: MapApp }> {
     signal?.addEventListener("abort", () => {
@@ -44,7 +45,10 @@ export async function initialiseMapview(
     const thamesTidalLayer = getThamesTidalLayer();
 
     const map = new esriMap({
-        basemap: new Basemap({ portalItem: { id: "608bfbf4ef80494f8d88d5a5b87be6b4" } }),
+        basemap:
+            theme === "light"
+                ? new Basemap({ portalItem: { id: "d9f8389625d54a139349c7ca2c9783db" } })
+                : new Basemap({ portalItem: { id: "a72079f8d71b411db805debac9a69421" } }),
         layers: [thamesTidalLayer, dischargeTraceLayer, dischargeSourceLayer]
     });
 

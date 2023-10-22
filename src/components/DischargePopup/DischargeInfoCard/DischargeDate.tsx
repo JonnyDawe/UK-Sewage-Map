@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 import { AlertStatus, DischargeInterval } from "../types";
 import { getDischargeDateObject } from "../utils";
-import { Text } from "@radix-ui/themes";
+import { Flex, Text } from "@radix-ui/themes";
 
 function getBGColorFromAlertStatus(alertStatus: AlertStatus): string {
     switch (alertStatus) {
@@ -26,16 +26,12 @@ function getColorFromAlertStatus(alertStatus: AlertStatus): string {
     }
 }
 
-const Container = styled.div`
+const Container = styled(Flex)`
     background-color: var(--backgroundcardcolor);
     border-radius: 8px;
     padding: 10px;
     width: 60px;
-    display: flex;
     text-align: center;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 `;
 
 type DischargeDateProps = {
@@ -47,6 +43,9 @@ export function DischargeDate({ alertStatus, dischargeInterval }: DischargeDateP
     if (dischargeInterval.start === null) {
         return (
             <Container
+                direction={"column"}
+                justify={"center"}
+                align={"center"}
                 style={
                     {
                         "--backgroundcardcolor": `var(${getBGColorFromAlertStatus(alertStatus)})`,
@@ -61,6 +60,9 @@ export function DischargeDate({ alertStatus, dischargeInterval }: DischargeDateP
 
     return (
         <Container
+            direction={"column"}
+            justify={"center"}
+            align={"center"}
             style={
                 {
                     "--backgroundcardcolor": `var(${getBGColorFromAlertStatus(alertStatus)})`,

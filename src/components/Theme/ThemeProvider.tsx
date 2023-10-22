@@ -63,13 +63,13 @@ const AppThemeProvider = ({
             document.body.classList.add(colorMode);
         }
 
-        if (colorMode === "dark") {
+        if (colorMode === "light") {
             loadEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
+                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css"
             );
         } else {
             loadEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css"
+                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
             );
         }
 
@@ -84,20 +84,19 @@ const AppThemeProvider = ({
         }
     }, [colorMode]);
 
-    const toggleColorMode = React.useCallback(() => {
-        setColorMode((currentTheme) => {
-            return currentTheme === "light" ? "dark" : "light";
-        });
-        if (colorMode === "dark") {
-            loadEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
-            );
-        } else {
+    const toggleColorMode = () => {
+        const newTheme = colorMode === "light" ? "dark" : "light";
+        setColorMode(newTheme);
+        if (newTheme === "light") {
             loadEsriStylesheet(
                 "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css"
             );
+        } else {
+            loadEsriStylesheet(
+                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
+            );
         }
-    }, []);
+    };
 
     return (
         <AppThemeContext.Provider

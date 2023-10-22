@@ -24,33 +24,41 @@ const Theme = styled(GenericTheme)`
     --river-blue: #0954a5;
     --light-river-blue: #52a9ff;
 
-    --blue-1: #f2f6fb;
-    --blue-2: #d4e2f2;
-    --blue-3: #b6cee9;
-    --blue-4: #97b9de;
-    --blue-5: #7aa5d4;
-    --blue-6: #5d91c9;
-    --blue-7: #417dbd;
-    --blue-8: #2568b1;
-    --blue-9: var(--river-blue);
-    --blue-10: #05468d;
-    --blue-11: #013873;
-    --blue-12: #002a58;
+    .light & {
+        --wave-brown: #997c74;
+        --wave-blue: #e6f5ff;
 
-    --blue-a1: #f2f6fb04;
-    --blue-a2: #d4e2f20b;
-    --blue-a3: #b6cee919;
-    --blue-a4: #97b9de2a;
-    --blue-a5: #7aa5d43d;
-    --blue-a6: #5d91c953;
-    --blue-a7: #417dbd71;
-    --blue-a8: #2568b1a1;
-    --blue-a9: #0954a5ff;
-    --blue-a10: #05468dfa;
-    --blue-a11: #013873f2;
-    --blue-a12: #002a58ee;
+        --blue-1: #f2f6fb;
+        --blue-2: #d4e2f2;
+        --blue-3: #b6cee9;
+        --blue-4: #97b9de;
+        --blue-5: #7aa5d4;
+        --blue-6: #5d91c9;
+        --blue-7: #417dbd;
+        --blue-8: #2568b1;
+        --blue-9: var(--river-blue);
+        --blue-10: #05468d;
+        --blue-11: #013873;
+        --blue-12: #002a58;
+
+        --blue-a1: #f2f6fb04;
+        --blue-a2: #d4e2f20b;
+        --blue-a3: #b6cee919;
+        --blue-a4: #97b9de2a;
+        --blue-a5: #7aa5d43d;
+        --blue-a6: #5d91c953;
+        --blue-a7: #417dbd71;
+        --blue-a8: #2568b1a1;
+        --blue-a9: #0954a5ff;
+        --blue-a10: #05468dfa;
+        --blue-a11: #013873f2;
+        --blue-a12: #002a58ee;
+    }
 
     .dark & {
+        --wave-brown: #765d57;
+        --wave-blue: #012d5c;
+
         --blue-1: #00162e;
         --blue-2: #001e3e;
         --blue-3: #00254d;

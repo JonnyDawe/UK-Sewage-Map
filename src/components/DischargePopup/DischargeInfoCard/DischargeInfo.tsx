@@ -1,23 +1,10 @@
-import * as Separator from "@radix-ui/react-separator";
 import styled from "@emotion/styled";
 
 import { useUTCTime } from "../../../hooks/useUTCTime";
 import PulsatingBadge from "../../ActiveBadge/ActiveBadge";
 import { AlertStatus, DischargeInterval } from "../types";
 import { formatShortDate, getFormattedTimeInterval } from "../utils";
-
-const TextContainer = styled.div`
-    display: flex;
-    flex-grow: 1;
-    padding-right: 16px;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-`;
-
-const DetailText = styled.p`
-    font-size: 0.9rem;
-`;
+import { Box, Text, Separator, Flex } from "@radix-ui/themes";
 
 function getDischargeDescriptionFromAlert(alertStatus: AlertStatus, dischargeStart: number | null) {
     switch (alertStatus) {
@@ -34,10 +21,14 @@ function getDischargeDescriptionFromAlert(alertStatus: AlertStatus, dischargeSta
 
 function DateText({ dateNumber, label }: { dateNumber: number; label: string }) {
     return (
-        <div style={{ lineHeight: "1.2" }}>
-            <DetailText>{label}</DetailText>
-            <p style={{ fontSize: "0.75rem" }}>{formatShortDate(dateNumber)}</p>
-        </div>
+        <Box>
+            <Text as="p" size={"2"}>
+                {label}
+            </Text>
+            <Text as="p" size={"1"}>
+                {formatShortDate(dateNumber)}
+            </Text>
+        </Box>
     );
 }
 
@@ -49,15 +40,13 @@ function DateRange({ dischargeInterval }: { dischargeInterval: DischargeInterval
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <DateText dateNumber={dischargeInterval.start} label={"Started:"}></DateText>
-            <Separator.Root
-                className="SeparatorRoot"
+
+            <Separator
                 decorative
                 orientation="vertical"
+                size={"2"}
                 style={{
-                    margin: "0px 4px",
-                    height: "32px",
-                    width: "0.5px",
-                    backgroundColor: dischargeInterval.end ? "black" : "unset"
+                    ...(dischargeInterval.end ? {} : { backgroundColor: "unset" })
                 }}
             />
             {dischargeInterval.end ? (
@@ -77,12 +66,14 @@ export function DischargeInfo({ alertStatus, dischargeInterval }: DischargeInfoT
     const [currentUTCTime] = useUTCTime();
 
     return (
-        <TextContainer>
-            <p>{getDischargeDescriptionFromAlert(alertStatus, dischargeInterval.start)}</p>
+        <Flex direction={"column"} justify={"center"} gap={"1"} grow={"1"} pr="2">
+            <Text as="p" size="3">
+                {getDischargeDescriptionFromAlert(alertStatus, dischargeInterval.start)}
+            </Text>
             {dischargeInterval.start != null && (
                 <>
                     <DateRange dischargeInterval={dischargeInterval}></DateRange>
-                    <DetailText>
+                    <Text as="p" size={"2"}>
                         Duration:{" "}
                         {dischargeInterval.end
                             ? getFormattedTimeInterval(
@@ -94,9 +85,9 @@ export function DischargeInfo({ alertStatus, dischargeInterval }: DischargeInfoT
                                   currentUTCTime,
                                   true
                               )}
-                    </DetailText>
+                    </Text>
                 </>
             )}
-        </TextContainer>
+        </Flex>
     );
 }

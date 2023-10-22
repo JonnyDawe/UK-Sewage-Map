@@ -69,9 +69,9 @@ export function PopUpBody({
 
     return (
         <BodyWrapper>
-            {/*{ alertStatus != "Not Discharging" && (
+            {alertStatus != "Not Discharging" && (
                 <BackgroundWave
-                    fill="var(--brown-a5)"
+                    fill="var(--wave-brown)"
                     paused={prefersReducedMotion}
                     options={{
                         height: 30,
@@ -80,10 +80,10 @@ export function PopUpBody({
                         points: 6
                     }}
                 />
-            )} */}
+            )}
 
             <BackgroundWave
-                fill="url(#gradient)"
+                fill="var(--wave-blue)"
                 paused={prefersReducedMotion}
                 options={{
                     height: 25,
@@ -91,19 +91,7 @@ export function PopUpBody({
                     speed: 0.175,
                     points: 5
                 }}
-            >
-                <defs>
-                    <linearGradient id="gradient" gradientTransform="rotate(90)">
-                        {alertStatus != "Not Discharging" && (
-                            <>
-                                <stop offset="1%" stopColor="var(--brown-a9)" />
-                                <stop offset="3%" stopColor="var(--brown-a5)" />
-                            </>
-                        )}
-                        <stop offset="8%" stopColor="var(--blue-a5)" />
-                    </linearGradient>
-                </defs>
-            </BackgroundWave>
+            />
             <ContentWrapper>
                 <Tabs.Root defaultValue="latest" aria-label="Choose which information to see:">
                     <Tabs.List>
