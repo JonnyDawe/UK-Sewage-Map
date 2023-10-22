@@ -1,6 +1,5 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-import GlobalStyles from "../App/GlobalStyles";
 import { PopUpBody } from "../DischargePopup/PopUpContent/PopUpBody";
 import InformationModal from "../Modal/InformationModal";
 
@@ -12,7 +11,6 @@ const PopupContainermock = styled.div`
 export function TestHarness() {
     return (
         <>
-            <GlobalStyles></GlobalStyles>
             <PopupContainermock>
                 <InformationModal></InformationModal>
 

@@ -1,38 +1,37 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { AlertStatus, DischargeInterval } from "../types";
 import { getDischargeDateObject } from "../utils";
+import { Flex, Text } from "@radix-ui/themes";
+
+function getBGColorFromAlertStatus(alertStatus: AlertStatus): string {
+    switch (alertStatus) {
+        case "Discharging":
+            return "--red-a3";
+        case "Recent Discharge":
+            return "--orange-a3";
+        case "Not Discharging":
+            return "--green-a3";
+    }
+}
 
 function getColorFromAlertStatus(alertStatus: AlertStatus): string {
     switch (alertStatus) {
         case "Discharging":
-            return "--danger";
+            return "--red-a11";
         case "Recent Discharge":
-            return "--warning";
+            return "--orange-a11";
         case "Not Discharging":
-            return "--good";
+            return "--green-a11";
     }
 }
 
-const Container = styled.div`
+const Container = styled(Flex)`
     background-color: var(--backgroundcardcolor);
     border-radius: 8px;
     padding: 10px;
     width: 60px;
-    display: flex;
     text-align: center;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-
-const SmallText = styled.p`
-    font-size: 0.9rem;
-    line-height: 1;
-`;
-const LargeText = styled.p`
-    font-size: 1.6rem;
-    line-height: 1.1;
 `;
 
 type DischargeDateProps = {
@@ -44,35 +43,39 @@ export function DischargeDate({ alertStatus, dischargeInterval }: DischargeDateP
     if (dischargeInterval.start === null) {
         return (
             <Container
+                direction={"column"}
+                justify={"center"}
+                align={"center"}
                 style={
                     {
-                        "--backgroundcardcolor": "var(--good)"
+                        "--backgroundcardcolor": `var(${getBGColorFromAlertStatus(alertStatus)})`,
+                        color: `var(${getColorFromAlertStatus(alertStatus)})`
                     } as React.CSSProperties
                 }
             >
-                <LargeText>N/A</LargeText>
+                <Text size={"8"}>N/A</Text>
             </Container>
         );
     }
 
     return (
         <Container
+            direction={"column"}
+            justify={"center"}
+            align={"center"}
             style={
                 {
-                    "--backgroundcardcolor": `var(${getColorFromAlertStatus(alertStatus)})`
+                    "--backgroundcardcolor": `var(${getBGColorFromAlertStatus(alertStatus)})`,
+                    color: `var(${getColorFromAlertStatus(alertStatus)})`
                 } as React.CSSProperties
             }
         >
             <>
-                <SmallText>
-                    {getDischargeDateObject(dischargeInterval.end ?? Date.now()).month}
-                </SmallText>
-                <LargeText>
+                <Text>{getDischargeDateObject(dischargeInterval.end ?? Date.now()).month}</Text>
+                <Text size={"6"}>
                     {getDischargeDateObject(dischargeInterval.end ?? Date.now()).day}
-                </LargeText>
-                <SmallText>
-                    {getDischargeDateObject(dischargeInterval.end ?? Date.now()).year}
-                </SmallText>
+                </Text>
+                <Text>{getDischargeDateObject(dischargeInterval.end ?? Date.now()).year}</Text>
             </>
         </Container>
     );

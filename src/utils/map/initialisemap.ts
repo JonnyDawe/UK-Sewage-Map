@@ -12,10 +12,10 @@ import Search from "@arcgis/core/widgets/Search";
 import LocatorSearchSource from "@arcgis/core/widgets/Search/LocatorSearchSource";
 import { SymbolAnimationManager } from "arcgis-animate-markers-plugin";
 
-import { getDischargePointLayer } from "../../utils/layers/dischargeSources";
-import { getRiverDischargeLayer } from "../../utils/layers/riverDischarge";
-import { getThamesTidalLayer } from "../../utils/layers/thamesTidalPolygon";
-import { MarkerHoverPopAnimation } from "../../utils/MarkerHoverPopAnimation";
+import { getDischargePointLayer } from "../layers/dischargeSources";
+import { getRiverDischargeLayer } from "../layers/riverDischarge";
+import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
+import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
 
@@ -23,15 +23,21 @@ interface MapApp {
     view?: esriMapView;
     map?: esriMap;
 }
-const app: MapApp = {};
-let handler: IHandle;
 
 export async function initialiseMapview(
-    mapElement: HTMLDivElement
+    mapElement: HTMLDivElement,
+    theme: "light" | "dark",
+    signal?: AbortSignal
 ): Promise<{ cleanup: () => void; app: MapApp }> {
-    if (app.view) {
-        app.view.destroy();
-        delete app.view;
+    signal?.addEventListener("abort", () => {
+        cleanup();
+    });
+
+    const app: MapApp = {};
+
+    function cleanup() {
+        app.map?.destroy();
+        app.view?.destroy();
     }
 
     const dischargeSourceLayer = getDischargePointLayer();
@@ -39,7 +45,10 @@ export async function initialiseMapview(
     const thamesTidalLayer = getThamesTidalLayer();
 
     const map = new esriMap({
-        basemap: new Basemap({ portalItem: { id: "608bfbf4ef80494f8d88d5a5b87be6b4" } }),
+        basemap:
+            theme === "light"
+                ? new Basemap({ portalItem: { id: "d9f8389625d54a139349c7ca2c9783db" } })
+                : new Basemap({ portalItem: { id: "a72079f8d71b411db805debac9a69421" } }),
         layers: [thamesTidalLayer, dischargeTraceLayer, dischargeSourceLayer]
     });
 
@@ -91,8 +100,7 @@ export async function initialiseMapview(
     reactiveUtils.watch(
         () => mapView.popup?.selectedFeature,
         async (graphic) => {
-            if (graphic?.layer === dischargeSourceLayer) {
-                console.log(mapView.extent);
+            if (graphic?.layer === dischargeSourceLayer || graphic?.layer === null) {
                 mapView.popup.viewModel.location = mapView.popup.selectedFeature
                     .geometry as __esri.Point;
                 const selectedAnimatedGraphic = symbolAnimationManager.getAnimatedGraphic({
@@ -110,9 +118,10 @@ export async function initialiseMapview(
                         ? window.visualViewport.height * 0.25
                         : 0;
                 }
-                await mapView.goTo({ target: mapView.popup.selectedFeature, zoom: 12 });
                 graphic.symbol = await symbolUtils.getDisplayedSymbol(graphic);
                 MarkerPopEffectManager.activeGraphic = graphic;
+
+                mapView.goTo({ target: mapView.popup.selectedFeature, zoom: 12 });
             }
         }
     );
@@ -175,9 +184,4 @@ function initialiseOverlayDiv(mapView: esriMapView) {
     OverlayWrapper.id = "__MapOverlay";
     OverlayWrapper.classList.add("mapoverlay");
     mapView.ui.add(OverlayWrapper, "manual");
-}
-
-function cleanup() {
-    handler?.remove();
-    app.view?.destroy();
 }

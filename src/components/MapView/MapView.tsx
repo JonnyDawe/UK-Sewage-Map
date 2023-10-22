@@ -1,7 +1,8 @@
 import React from "react";
-import styled from "styled-components";
-
+import styled from "@emotion/styled";
+import * as promiseUtils from "@arcgis/core/core/promiseUtils";
 import MapOverlay from "./MapOverlay";
+import { AppThemeContext } from "../Theme/ThemeProvider";
 
 const MapContainer = styled.div`
     position: absolute;
@@ -11,27 +12,44 @@ const MapContainer = styled.div`
     height: 100%;
 `;
 
-async function loadMap(container: HTMLDivElement) {
-    const { initialiseMapview } = await import("./mapviewlogic");
-    return initialiseMapview(container);
+async function loadMap(container: HTMLDivElement, theme: "dark" | "light", signal?: AbortSignal) {
+    const { initialiseMapview } = await import("../../utils/map/initialisemap");
+    return initialiseMapview(container, theme, signal);
 }
+
+// To do:
+// Refactor out a function that creates a map view - allow a slot for post initialisation logic
+// to be added.
+// create a provider which if it exists is given the reference to the mapview.
 
 function MapView() {
     const [mapView, setMapView] = React.useState<__esri.MapView | null>(null);
     const mapRef = React.useRef<HTMLDivElement>(null);
+    const { appearance } = React.useContext(AppThemeContext).theme;
+    const mode = appearance === "dark" ? "dark" : "light";
 
     React.useEffect(() => {
         let asyncCleanup: Promise<() => void>;
+        let abortController: AbortController = new AbortController();
 
         // runs after the first render
         if (mapRef.current) {
-            asyncCleanup = loadMap(mapRef.current).then(({ app, cleanup }) => {
-                setMapView(app.view ?? null);
-                return cleanup;
-            });
+            asyncCleanup = loadMap(mapRef.current, mode, abortController.signal)
+                .then(({ app, cleanup }) => {
+                    setMapView(app.view ?? null);
+                    return cleanup;
+                })
+                .catch((error) => {
+                    if (!promiseUtils.isAbortError(error)) {
+                        throw error;
+                    } else {
+                        return () => {};
+                    }
+                });
         }
 
         return () => {
+            abortController.abort();
             asyncCleanup && asyncCleanup.then((cleanup) => cleanup());
         };
     }, [mapRef]);

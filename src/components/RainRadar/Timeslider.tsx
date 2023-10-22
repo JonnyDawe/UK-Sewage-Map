@@ -1,10 +1,8 @@
-import "@esri/calcite-components/dist/components/calcite-slider";
-
-import { CalciteSlider } from "@esri/calcite-components-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import React from "react";
 
 import { RainviewerItem } from "./config";
+import { Box, Slider, Text } from "@radix-ui/themes";
 
 type TimeSliderProps = {
     currentTimePath: RainviewerItem;
@@ -33,24 +31,26 @@ export function TimeSlider({
 }: TimeSliderProps) {
     const uniqueId = React.useId();
     return (
-        <div>
-            <p>{renderTimePath(currentTimePath.time, false)}</p>
+        <Box>
+            <Text size={"3"}>{renderTimePath(currentTimePath.time, false)}</Text>
             <label htmlFor={uniqueId}>
                 <VisuallyHidden>Rain Radar Time Slider</VisuallyHidden>
             </label>
-            <CalciteSlider
+            <Slider
                 name={`radartimeslider-${uniqueId}`}
                 id={uniqueId}
                 min={0}
                 max={timePathList.length - 1}
-                value={timePathList.findIndex((item) => {
-                    return item.time === currentTimePath?.time;
-                })}
-                onCalciteSliderInput={(event) => {
-                    handleTimeSliderChange(event.target.value as number);
+                value={[
+                    timePathList.findIndex((item) => {
+                        return item.time === currentTimePath?.time;
+                    })
+                ]}
+                onValueChange={(value) => {
+                    handleTimeSliderChange(value?.[0] ?? 0);
                 }}
-                ticks={1}
-            ></CalciteSlider>
-        </div>
+                step={1}
+            ></Slider>
+        </Box>
     );
 }

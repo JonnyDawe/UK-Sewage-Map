@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { ERRORICON, GREENTICKICON, POOICON } from "../../../static/hostedImages";
 import { AlertStatus } from "../types";
+import { Box, Flex, Heading, Text } from "@radix-ui/themes";
+import { Em } from "../../common/Text";
 
 const Header = styled.div`
     display: flex;
@@ -15,13 +17,6 @@ const Header = styled.div`
 const Icon = styled.img`
     width: 30px;
     height: 30px;
-`;
-
-const Title = styled.p`
-    font-size: 1.2rem;
-    line-height: 1;
-    color: var(--font-1);
-    font-weight: 500;
 `;
 
 const SubTitle = styled.p`
@@ -48,14 +43,18 @@ type DischargePopupHeaderType = {
 
 export function PopUpHeader({ alertStatus, location, feeds }: DischargePopupHeaderType) {
     return (
-        <Header>
+        <Flex gap="2">
             <Icon src={getDischargeIcon(alertStatus)}></Icon>
             <div>
-                <Title>{location}</Title>
-                <SubTitle>
-                    Feeds into: <b>{feeds}</b>
-                </SubTitle>
+                <Heading size={"4"} as="h3" trim={"end"}>
+                    {location}
+                </Heading>
+                <Text size={"2"}>
+                    <Em>
+                        Feeds into: <b>{feeds}</b>
+                    </Em>
+                </Text>
             </div>
-        </Header>
+        </Flex>
     );
 }

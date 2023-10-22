@@ -1,7 +1,84 @@
-@import "@esri/calcite-components/dist/calcite/calcite.css";
-@import "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css";
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap");
 @import "./esri-overides.css";
+@import "./css-reset.css";
+
+:root {
+    --river-blue: #0954a5;
+
+    --blue-1: #f2f6fb;
+    --blue-2: #d4e2f2;
+    --blue-3: #b6cee9;
+    --blue-4: #97b9de;
+    --blue-5: #7aa5d4;
+    --blue-6: #5d91c9;
+    --blue-7: #417dbd;
+    --blue-8: #2568b1;
+    --blue-9: var(--river-blue);
+    --blue-10: #05468d;
+    --blue-11: #013873;
+    --blue-12: #002a58;
+
+    --blue-a1: #f2f6fb04;
+    --blue-a2: #d4e2f20b;
+    --blue-a3: #b6cee919;
+    --blue-a4: #97b9de2a;
+    --blue-a5: #7aa5d43d;
+    --blue-a6: #5d91c953;
+    --blue-a7: #417dbd71;
+    --blue-a8: #2568b1a1;
+    --blue-a9: var(--river-blue);
+    --blue-a10: #05468dfa;
+    --blue-a11: #013873f2;
+    --blue-a12: #002a58ee;
+
+    --dark-blue-1: #00162e;
+    --dark-blue-2: #001e3e;
+    --dark-blue-3: #00254d;
+    --dark-blue-4: #012d5c;
+    --dark-blue-5: #02356b;
+    --dark-blue-6: #043d7a;
+    --dark-blue-7: #054489;
+    --dark-blue-8: #074c97;
+    --dark-blue-9: var(--river-blue);
+    --dark-blue-10: #538ac5;
+    --dark-blue-11: #a2c0e2;
+    --dark-blue-12: #f2f6fb;
+
+    --dark-blue-a1: #00162e11;
+    --dark-blue-a2: #001e3e18;
+    --dark-blue-a3: #00254d3a;
+    --dark-blue-a4: #012d5c57;
+    --dark-blue-a5: #02356b6b;
+    --dark-blue-a6: #043d7a7f;
+    --dark-blue-a7: #05448998;
+    --dark-blue-a8: #074c97b9;
+    --dark-blue-a9: var(--river-blue);
+    --dark-blue-a10: #538ac5;
+    --dark-blue-a11: #a2c0e2;
+    --dark-blue-a12: #f2f6fb;
+
+    --blackA1: hsla(0, 0%, 0%, 0.012);
+    --blackA2: hsla(0, 0%, 0%, 0.027);
+    --blackA3: hsla(0, 0%, 0%, 0.047);
+    --blackA4: hsla(0, 0%, 0%, 0.071);
+    --blackA5: hsla(0, 0%, 0%, 0.09);
+    --blackA6: hsla(0, 0%, 0%, 0.114);
+    --blackA7: hsla(0, 0%, 0%, 0.141);
+    --blackA8: hsla(0, 0%, 0%, 0.22);
+    --blackA9: hsla(0, 0%, 0%, 0.439);
+    --blackA10: hsla(0, 0%, 0%, 0.478);
+    --blackA11: hsla(0, 0%, 0%, 0.565);
+    --blackA12: hsla(0, 0%, 0%, 0.91);
+
+    --font-1: rgb(28, 32, 36);
+    --dark-river-blue: #0a4481;
+    --light-river-blue: #52a9ff;
+    --faded-river-blue: #eaf6ff;
+    --border-grey: #e6e6e6;
+    --danger: #ffcccc;
+    --warning: #fff1ad;
+    --good: #bff3c3;
+}
 
 html,
 body,
@@ -17,6 +94,7 @@ body {
         "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 }
 
 .cursor-pointer {
@@ -40,6 +118,7 @@ body {
         padding-top: 0px;
         padding-bottom: 50px;
     }
+
     .searchWrapper .esri-menu {
         top: auto;
         bottom: 100%;

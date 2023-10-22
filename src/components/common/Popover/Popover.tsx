@@ -1,11 +1,11 @@
 import * as PrimitivePopover from "@radix-ui/react-popover";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 const Content = styled(PrimitivePopover.Content)`
     border-radius: 4px;
     padding: 20px;
     width: 260px;
-    background-color: white;
+    background-color: var(--color-panel-solid);
     box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -74,8 +74,8 @@ const Content = styled(PrimitivePopover.Content)`
 const CloseCornerButton = styled(PrimitivePopover.Close)`
     background-color: unset;
     border: unset;
-    height: 16px;
-    width: 16px;
+    height: 20px;
+    width: 20px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -86,7 +86,7 @@ const CloseCornerButton = styled(PrimitivePopover.Close)`
 `;
 
 const Arrow = styled(PrimitivePopover.Arrow)`
-    fill: white;
+    fill: var(--color-panel-solid);
 `;
 
 export default {

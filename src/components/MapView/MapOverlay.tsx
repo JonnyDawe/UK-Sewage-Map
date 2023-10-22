@@ -1,10 +1,11 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import Footer from "../Footer/Footer";
 import InformationModal from "../Modal/InformationModal";
 import RainRadarPopover from "../RainRadar/RainRadarPopover";
+import { DarkModeToggle } from "../DarkModeToggle/DarkModeToggle";
 
 const ModalLaunchButtonWrapper = styled.div`
     pointer-events: all;
@@ -18,6 +19,7 @@ const ModalLaunchButtonWrapper = styled.div`
 
 function MapOverlay({ view }: { view: __esri.MapView }) {
     if (!view) return;
+    console.log("rendered mapoverlay");
 
     return (
         <>
@@ -27,6 +29,7 @@ function MapOverlay({ view }: { view: __esri.MapView }) {
                     <ModalLaunchButtonWrapper>
                         <InformationModal></InformationModal>
                         <RainRadarPopover view={view}></RainRadarPopover>
+                        <DarkModeToggle view={view}></DarkModeToggle>
                     </ModalLaunchButtonWrapper>
                     <Footer></Footer>
                 </>,

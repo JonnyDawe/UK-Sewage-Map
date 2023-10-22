@@ -2,10 +2,12 @@ import React from "react";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 
-import GlobalStyles from "../App/GlobalStyles";
 import { PopUpBody } from "./PopUpContent/PopUpBody";
 import { PopUpHeader } from "./PopUpContent/PopUpHeader";
 import { getRenderPropsFromGraphic } from "./utils";
+import AppTheme from "../Theme/AppTheme";
+import { AppThemeProvider } from "../Theme/ThemeProvider";
+import "@radix-ui/themes/styles.css";
 
 export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }) {
     const container = document.createElement("div");
@@ -14,8 +16,19 @@ export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }
 
     root.render(
         <React.StrictMode>
-            <GlobalStyles></GlobalStyles>
-            <PopUpBody {...{ dischargeInterval, alertStatus, locationName: location }}></PopUpBody>
+            <AppThemeProvider
+                theme={{
+                    accentColor: "blue",
+                    grayColor: "gray",
+                    panelBackground: "solid"
+                }}
+            >
+                <AppTheme>
+                    <PopUpBody
+                        {...{ dischargeInterval, alertStatus, locationName: location }}
+                    ></PopUpBody>
+                </AppTheme>
+            </AppThemeProvider>
         </React.StrictMode>
     );
     return container;
@@ -28,7 +41,17 @@ export function setEsriPopupTitle({ graphic }: { graphic: __esri.Graphic }) {
     flushSync(() => {
         root.render(
             <React.StrictMode>
-                <PopUpHeader {...{ alertStatus, feeds, location }}></PopUpHeader>
+                <AppThemeProvider
+                    theme={{
+                        accentColor: "blue",
+                        grayColor: "gray",
+                        panelBackground: "solid"
+                    }}
+                >
+                    <AppTheme>
+                        <PopUpHeader {...{ alertStatus, feeds, location }}></PopUpHeader>
+                    </AppTheme>
+                </AppThemeProvider>
             </React.StrictMode>
         );
     });

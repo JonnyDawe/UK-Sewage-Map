@@ -1,16 +1,17 @@
 import Wave from "react-wavify";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { usePrefersReducedMotion } from "../../../hooks/usePrefersReducedMotion";
-import Tabs from "../../Tabs";
+import Tabs from "../../common/Tabs";
 import { DischargeDate } from "../DischargeInfoCard/DischargeDate";
 import { DischargeInfo } from "../DischargeInfoCard/DischargeInfo";
 import Timeline from "../DischargeTimeline";
 import { AlertStatus, DischargeInterval } from "../types";
+import { Box } from "@radix-ui/themes";
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled(Box)`
     width: 100%;
-    padding: 10px 4px 0px;
+    padding: 0px 4px;
     position: relative;
     overflow: hidden;
 `;
@@ -42,7 +43,8 @@ const DataCardWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: white;
+    background-color: var(--color-panel);
+
     position: relative;
     min-height: 50px;
 `;
@@ -69,7 +71,7 @@ export function PopUpBody({
         <BodyWrapper>
             {alertStatus != "Not Discharging" && (
                 <BackgroundWave
-                    fill="#997c74"
+                    fill="var(--wave-brown)"
                     paused={prefersReducedMotion}
                     options={{
                         height: 30,
@@ -81,7 +83,7 @@ export function PopUpBody({
             )}
 
             <BackgroundWave
-                fill="#E6F5FF"
+                fill="var(--wave-blue)"
                 paused={prefersReducedMotion}
                 options={{
                     height: 25,
@@ -96,25 +98,27 @@ export function PopUpBody({
                         <Tabs.Trigger value="latest">Latest</Tabs.Trigger>
                         <Tabs.Trigger value="history">History</Tabs.Trigger>
                     </Tabs.List>
-                    <Tabs.Content value="latest">
-                        <DataCardWrapper>
-                            <ActiveDischargeContent>
-                                <DischargeDate
-                                    alertStatus={alertStatus}
-                                    dischargeInterval={dischargeInterval}
-                                ></DischargeDate>
-                                <DischargeInfo
-                                    alertStatus={alertStatus}
-                                    dischargeInterval={dischargeInterval}
-                                ></DischargeInfo>
-                            </ActiveDischargeContent>
-                        </DataCardWrapper>
-                    </Tabs.Content>
-                    <Tabs.Content value="history">
-                        <DataCardWrapper>
-                            <Timeline locationName={locationName}></Timeline>
-                        </DataCardWrapper>
-                    </Tabs.Content>
+                    <Box pt={"3"}>
+                        <Tabs.Content value="latest">
+                            <DataCardWrapper>
+                                <ActiveDischargeContent>
+                                    <DischargeDate
+                                        alertStatus={alertStatus}
+                                        dischargeInterval={dischargeInterval}
+                                    ></DischargeDate>
+                                    <DischargeInfo
+                                        alertStatus={alertStatus}
+                                        dischargeInterval={dischargeInterval}
+                                    ></DischargeInfo>
+                                </ActiveDischargeContent>
+                            </DataCardWrapper>
+                        </Tabs.Content>
+                        <Tabs.Content value="history">
+                            <DataCardWrapper>
+                                <Timeline locationName={locationName}></Timeline>
+                            </DataCardWrapper>
+                        </Tabs.Content>
+                    </Box>
                 </Tabs.Root>
             </ContentWrapper>
         </BodyWrapper>

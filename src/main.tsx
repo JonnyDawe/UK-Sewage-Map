@@ -1,19 +1,23 @@
 import "./styles/index.css";
 
-import { setAssetPath } from "@esri/calcite-components/dist/components";
 import React from "react";
 import { createRoot } from "react-dom/client";
-
-import App, { GlobalStyles } from "./components/App";
-
-// Local assets path for Calcite Components
-setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
+import "@radix-ui/themes/styles.css";
+import App from "./components/App/App";
+import { AppThemeProvider } from "./components/Theme/ThemeProvider";
 
 const container = document.getElementById("root");
 const root = createRoot(container as HTMLDivElement);
 root.render(
     <React.StrictMode>
-        <GlobalStyles></GlobalStyles>
-        <App />
+        <AppThemeProvider
+            theme={{
+                accentColor: "blue",
+                grayColor: "gray",
+                panelBackground: "solid"
+            }}
+        >
+            <App />
+        </AppThemeProvider>
     </React.StrictMode>
 );

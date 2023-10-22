@@ -1,7 +1,12 @@
 import MapView from "../MapView";
+import AppTheme from "../Theme/AppTheme";
 
 function App() {
-    return <MapView></MapView>;
+    return (
+        <AppTheme>
+            <MapView></MapView>
+        </AppTheme>
+    );
 }
 
 export default App;
