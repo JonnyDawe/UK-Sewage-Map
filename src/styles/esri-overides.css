@@ -1,4 +1,9 @@
-﻿.esri-search {
+﻿/* WARNING Required to fix broken Esri Styling */
+.esri-features.esri-widget.esri-widget--panel {
+    overflow: hidden;
+}
+
+.esri-search {
     border-radius: var(--search-border-radius, 2px);
     border: var(--river-blue, blue) 1px solid;
     max-width: var(--search-input-max-width, 85vw);

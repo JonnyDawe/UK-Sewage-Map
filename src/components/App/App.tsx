@@ -1,4 +1,4 @@
-import MapView from "../MapView";
+import MapView from "../MapView/MapView";
 import AppTheme from "../Theme/AppTheme";
 
 function App() {

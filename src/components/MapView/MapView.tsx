@@ -57,7 +57,7 @@ function MapView() {
     return (
         <>
             <MapContainer ref={mapRef}>
-                {mapView && mapView.ready && <MapOverlay view={mapView}></MapOverlay>}
+                {mapView && <MapOverlay view={mapView}></MapOverlay>}
             </MapContainer>
         </>
     );

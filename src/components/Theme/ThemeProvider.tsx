@@ -6,27 +6,40 @@ interface ThemeContextProps {
     toggleColorMode: () => void;
 }
 
-type colorMode = "light" | "dark" | "inherit";
+type ColorMode = "light" | "dark";
 
-function isColorMode(value: string): value is colorMode {
+function isColorMode(value: string): value is ColorMode {
     return value === "light" || value === "dark";
 }
 
-const createEsriStylesheet = (href: string) => {
-    const linkElement = document.createElement("link");
-    linkElement.type = "text/css";
-    linkElement.rel = "stylesheet";
-    linkElement.href = href;
-    linkElement.id = "themeStylesheet";
+function updateDocumentBodyThemeClass(colorMode: ColorMode) {
+    if (document?.body) {
+        document.body.classList.remove("light", "dark");
+        document.body.classList.add(colorMode);
+    }
+}
 
-    const head = document.head || document.getElementsByTagName("head")[0];
-    const existingLink = document.getElementById("themeStylesheet");
+const updateDarkMode = (colorMode: ColorMode) => {
+    updateDocumentBodyThemeClass(colorMode);
 
-    if (existingLink) {
-        head.insertBefore(linkElement, existingLink);
-        head.removeChild(existingLink);
-    } else {
-        head.insertBefore(linkElement, head.firstChild);
+    // Get references to the dark and light theme links in the DOM
+    const dark = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-dark");
+    const light = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-light");
+
+    // Check if both dark and light theme links were found
+    if (dark && light) {
+        // Set the 'disabled' property of the links based on the colorMode
+        dark.disabled = colorMode === "light";
+        light.disabled = colorMode === "dark";
+    }
+
+    // Toggle Calcite mode if the element with class 'calcite-mode-dark' is found
+    const calciteMode = document.querySelector(
+        `.calcite-mode-${colorMode === "dark" ? "light" : "dark"}`
+    );
+    if (calciteMode) {
+        calciteMode.classList.remove("calcite-mode-dark", "calcite-mode-light");
+        calciteMode.classList.add(`calcite-mode-${colorMode}`);
     }
 };
 
@@ -40,11 +53,10 @@ const AppThemeProvider = ({
     children
 }: React.PropsWithChildren<{ theme: Partial<ThemeOptions> }>) => {
     const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const [colorMode, setColorMode] = React.useState<colorMode>(() => {
-        let colorMode: colorMode;
-
+    const [colorMode, setColorMode] = React.useState<ColorMode>(() => {
+        let colorMode: ColorMode;
         if (theme.appearance) {
-            colorMode = theme.appearance;
+            colorMode = theme.appearance === "light" ? "light" : "dark";
         } else {
             const localStorageValue = window.localStorage.getItem("color-mode");
             colorMode = localStorageValue
@@ -58,46 +70,18 @@ const AppThemeProvider = ({
                 : "light";
         }
 
-        if (document?.body) {
-            document.body.classList.remove("light", "dark", "inherit");
-            document.body.classList.add(colorMode);
-        }
-
-        if (colorMode === "light") {
-            createEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css"
-            );
-        } else {
-            createEsriStylesheet(
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css"
-            );
-        }
+        window.localStorage.setItem("color-mode", colorMode);
 
         return colorMode;
     });
 
     React.useEffect(() => {
         window.localStorage.setItem("color-mode", colorMode);
-        if (document?.body) {
-            document.body.classList.remove("light", "dark", "inherit");
-            document.body.classList.add(colorMode);
-        }
+        updateDarkMode(colorMode);
     }, [colorMode]);
 
     const toggleColorMode = () => {
-        const newTheme = colorMode === "light" ? "dark" : "light";
-        const existingLink = document.getElementById("themeStylesheet");
-        if (!existingLink) return;
-
-        setColorMode(newTheme);
-
-        if (newTheme === "light") {
-            (existingLink as HTMLLinkElement).href =
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/light/main.css";
-        } else {
-            (existingLink as HTMLLinkElement).href =
-                "https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css";
-        }
+        setColorMode((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
     };
 
     return (

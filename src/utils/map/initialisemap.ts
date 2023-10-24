@@ -47,8 +47,8 @@ export async function initialiseMapview(
     const map = new esriMap({
         basemap:
             theme === "light"
-                ? new Basemap({ portalItem: { id: "d9f8389625d54a139349c7ca2c9783db" } })
-                : new Basemap({ portalItem: { id: "a72079f8d71b411db805debac9a69421" } }),
+                ? new Basemap({ portalItem: { id: import.meta.env.VITE_ESRI_BASEMAP_ID_LIGHT } })
+                : new Basemap({ portalItem: { id: import.meta.env.VITE_ESRI_BASEMAP_ID_DARK } }),
         layers: [thamesTidalLayer, dischargeTraceLayer, dischargeSourceLayer]
     });
 
@@ -138,7 +138,8 @@ export async function initialiseMapview(
 
     app.map = map;
     app.view = mapView;
-    await mapView.when();
+
+    await reactiveUtils.whenOnce(() => mapView.ready);
     return { cleanup, app };
 }
 function initialiseMapViewWidgets(mapView: esriMapView) {
