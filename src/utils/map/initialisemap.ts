@@ -138,7 +138,8 @@ export async function initialiseMapview(
 
     app.map = map;
     app.view = mapView;
-    await mapView.when();
+
+    await reactiveUtils.whenOnce(() => mapView.ready);
     return { cleanup, app };
 }
 function initialiseMapViewWidgets(mapView: esriMapView) {

@@ -12,30 +12,36 @@ function isColorMode(value: string): value is ColorMode {
     return value === "light" || value === "dark";
 }
 
-function createEsriStylesheet(href: string) {
-    const linkElement = document.createElement("link");
-    linkElement.type = "text/css";
-    linkElement.rel = "stylesheet";
-    linkElement.href = href;
-    linkElement.id = "themeStylesheet";
-
-    const head = document.head || document.getElementsByTagName("head")[0];
-    const existingLink = document.getElementById("themeStylesheet");
-
-    if (existingLink) {
-        head.insertBefore(linkElement, existingLink);
-        head.removeChild(existingLink);
-    } else {
-        head.insertBefore(linkElement, head.firstChild);
-    }
-}
-
 function updateDocumentBodyThemeClass(colorMode: ColorMode) {
     if (document?.body) {
         document.body.classList.remove("light", "dark");
         document.body.classList.add(colorMode);
     }
 }
+
+const updateDarkMode = (colorMode: ColorMode) => {
+    updateDocumentBodyThemeClass(colorMode);
+
+    // Get references to the dark and light theme links in the DOM
+    const dark = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-dark");
+    const light = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-light");
+
+    // Check if both dark and light theme links were found
+    if (dark && light) {
+        // Set the 'disabled' property of the links based on the colorMode
+        dark.disabled = colorMode === "light";
+        light.disabled = colorMode === "dark";
+    }
+
+    // Toggle Calcite mode if the element with class 'calcite-mode-dark' is found
+    const calciteMode = document.querySelector(
+        `.calcite-mode-${colorMode === "dark" ? "light" : "dark"}`
+    );
+    if (calciteMode) {
+        calciteMode.classList.remove("calcite-mode-dark", "calcite-mode-light");
+        calciteMode.classList.add(`calcite-mode-${colorMode}`);
+    }
+};
 
 const AppThemeContext = React.createContext<ThemeContextProps>({
     theme: {},
@@ -64,26 +70,18 @@ const AppThemeProvider = ({
                 : "light";
         }
 
+        window.localStorage.setItem("color-mode", colorMode);
+
         return colorMode;
     });
 
     React.useEffect(() => {
         window.localStorage.setItem("color-mode", colorMode);
-        updateDocumentBodyThemeClass(colorMode);
-        createEsriStylesheet(
-            `https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/${colorMode}/main.css`
-        );
+        updateDarkMode(colorMode);
     }, [colorMode]);
 
     const toggleColorMode = () => {
-        const esriStyleSheet = document.getElementById("themeStylesheet");
-        if (!esriStyleSheet) return;
-
-        const newTheme = colorMode === "light" ? "dark" : "light";
-        setColorMode(newTheme);
-        (
-            esriStyleSheet as HTMLLinkElement
-        ).href = `https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/${newTheme}/main.css`;
+        setColorMode((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
     };
 
     return (
