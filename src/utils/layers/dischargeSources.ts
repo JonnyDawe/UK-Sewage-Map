@@ -75,6 +75,7 @@ export function getDischargePointLayer() {
     return new FeatureLayer({
         url: "https://services2.arcgis.com/g6o32ZDQ33GpCIu3/arcgis/rest/services/STEServiceProduction/FeatureServer",
         outFields: ["*"],
+        title: "Thames Water CSOs",
         renderer: dischargeRenderer,
         popupTemplate: template,
         effect: `drop-shadow(0.3px 0.5px 0.7px #a0a0925c) drop-shadow(0.4px 0.8px 1px #a0a0925c) drop-shadow( 1px 2px 2.5px #a0a0925c)`,
