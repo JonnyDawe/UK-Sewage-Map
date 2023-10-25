@@ -199,16 +199,27 @@ export function getDateSixMonthsAgo(currentDate: Date): Date {
 }
 
 /**
- * Checks if a given date is within the last six months from the current date.
+ * Checks if a given date is within the last n months from the current date.
  * @param date The date to check.
- * @returns true if the date is within the last six months, false otherwise.
+ * @param n The number of months
+ * @returns true if the date is within the last n months, false otherwise.
  */
-export function isDateWithinLast6Months(date: Date): boolean {
-    const currentDate = new Date();
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
+export function isDateWithinLastMonths(date: Date, n: number) {
+    const today = new Date();
+    const monthsAgo = new Date(today.getFullYear(), today.getMonth() - n, today.getDate());
+    return date >= monthsAgo && date <= today;
+}
 
-    return date >= sixMonthsAgo && date <= currentDate;
+/**
+ * Checks if a given date is within the year 2023.
+ *
+ * @param {Date} date - The date to check.
+ * @returns {boolean} Returns true if the date is within the year 2023, false otherwise.
+ */
+export function isDateWithin2023(date: Date) {
+    const startOf2023 = new Date(2023, 0, 1); // January is 0-based
+    const endOf2023 = new Date(2023, 11, 31);
+    return date >= startOf2023 && date <= endOf2023;
 }
 
 /**

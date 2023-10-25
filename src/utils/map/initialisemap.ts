@@ -159,6 +159,7 @@ function initialiseSearchWidget(mapView: esriMapView) {
     const searchWrapper = document.createElement("div");
     searchWrapper.classList.add("searchWrapper");
     const searchWidgetDiv = document.createElement("div");
+    searchWidgetDiv.classList.add("searchWidget");
     searchWrapper.appendChild(searchWidgetDiv);
     new Search({
         view: mapView,

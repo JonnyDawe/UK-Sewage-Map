@@ -102,6 +102,7 @@ body {
 }
 
 .searchWrapper {
+    pointer-events: none !important;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -109,6 +110,10 @@ body {
     bottom: unset;
     padding-top: 15px;
     padding-bottom: 0px;
+}
+
+.searchWidget {
+    pointer-events: auto;
 }
 
 @media (max-width: 640px) {

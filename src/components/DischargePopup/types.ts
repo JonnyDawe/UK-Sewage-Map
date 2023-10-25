@@ -25,3 +25,10 @@ export interface DischargeHistoricalData {
         end: Date;
     }[];
 }
+
+export enum DischargeHistoryPeriod {
+    Last12Months,
+    Last6Months,
+    Last3Months,
+    StartOf2023
+}

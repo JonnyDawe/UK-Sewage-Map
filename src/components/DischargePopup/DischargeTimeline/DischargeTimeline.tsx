@@ -2,7 +2,7 @@ import { Chart } from "react-google-charts";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 
-import { DischargeHistoricalDataJSON } from "../types";
+import { DischargeHistoricalDataJSON, DischargeHistoryPeriod } from "../types";
 import {
     calculateTotalDischargeLength,
     formatTime,
@@ -10,9 +10,12 @@ import {
     getDischargeDataForLocation,
     getDischargeDateObject,
     getFormattedTimeInterval,
-    isDateWithinLast6Months
+    isDateWithin2023,
+    isDateWithinLastMonths
 } from "../utils";
 import { Text } from "@radix-ui/themes";
+import { InLineSelect } from "../../common/Select/InlineSelect";
+import React from "react";
 
 const CustomChart = styled(Chart)`
     svg {
@@ -42,7 +45,11 @@ const CustomChart = styled(Chart)`
     }
 `;
 
-function processDataForLocation(jsonData: DischargeHistoricalDataJSON, locationName: string) {
+function processDataForLocation(
+    jsonData: DischargeHistoricalDataJSON,
+    locationName: string,
+    selectedPeriod: DischargeHistoryPeriod
+) {
     const dischargeData = getDischargeDataForLocation(jsonData, locationName);
     const columns = [
         { type: "string", id: "Location" },
@@ -52,12 +59,32 @@ function processDataForLocation(jsonData: DischargeHistoricalDataJSON, locationN
         { type: "date", id: "End" }
     ];
 
-    const dischargesInLast6Months: {
-        start: Date;
-        end: Date;
-    }[] = dischargeData.discharges.filter((discharge) => isDateWithinLast6Months(discharge.start));
+    const getFilteredDischarges = (period: DischargeHistoryPeriod) => {
+        switch (period) {
+            case DischargeHistoryPeriod.Last12Months:
+                return dischargeData.discharges.filter((discharge) =>
+                    isDateWithinLastMonths(discharge.start, 12)
+                );
+            case DischargeHistoryPeriod.Last6Months:
+                return dischargeData.discharges.filter((discharge) =>
+                    isDateWithinLastMonths(discharge.start, 6)
+                );
+            case DischargeHistoryPeriod.Last3Months:
+                return dischargeData.discharges.filter((discharge) =>
+                    isDateWithinLastMonths(discharge.start, 3)
+                );
+            case DischargeHistoryPeriod.StartOf2023:
+                return dischargeData.discharges.filter((discharge) =>
+                    isDateWithin2023(discharge.start)
+                );
+            default:
+                return [];
+        }
+    };
 
-    const rows = dischargesInLast6Months.map((discharge) => {
+    const dischargesForSelectedPeriod = getFilteredDischarges(selectedPeriod);
+
+    const rows = dischargesForSelectedPeriod.map((discharge) => {
         return [
             "Discharge Date",
             "",
@@ -69,7 +96,7 @@ function processDataForLocation(jsonData: DischargeHistoricalDataJSON, locationN
 
     return {
         dischargeChartData: [columns, ...rows],
-        totalDischarge: calculateTotalDischargeLength(dischargesInLast6Months)
+        totalDischarge: calculateTotalDischargeLength(dischargesForSelectedPeriod)
     };
 }
 
@@ -118,6 +145,10 @@ const TimeLineWrapper = styled.div`
     gap: 8px;
 `;
 function Timeline({ locationName }: { locationName: string }) {
+    const [selectedPeriod, setSelectedPeriod] = React.useState<DischargeHistoryPeriod>(
+        DischargeHistoryPeriod.Last6Months
+    );
+
     const {
         data: historicDataJSON,
         isLoading,
@@ -135,7 +166,7 @@ function Timeline({ locationName }: { locationName: string }) {
         return <p>Failed to load historic discharge data.</p>;
     }
 
-    const locationData = processDataForLocation(historicDataJSON, locationName);
+    const locationData = processDataForLocation(historicDataJSON, locationName, selectedPeriod);
 
     //no data rows
     if (locationData?.dischargeChartData?.length === 1) {
@@ -148,7 +179,19 @@ function Timeline({ locationName }: { locationName: string }) {
     return (
         <TimeLineWrapper>
             <Text size={"2"}>
-                Discharge events from the last <b>6 months</b>
+                Discharge events from the:{" "}
+                <InLineSelect
+                    options={[
+                        { value: DischargeHistoryPeriod.Last3Months, label: "Last 3 months" },
+                        { value: DischargeHistoryPeriod.Last6Months, label: "Last 6 months" },
+                        { value: DischargeHistoryPeriod.Last12Months, label: "Last 12 months" },
+                        { value: DischargeHistoryPeriod.StartOf2023, label: "Start of the year" }
+                    ]}
+                    value={selectedPeriod}
+                    onChange={(selectedPeriod) => {
+                        setSelectedPeriod(selectedPeriod as DischargeHistoryPeriod);
+                    }}
+                />
             </Text>
             <CustomChart
                 chartType="Timeline"
@@ -164,7 +207,7 @@ function Timeline({ locationName }: { locationName: string }) {
                         }
                     },
                     hAxis: {
-                        minValue: getDateSixMonthsAgo(new Date()),
+                        // minValue: getDateSixMonthsAgo(new Date()),
                         maxValue: Date.now()
                     },
                     tooltip: { html: true },

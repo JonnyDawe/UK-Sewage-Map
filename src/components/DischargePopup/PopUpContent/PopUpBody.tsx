@@ -5,7 +5,7 @@ import { usePrefersReducedMotion } from "../../../hooks/usePrefersReducedMotion"
 import Tabs from "../../common/Tabs";
 import { DischargeDate } from "../DischargeInfoCard/DischargeDate";
 import { DischargeInfo } from "../DischargeInfoCard/DischargeInfo";
-import Timeline from "../DischargeTimeline";
+import Timeline from "../DischargeTimeline/DischargeTimeline";
 import { AlertStatus, DischargeInterval } from "../types";
 import { Box } from "@radix-ui/themes";
 
