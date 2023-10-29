@@ -88,8 +88,8 @@ export async function initialiseMapview(
 
         const { features } = await dischargeSourceLayer.queryFeatures(query);
         if (features.length) {
-            mapView.goTo({ target: features[0], zoom: 12 });
             mapView.popup.open({ features });
+            mapView.goTo({ target: features[0], zoom: 12 });
         }
     }
 
@@ -133,12 +133,6 @@ export async function initialiseMapview(
                     );
                     (await graphicsLayerView).highlight(selectedAnimatedGraphic);
                 }
-
-                if (mapView.popup.currentDockPosition === "bottom-center") {
-                    mapView.padding.bottom = window.visualViewport?.height
-                        ? window.visualViewport.height * 0.25
-                        : 0;
-                }
                 graphic.symbol = await symbolUtils.getDisplayedSymbol(graphic);
                 MarkerPopEffectManager.activeGraphic = graphic;
 
@@ -159,6 +153,12 @@ export async function initialiseMapview(
 
     app.map = map;
     app.view = mapView;
+
+    if (mapView.width <= 544) {
+        mapView.padding.bottom = window.visualViewport?.height
+            ? window.visualViewport.height * 0.3
+            : 0;
+    }
 
     await reactiveUtils.whenOnce(() => mapView.ready);
     return { cleanup, app };
