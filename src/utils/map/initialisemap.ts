@@ -144,9 +144,10 @@ export async function initialiseMapview(
     // Ensure graphic made no longer active when popup closes
     reactiveUtils.watch(
         () => mapView.popup?.visible,
-        (visible) => {
-            if (!visible) {
+        (visible, wasVisible) => {
+            if (wasVisible && !visible && mapView.ready) {
                 MarkerPopEffectManager.activeGraphic = null;
+                router.navigate("/");
             }
         }
     );
