@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils";
 import MapOverlay from "./MapOverlay";
 import { AppThemeContext } from "../Theme/ThemeProvider";
+import { useParams } from "react-router-dom";
 
 const MapContainer = styled.div`
     position: absolute;
@@ -12,9 +13,14 @@ const MapContainer = styled.div`
     height: 100%;
 `;
 
-async function loadMap(container: HTMLDivElement, theme: "dark" | "light", signal?: AbortSignal) {
+async function loadMap(
+    container: HTMLDivElement,
+    theme: "dark" | "light",
+    csoId: string,
+    signal?: AbortSignal
+) {
     const { initialiseMapview } = await import("../../utils/map/initialisemap");
-    return initialiseMapview(container, theme, signal);
+    return initialiseMapview(container, theme, csoId, signal);
 }
 
 // To do:
@@ -28,13 +34,16 @@ function MapView() {
     const { appearance } = React.useContext(AppThemeContext).theme;
     const mode = appearance === "dark" ? "dark" : "light";
 
+    const { "*": route } = useParams();
+    const csoId = route?.split("/")[0] ?? "";
+
     React.useEffect(() => {
         let asyncCleanup: Promise<() => void>;
         let abortController: AbortController = new AbortController();
 
         // runs after the first render
         if (mapRef.current) {
-            asyncCleanup = loadMap(mapRef.current, mode, abortController.signal)
+            asyncCleanup = loadMap(mapRef.current, mode, csoId, abortController.signal)
                 .then(({ app, cleanup }) => {
                     setMapView(app.view ?? null);
                     return cleanup;

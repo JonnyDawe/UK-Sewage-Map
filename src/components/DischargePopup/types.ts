@@ -5,6 +5,11 @@ export type DischargeInterval = {
     end: number | null;
 };
 
+export type DischargeDateInterval = {
+    start: Date;
+    end: Date;
+};
+
 export type DischargeData = {
     alertStatus: AlertStatus;
     dischargeInterval: DischargeInterval;
@@ -20,10 +25,7 @@ export interface DischargeHistoricalDataJSON {
 
 export interface DischargeHistoricalData {
     locationName: string;
-    discharges: {
-        start: Date;
-        end: Date;
-    }[];
+    discharges: DischargeDateInterval[];
 }
 
 export enum DischargeHistoryPeriod {

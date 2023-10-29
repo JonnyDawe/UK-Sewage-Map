@@ -16,6 +16,7 @@ import { getDischargePointLayer } from "../layers/dischargeSources";
 import { getRiverDischargeLayer } from "../layers/riverDischarge";
 import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
 import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
+import { router } from "../../main";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
 
@@ -27,6 +28,7 @@ interface MapApp {
 export async function initialiseMapview(
     mapElement: HTMLDivElement,
     theme: "light" | "dark",
+    csoId: string,
     signal?: AbortSignal
 ): Promise<{ cleanup: () => void; app: MapApp }> {
     signal?.addEventListener("abort", () => {
@@ -78,6 +80,19 @@ export async function initialiseMapview(
     initialiseMapViewWidgets(mapView);
 
     const sourceLayerView = await mapView.whenLayerView(dischargeSourceLayer);
+
+    if (csoId) {
+        const query = dischargeSourceLayer.createQuery();
+        query.where = `PermitNumber = '${csoId.replace("_", ".")}'`;
+        query.returnGeometry = true;
+
+        const { features } = await dischargeSourceLayer.queryFeatures(query);
+        if (features.length) {
+            mapView.goTo({ target: features[0], zoom: 12 });
+            mapView.popup.open({ features });
+        }
+    }
+
     const symbolAnimationManager = new SymbolAnimationManager({
         mapView: mapView,
         layerView: sourceLayerView
@@ -101,6 +116,12 @@ export async function initialiseMapview(
         () => mapView.popup?.selectedFeature,
         async (graphic) => {
             if (graphic?.layer === dischargeSourceLayer || graphic?.layer === null) {
+                router.navigate(
+                    `/${encodeURIComponent(
+                        graphic?.attributes?.["PermitNumber"].replace(".", "_") ?? ""
+                    )}`
+                );
+
                 mapView.popup.viewModel.location = mapView.popup.selectedFeature
                     .geometry as __esri.Point;
                 const selectedAnimatedGraphic = symbolAnimationManager.getAnimatedGraphic({

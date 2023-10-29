@@ -188,14 +188,15 @@ export function getDischargeDataForLocation(
 }
 
 /**
- * Calculates the date six months ago from the current date.
+ * Calculates the date a specified number of months ago from the current date.
  * @param currentDate The current date.
- * @returns A Date object representing the date six months ago.
+ * @param monthsAgo The number of months ago.
+ * @returns A Date object representing the calculated date.
  */
-export function getDateSixMonthsAgo(currentDate: Date): Date {
-    const sixMonthsAgo = new Date(currentDate);
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-    return sixMonthsAgo;
+export function getDatenMonthsAgo(currentDate: Date, monthsAgo: number): Date {
+    const calculatedDate = new Date(currentDate);
+    calculatedDate.setMonth(calculatedDate.getMonth() - monthsAgo);
+    return calculatedDate;
 }
 
 /**
@@ -204,7 +205,7 @@ export function getDateSixMonthsAgo(currentDate: Date): Date {
  * @param n The number of months
  * @returns true if the date is within the last n months, false otherwise.
  */
-export function isDateWithinLastMonths(date: Date, n: number) {
+export function isDateWithinLastnMonths(date: Date, n: number) {
     const today = new Date();
     const monthsAgo = new Date(today.getFullYear(), today.getMonth() - n, today.getDate());
     return date >= monthsAgo && date <= today;

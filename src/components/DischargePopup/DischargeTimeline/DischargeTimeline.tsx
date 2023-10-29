@@ -2,16 +2,22 @@ import { Chart } from "react-google-charts";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 
-import { DischargeHistoricalDataJSON, DischargeHistoryPeriod } from "../types";
+import {
+    DischargeDateInterval,
+    DischargeHistoricalData,
+    DischargeHistoricalDataJSON,
+    DischargeHistoryPeriod,
+    DischargeInterval
+} from "../types";
 import {
     calculateTotalDischargeLength,
     formatTime,
-    getDateSixMonthsAgo,
+    getDatenMonthsAgo,
     getDischargeDataForLocation,
     getDischargeDateObject,
     getFormattedTimeInterval,
     isDateWithin2023,
-    isDateWithinLastMonths
+    isDateWithinLastnMonths
 } from "../utils";
 import { Text } from "@radix-ui/themes";
 import { InLineSelect } from "../../common/Select/InlineSelect";
@@ -45,6 +51,47 @@ const CustomChart = styled(Chart)`
     }
 `;
 
+function getFilteredDischarges(
+    dischargeData: DischargeHistoricalData,
+    period: DischargeHistoryPeriod
+) {
+    switch (period) {
+        case DischargeHistoryPeriod.Last12Months:
+            return dischargeData.discharges.filter((discharge) =>
+                isDateWithinLastnMonths(discharge.start, 12)
+            );
+        case DischargeHistoryPeriod.Last6Months:
+            return dischargeData.discharges.filter((discharge) =>
+                isDateWithinLastnMonths(discharge.start, 6)
+            );
+        case DischargeHistoryPeriod.Last3Months:
+            return dischargeData.discharges.filter((discharge) =>
+                isDateWithinLastnMonths(discharge.start, 3)
+            );
+        case DischargeHistoryPeriod.StartOf2023:
+            return dischargeData.discharges.filter((discharge) =>
+                isDateWithin2023(discharge.start)
+            );
+        default:
+            return [];
+    }
+}
+
+function getStartDateOfInterest(period: DischargeHistoryPeriod) {
+    switch (period) {
+        case DischargeHistoryPeriod.Last12Months:
+            return getDatenMonthsAgo(new Date(), 12);
+        case DischargeHistoryPeriod.Last6Months:
+            return getDatenMonthsAgo(new Date(), 6);
+        case DischargeHistoryPeriod.Last3Months:
+            return getDatenMonthsAgo(new Date(), 3);
+        case DischargeHistoryPeriod.StartOf2023:
+            return new Date(2023, 0, 1);
+        default:
+            return undefined;
+    }
+}
+
 function processDataForLocation(
     jsonData: DischargeHistoricalDataJSON,
     locationName: string,
@@ -59,30 +106,7 @@ function processDataForLocation(
         { type: "date", id: "End" }
     ];
 
-    const getFilteredDischarges = (period: DischargeHistoryPeriod) => {
-        switch (period) {
-            case DischargeHistoryPeriod.Last12Months:
-                return dischargeData.discharges.filter((discharge) =>
-                    isDateWithinLastMonths(discharge.start, 12)
-                );
-            case DischargeHistoryPeriod.Last6Months:
-                return dischargeData.discharges.filter((discharge) =>
-                    isDateWithinLastMonths(discharge.start, 6)
-                );
-            case DischargeHistoryPeriod.Last3Months:
-                return dischargeData.discharges.filter((discharge) =>
-                    isDateWithinLastMonths(discharge.start, 3)
-                );
-            case DischargeHistoryPeriod.StartOf2023:
-                return dischargeData.discharges.filter((discharge) =>
-                    isDateWithin2023(discharge.start)
-                );
-            default:
-                return [];
-        }
-    };
-
-    const dischargesForSelectedPeriod = getFilteredDischarges(selectedPeriod);
+    const dischargesForSelectedPeriod = getFilteredDischarges(dischargeData, selectedPeriod);
 
     const rows = dischargesForSelectedPeriod.map((discharge) => {
         return [
@@ -170,7 +194,9 @@ function Timeline({ locationName }: { locationName: string }) {
 
     //no data rows
     if (locationData?.dischargeChartData?.length === 1) {
-        const dateobj = getDischargeDateObject(getDateSixMonthsAgo(new Date()));
+        const dateobj = getDischargeDateObject(
+            getStartDateOfInterest(selectedPeriod) ?? new Date()
+        );
         return (
             <p>{`No Recorded Discharge since ${dateobj.day} ${dateobj.month} ${dateobj.year} `}</p>
         );
@@ -207,8 +233,8 @@ function Timeline({ locationName }: { locationName: string }) {
                         }
                     },
                     hAxis: {
-                        // minValue: getDateSixMonthsAgo(new Date()),
-                        maxValue: Date.now()
+                        minValue: getStartDateOfInterest(selectedPeriod),
+                        maxValue: new Date()
                     },
                     tooltip: { html: true },
                     avoidOverlappingGridLines: false

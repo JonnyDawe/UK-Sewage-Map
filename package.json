@@ -31,6 +31,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-google-charts": "^4.0.1",
+        "react-router-dom": "^6.17.0",
         "react-wavify": "^1.8.3",
         "swr": "^2.2.1"
     },
@@ -51,7 +52,6 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.33.1",
         "eslint-plugin-simple-import-sort": "^7.0.0",
-        "gh-pages": "^5.0.0",
         "pre-commit": "^1.2.2",
         "prettier": "^2.8.8",
         "typescript": "^5.1.6",
