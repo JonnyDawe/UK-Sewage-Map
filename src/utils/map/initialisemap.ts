@@ -152,6 +152,12 @@ export async function initialiseMapview(
         }
     );
 
+    mapView.popup.on("trigger-action", function (event) {
+        if (event.action.id === "copy-link") {
+            navigator.clipboard.writeText(window.location.href);
+        }
+    });
+
     app.map = map;
     app.view = mapView;
 
