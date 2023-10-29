@@ -3,11 +3,9 @@ import styled from "@emotion/styled";
 import useSWR from "swr";
 
 import {
-    DischargeDateInterval,
     DischargeHistoricalData,
     DischargeHistoricalDataJSON,
-    DischargeHistoryPeriod,
-    DischargeInterval
+    DischargeHistoryPeriod
 } from "../types";
 import {
     calculateTotalDischargeLength,

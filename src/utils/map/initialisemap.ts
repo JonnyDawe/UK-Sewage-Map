@@ -17,6 +17,7 @@ import { getRiverDischargeLayer } from "../layers/riverDischarge";
 import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
 import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
 import { router } from "../../main";
+import { removeURLParameter, updateURLParameter } from "../url";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
 
@@ -83,7 +84,7 @@ export async function initialiseMapview(
 
     if (csoId) {
         const query = dischargeSourceLayer.createQuery();
-        query.where = `PermitNumber = '${csoId.replace("_", ".")}'`;
+        query.where = `PermitNumber = '${csoId}'`;
         query.returnGeometry = true;
 
         const { features } = await dischargeSourceLayer.queryFeatures(query);
@@ -116,11 +117,7 @@ export async function initialiseMapview(
         () => mapView.popup?.selectedFeature,
         async (graphic) => {
             if (graphic?.layer === dischargeSourceLayer || graphic?.layer === null) {
-                router.navigate(
-                    `/${encodeURIComponent(
-                        graphic?.attributes?.["PermitNumber"].replace(".", "_") ?? ""
-                    )}`
-                );
+                updateURLParameter("PermitNumber", graphic.attributes["PermitNumber"] ?? "");
 
                 mapView.popup.viewModel.location = mapView.popup.selectedFeature
                     .geometry as __esri.Point;
@@ -147,7 +144,7 @@ export async function initialiseMapview(
         (visible, wasVisible) => {
             if (wasVisible && !visible && mapView.ready) {
                 MarkerPopEffectManager.activeGraphic = null;
-                router.navigate("/");
+                removeURLParameter("PermitNumber");
             }
         }
     );
