@@ -1,9 +1,9 @@
-import { UserConfig, defineConfig } from "vite";
+import { UserConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import vercel from "vite-plugin-vercel";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default {
     publicDir: "public",
     build: {
         chunkSizeWarningLimit: 1500
@@ -24,4 +24,4 @@ export default defineConfig({
             }
         ]
     }
-});
+} as UserConfig;
