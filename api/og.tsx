@@ -26,7 +26,7 @@ export default async function handler(request: VercelRequest) {
             throw error;
         }
 
-        const historicDataJSON = res.json();
+        const historicDataJSON = await res.json();
         console.log(historicDataJSON);
 
         return new ImageResponse(
@@ -73,7 +73,7 @@ export default async function handler(request: VercelRequest) {
                             whiteSpace: "pre-wrap"
                         }}
                     >
-                        {title}
+                        {title + JSON.stringify(historicDataJSON)}
                     </div>
                 </div>
             ),
