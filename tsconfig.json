@@ -61,7 +61,7 @@
         "allowSyntheticDefaultImports": true
     },
     /* Specify files to include in compilation. */
-    "include": ["src", "api/og.tsx"],
+    "include": ["src", "api"],
 
     /* Referenced configuration file. */
     "references": [{ "path": "./tsconfig.node.json" }]
