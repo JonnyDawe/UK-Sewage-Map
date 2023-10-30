@@ -86,7 +86,9 @@ export default async function handler(request: VercelRequest) {
                             marginTop: 30,
                             padding: "0 120px",
                             lineHeight: 1.4,
-                            whiteSpace: "pre-wrap"
+                            whiteSpace: "pre-wrap",
+                            display: "flex",
+                            flexDirection: "column"
                         }}
                     >
                         {title}
