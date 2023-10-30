@@ -1,9 +1,25 @@
 import { ImageResponse } from "@vercel/og";
 import type { VercelRequest } from "@vercel/node";
+import {
+    DischargeHistoricalDataJSON,
+    DischargeHistoryPeriod
+} from "../src/components/DischargePopup/types";
+import {
+    calculateTotalDischargeLength,
+    getDischargeDataForLocation
+} from "../src/components/DischargePopup/utils";
 
 export const config = {
     runtime: "edge"
 };
+
+function processDataForLocation(jsonData: DischargeHistoricalDataJSON, locationName: string) {
+    const dischargeData = getDischargeDataForLocation(jsonData, locationName);
+
+    return {
+        totalDischarge: calculateTotalDischargeLength(dischargeData.discharges)
+    };
+}
 
 export default async function handler(request: VercelRequest) {
     try {
@@ -19,7 +35,7 @@ export default async function handler(request: VercelRequest) {
 
         // If the status code is not in the range 200-299,
         // we still try to parse and throw it.
-        if (!res.ok) {
+        if (!res.ok || title === undefined) {
             const error = new Error(
                 "An error occurred while fetching the historic discharge data."
             );
@@ -27,7 +43,7 @@ export default async function handler(request: VercelRequest) {
         }
 
         const historicDataJSON = await res.json();
-        console.log(historicDataJSON);
+        const topItem = historicDataJSON as DischargeHistoricalDataJSON;
 
         return new ImageResponse(
             (
@@ -73,7 +89,8 @@ export default async function handler(request: VercelRequest) {
                             whiteSpace: "pre-wrap"
                         }}
                     >
-                        {title + JSON.stringify(historicDataJSON)}
+                        {title}
+                        {processDataForLocation(historicDataJSON, title).totalDischarge}
                     </div>
                 </div>
             ),
