@@ -5,13 +5,29 @@ export const config = {
     runtime: "edge"
 };
 
-export default function handler(request: VercelRequest) {
+export default async function handler(request: VercelRequest) {
     try {
         const { searchParams } = new URL(request.url ?? "");
 
         // ?title=<title>
         const hasTitle = searchParams.has("title");
         const title = hasTitle ? searchParams.get("title")?.slice(0, 100) : "My default title";
+
+        const res = await fetch(
+            "https://thamessewage.s3.eu-west-2.amazonaws.com/discharges_to_date/up_to_now.json"
+        );
+
+        // If the status code is not in the range 200-299,
+        // we still try to parse and throw it.
+        if (!res.ok) {
+            const error = new Error(
+                "An error occurred while fetching the historic discharge data."
+            );
+            throw error;
+        }
+
+        const historicDataJSON = res.json();
+        console.log(historicDataJSON);
 
         return new ImageResponse(
             (
