@@ -3,7 +3,7 @@ import { ImageResponse } from "@vercel/og";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export const config = {
-    runtime: "edge"
+    runtime: "experimental-edge"
 };
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
