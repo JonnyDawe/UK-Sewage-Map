@@ -27,6 +27,7 @@
         "@radix-ui/themes": "^2.0.0",
         "@react-spring/web": "^9.7.3",
         "@vercel/analytics": "^1.0.1",
+        "@vercel/node": "^3.0.7",
         "@vercel/og": "^0.5.20",
         "arcgis-animate-markers-plugin": "^1.1.7",
         "react": "^18.2.0",
@@ -34,7 +35,8 @@
         "react-google-charts": "^4.0.1",
         "react-router-dom": "^6.17.0",
         "react-wavify": "^1.8.3",
-        "swr": "^2.2.1"
+        "swr": "^2.2.1",
+        "vite-plugin-vercel": "^2.0.0"
     },
     "devDependencies": {
         "@babel/plugin-transform-typescript": "^7.20.13",
