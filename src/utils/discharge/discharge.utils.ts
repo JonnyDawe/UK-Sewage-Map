@@ -178,6 +178,34 @@ export function getDischargeDataForLocation(
     const dischargeKeys = findKeysByValue(jsonData.LocationName, locationName);
     return {
         locationName,
+        receivingWaterCourse:
+            dischargeKeys.length > 0 ? jsonData.ReceivingWaterCourse[dischargeKeys[0]] : "",
+        permitNumber: dischargeKeys.length > 0 ? jsonData.PermitNumber[dischargeKeys[0]] : "",
+        discharges: dischargeKeys.map((key) => {
+            return {
+                start: new Date(jsonData.StartDateTime[key]),
+                end: new Date(jsonData.StopDateTime[key])
+            };
+        })
+    };
+}
+
+/**
+ * Converts discharge historical data in JSON format to a structured object.
+ * @param jsonData The JSON data containing discharge historical information.
+ * @param locationName The location name to filter the data.
+ * @returns A structured object containing location name and associated discharge intervals.
+ */
+export function getDischargeDataForPermitNumber(
+    jsonData: DischargeHistoricalDataJSON,
+    permitNumber: string
+): DischargeHistoricalData {
+    const dischargeKeys = findKeysByValue(jsonData.PermitNumber, permitNumber);
+    return {
+        permitNumber,
+        receivingWaterCourse:
+            dischargeKeys.length > 0 ? jsonData.ReceivingWaterCourse[dischargeKeys[0]] : "",
+        locationName: dischargeKeys.length > 0 ? jsonData.LocationName[dischargeKeys[0]] : "",
         discharges: dischargeKeys.map((key) => {
             return {
                 start: new Date(jsonData.StartDateTime[key]),

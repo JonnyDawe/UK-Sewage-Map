@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import useSWR from "swr";
 
-import { formatShortDate } from "../DischargePopup/utils";
+import { formatShortDate } from "../../utils/discharge/discharge.utils";
 
 const FooterWrapper = styled.div`
     display: block;

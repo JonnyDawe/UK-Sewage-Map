@@ -1,23 +1,27 @@
 import { ImageResponse } from "@vercel/og";
 import type { VercelRequest } from "@vercel/node";
-import {
-    DischargeHistoricalDataJSON,
-    DischargeHistoryPeriod
-} from "../src/components/DischargePopup/types";
+import { DischargeHistoricalDataJSON, DischargeHistoryPeriod } from "../src/utils/discharge/types";
 import {
     calculateTotalDischargeLength,
-    getDischargeDataForLocation
-} from "../src/components/DischargePopup/utils";
+    formatTime,
+    getDischargeDataForPermitNumber
+} from "../src/utils/discharge/discharge.utils";
 
 export const config = {
     runtime: "edge"
 };
 
-function processDataForLocation(jsonData: DischargeHistoricalDataJSON, locationName: string) {
-    const dischargeData = getDischargeDataForLocation(jsonData, locationName);
+function generateDisplayData(jsonData: DischargeHistoricalDataJSON, permitNumber: string) {
+    const { discharges, locationName, receivingWaterCourse } = getDischargeDataForPermitNumber(
+        jsonData,
+        permitNumber
+    );
 
     return {
-        totalDischarge: calculateTotalDischargeLength(dischargeData.discharges)
+        locationName,
+        permitNumber,
+        receivingWaterCourse,
+        totalDischarge: formatTime(calculateTotalDischargeLength(discharges), false)
     };
 }
 
@@ -25,25 +29,47 @@ export default async function handler(request: VercelRequest) {
     try {
         const { searchParams } = new URL(request.url ?? "");
 
-        // ?title=<title>
-        const hasTitle = searchParams.has("title");
-        const title = hasTitle ? searchParams.get("title")?.slice(0, 100) : "My default title";
+        // ?PermitNumber=<PermitNumber>
+        const hasPermitNumber = searchParams.has("PermitNumber");
 
-        const res = await fetch(
+        if (!hasPermitNumber) {
+            return new ImageResponse(
+                (
+                    <div
+                        style={{
+                            height: "100%",
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "24px",
+                            backgroundImage:
+                                'url("https://www.sewagemap.co.uk/opengraphsocial.png")',
+                            backgroundSize: "100% 100%",
+                            fontSize: 32,
+                            fontWeight: 600
+                        }}
+                    ></div>
+                )
+            );
+        }
+
+        const permitNumber = searchParams.get("PermitNumber")?.slice(0, 100);
+
+        const dischargesUpToPresent = await fetch(
             "https://thamessewage.s3.eu-west-2.amazonaws.com/discharges_to_date/up_to_now.json"
         );
 
         // If the status code is not in the range 200-299,
         // we still try to parse and throw it.
-        if (!res.ok || title === undefined) {
+        if (!dischargesUpToPresent.ok || permitNumber === undefined) {
             const error = new Error(
                 "An error occurred while fetching the historic discharge data."
             );
             throw error;
         }
 
-        const historicDataJSON = await res.json();
-        const topItem = historicDataJSON as DischargeHistoricalDataJSON;
+        const historicDataJSON = await dischargesUpToPresent.json();
+        const displayData = generateDisplayData(historicDataJSON, permitNumber);
 
         return new ImageResponse(
             (
@@ -70,7 +96,7 @@ export default async function handler(request: VercelRequest) {
                     >
                         <div
                             style={{
-                                padding: 24,
+                                padding: 40,
                                 background: "white",
                                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                                 border: "1px #E6E6E6 solid",
@@ -110,7 +136,7 @@ export default async function handler(request: VercelRequest) {
                                             wordWrap: "break-word"
                                         }}
                                     >
-                                        Burghfield
+                                        {displayData.locationName}
                                     </span>
 
                                     <p style={{ margin: 0 }}>
@@ -135,7 +161,7 @@ export default async function handler(request: VercelRequest) {
                                                 wordWrap: "break-word"
                                             }}
                                         >
-                                            Clay Brooks Hill
+                                            {displayData.receivingWaterCourse}
                                         </span>
                                     </p>
                                 </div>
@@ -152,10 +178,7 @@ export default async function handler(request: VercelRequest) {
                                         fontWeight: 600
                                     }}
                                 >
-                                    {`Sewage overflow recorded for a total of ${
-                                        processDataForLocation(historicDataJSON, title)
-                                            .totalDischarge
-                                    } this year
+                                    {`Sewage overflow recorded for a total of ${displayData.totalDischarge} this year
                                     to date.`}
                                 </p>
                             </div>

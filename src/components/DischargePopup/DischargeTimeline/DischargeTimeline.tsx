@@ -6,7 +6,7 @@ import {
     DischargeHistoricalData,
     DischargeHistoricalDataJSON,
     DischargeHistoryPeriod
-} from "../types";
+} from "../../../utils/discharge/types";
 import {
     calculateTotalDischargeLength,
     formatTime,
@@ -16,7 +16,7 @@ import {
     getFormattedTimeInterval,
     isDateWithin2023,
     isDateWithinLastnMonths
-} from "../utils";
+} from "../../../utils/discharge/discharge.utils";
 import { Text } from "@radix-ui/themes";
 import { InLineSelect } from "../../common/Select/InlineSelect";
 import React from "react";

@@ -19,12 +19,16 @@ export type DischargeData = {
 
 export interface DischargeHistoricalDataJSON {
     LocationName: Record<string, string>;
+    PermitNumber: Record<string, string>;
+    ReceivingWaterCourse: Record<string, string>;
     StartDateTime: Record<string, string>;
     StopDateTime: Record<string, string>;
 }
 
 export interface DischargeHistoricalData {
     locationName: string;
+    permitNumber: string;
+    receivingWaterCourse: string;
     discharges: DischargeDateInterval[];
 }
 
