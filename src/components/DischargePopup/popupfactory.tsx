@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 
 import { PopUpBody } from "./PopUpContent/PopUpBody";
 import { PopUpHeader } from "./PopUpContent/PopUpHeader";
-import { getRenderPropsFromGraphic } from "./utils";
+import { getRenderPropsFromGraphic } from "../../utils/discharge/discharge.utils";
 import AppTheme from "../Theme/AppTheme";
 import { AppThemeProvider } from "../Theme/ThemeProvider";
 import "@radix-ui/themes/styles.css";

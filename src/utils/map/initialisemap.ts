@@ -16,6 +16,8 @@ import { getDischargePointLayer } from "../layers/dischargeSources";
 import { getRiverDischargeLayer } from "../layers/riverDischarge";
 import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
 import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
+import { router } from "../../main";
+import { removeURLParameter, updateURLParameter } from "../url";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
 
@@ -27,6 +29,7 @@ interface MapApp {
 export async function initialiseMapview(
     mapElement: HTMLDivElement,
     theme: "light" | "dark",
+    csoId: string,
     signal?: AbortSignal
 ): Promise<{ cleanup: () => void; app: MapApp }> {
     signal?.addEventListener("abort", () => {
@@ -78,6 +81,19 @@ export async function initialiseMapview(
     initialiseMapViewWidgets(mapView);
 
     const sourceLayerView = await mapView.whenLayerView(dischargeSourceLayer);
+
+    if (csoId) {
+        const query = dischargeSourceLayer.createQuery();
+        query.where = `PermitNumber = '${csoId}'`;
+        query.returnGeometry = true;
+
+        const { features } = await dischargeSourceLayer.queryFeatures(query);
+        if (features.length) {
+            mapView.popup.open({ features });
+            mapView.goTo({ target: features[0], zoom: 12 });
+        }
+    }
+
     const symbolAnimationManager = new SymbolAnimationManager({
         mapView: mapView,
         layerView: sourceLayerView
@@ -101,6 +117,8 @@ export async function initialiseMapview(
         () => mapView.popup?.selectedFeature,
         async (graphic) => {
             if (graphic?.layer === dischargeSourceLayer || graphic?.layer === null) {
+                updateURLParameter("PermitNumber", graphic.attributes["PermitNumber"] ?? "");
+
                 mapView.popup.viewModel.location = mapView.popup.selectedFeature
                     .geometry as __esri.Point;
                 const selectedAnimatedGraphic = symbolAnimationManager.getAnimatedGraphic({
@@ -111,12 +129,6 @@ export async function initialiseMapview(
                         symbolAnimationManager.animationGraphicsLayer
                     );
                     (await graphicsLayerView).highlight(selectedAnimatedGraphic);
-                }
-
-                if (mapView.popup.currentDockPosition === "bottom-center") {
-                    mapView.padding.bottom = window.visualViewport?.height
-                        ? window.visualViewport.height * 0.25
-                        : 0;
                 }
                 graphic.symbol = await symbolUtils.getDisplayedSymbol(graphic);
                 MarkerPopEffectManager.activeGraphic = graphic;
@@ -129,15 +141,28 @@ export async function initialiseMapview(
     // Ensure graphic made no longer active when popup closes
     reactiveUtils.watch(
         () => mapView.popup?.visible,
-        (visible) => {
-            if (!visible) {
+        (visible, wasVisible) => {
+            if (wasVisible && !visible && mapView.ready) {
                 MarkerPopEffectManager.activeGraphic = null;
+                removeURLParameter("PermitNumber");
             }
         }
     );
 
+    mapView.popup.on("trigger-action", function (event) {
+        if (event.action.id === "copy-link") {
+            navigator.clipboard.writeText(window.location.href);
+        }
+    });
+
     app.map = map;
     app.view = mapView;
+
+    if (mapView.width <= 544) {
+        mapView.padding.bottom = window.visualViewport?.height
+            ? window.visualViewport.height * 0.3
+            : 0;
+    }
 
     await reactiveUtils.whenOnce(() => mapView.ready);
     return { cleanup, app };

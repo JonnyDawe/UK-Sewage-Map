@@ -5,6 +5,11 @@ export type DischargeInterval = {
     end: number | null;
 };
 
+export type DischargeDateInterval = {
+    start: Date;
+    end: Date;
+};
+
 export type DischargeData = {
     alertStatus: AlertStatus;
     dischargeInterval: DischargeInterval;
@@ -14,16 +19,17 @@ export type DischargeData = {
 
 export interface DischargeHistoricalDataJSON {
     LocationName: Record<string, string>;
+    PermitNumber: Record<string, string>;
+    ReceivingWaterCourse: Record<string, string>;
     StartDateTime: Record<string, string>;
     StopDateTime: Record<string, string>;
 }
 
 export interface DischargeHistoricalData {
     locationName: string;
-    discharges: {
-        start: Date;
-        end: Date;
-    }[];
+    permitNumber: string;
+    receivingWaterCourse: string;
+    discharges: DischargeDateInterval[];
 }
 
 export enum DischargeHistoryPeriod {

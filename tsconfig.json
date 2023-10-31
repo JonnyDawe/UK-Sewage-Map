@@ -21,10 +21,7 @@
         /* Bundler Mode */
 
         /* Specify module resolution strategy for bundlers. */
-        "moduleResolution": "Bundler",
-
-        /* Allow importing of TypeScript files as well as JavaScript files. */
-        "allowImportingTsExtensions": true,
+        "moduleResolution": "Node",
 
         /* Enable importing of JSON files as modules. */
         "resolveJsonModule": true,
@@ -61,7 +58,7 @@
         "allowSyntheticDefaultImports": true
     },
     /* Specify files to include in compilation. */
-    "include": ["src"],
+    "include": ["src", "api"],
 
     /* Referenced configuration file. */
     "references": [{ "path": "./tsconfig.node.json" }]

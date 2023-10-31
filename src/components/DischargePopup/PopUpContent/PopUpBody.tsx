@@ -6,7 +6,7 @@ import Tabs from "../../common/Tabs";
 import { DischargeDate } from "../DischargeInfoCard/DischargeDate";
 import { DischargeInfo } from "../DischargeInfoCard/DischargeInfo";
 import Timeline from "../DischargeTimeline/DischargeTimeline";
-import { AlertStatus, DischargeInterval } from "../types";
+import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
 import { Box } from "@radix-ui/themes";
 
 const ContentWrapper = styled(Box)`

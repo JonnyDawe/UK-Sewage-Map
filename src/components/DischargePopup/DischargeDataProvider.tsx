@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DischargeData } from "./types";
+import { DischargeData } from "../../utils/discharge/types";
 
 export const DischargeDataContext: React.Context<DischargeData> = React.createContext({
     alertStatus: "Not Discharging",

@@ -69,7 +69,15 @@ export function getDischargePointLayer() {
     const template = new PopupTemplate({
         title: setEsriPopupTitle,
         returnGeometry: true,
-        content: setEsriPopupHTMLContent
+        content: setEsriPopupHTMLContent,
+        actions: [
+            {
+                id: "copy-link",
+                className: "esri-icon-share2",
+                title: "Copy Link",
+                type: "button"
+            }
+        ]
     });
 
     return new FeatureLayer({

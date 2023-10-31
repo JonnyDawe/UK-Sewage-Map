@@ -178,6 +178,9 @@ export function getDischargeDataForLocation(
     const dischargeKeys = findKeysByValue(jsonData.LocationName, locationName);
     return {
         locationName,
+        receivingWaterCourse:
+            dischargeKeys.length > 0 ? jsonData.ReceivingWaterCourse[dischargeKeys[0]] : "",
+        permitNumber: dischargeKeys.length > 0 ? jsonData.PermitNumber[dischargeKeys[0]] : "",
         discharges: dischargeKeys.map((key) => {
             return {
                 start: new Date(jsonData.StartDateTime[key]),
@@ -188,14 +191,40 @@ export function getDischargeDataForLocation(
 }
 
 /**
- * Calculates the date six months ago from the current date.
- * @param currentDate The current date.
- * @returns A Date object representing the date six months ago.
+ * Converts discharge historical data in JSON format to a structured object.
+ * @param jsonData The JSON data containing discharge historical information.
+ * @param locationName The location name to filter the data.
+ * @returns A structured object containing location name and associated discharge intervals.
  */
-export function getDateSixMonthsAgo(currentDate: Date): Date {
-    const sixMonthsAgo = new Date(currentDate);
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-    return sixMonthsAgo;
+export function getDischargeDataForPermitNumber(
+    jsonData: DischargeHistoricalDataJSON,
+    permitNumber: string
+): DischargeHistoricalData {
+    const dischargeKeys = findKeysByValue(jsonData.PermitNumber, permitNumber);
+    return {
+        permitNumber,
+        receivingWaterCourse:
+            dischargeKeys.length > 0 ? jsonData.ReceivingWaterCourse[dischargeKeys[0]] : "",
+        locationName: dischargeKeys.length > 0 ? jsonData.LocationName[dischargeKeys[0]] : "",
+        discharges: dischargeKeys.map((key) => {
+            return {
+                start: new Date(jsonData.StartDateTime[key]),
+                end: new Date(jsonData.StopDateTime[key])
+            };
+        })
+    };
+}
+
+/**
+ * Calculates the date a specified number of months ago from the current date.
+ * @param currentDate The current date.
+ * @param monthsAgo The number of months ago.
+ * @returns A Date object representing the calculated date.
+ */
+export function getDatenMonthsAgo(currentDate: Date, monthsAgo: number): Date {
+    const calculatedDate = new Date(currentDate);
+    calculatedDate.setMonth(calculatedDate.getMonth() - monthsAgo);
+    return calculatedDate;
 }
 
 /**
@@ -204,7 +233,7 @@ export function getDateSixMonthsAgo(currentDate: Date): Date {
  * @param n The number of months
  * @returns true if the date is within the last n months, false otherwise.
  */
-export function isDateWithinLastMonths(date: Date, n: number) {
+export function isDateWithinLastnMonths(date: Date, n: number) {
     const today = new Date();
     const monthsAgo = new Date(today.getFullYear(), today.getMonth() - n, today.getDate());
     return date >= monthsAgo && date <= today;

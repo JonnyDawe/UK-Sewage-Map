@@ -21,7 +21,12 @@ export function DarkModeToggle({ view }: { view: __esri.MapView }) {
             onClick={() => {
                 toggleColorMode();
                 toggle();
-                view.popup?.close();
+
+                if (view.popup.visible) {
+                    const currentFeatures = [...view.popup.features];
+                    view.popup.close();
+                    view.popup.open({ features: currentFeatures });
+                }
             }}
         >
             {theme.appearance === "light" ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
