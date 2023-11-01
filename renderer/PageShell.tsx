@@ -1,10 +1,6 @@
 import React from "react";
-
 import { PageContextProvider } from "./usePageContext";
 import type { PageContext } from "./types";
-import "../src/styles/index.css";
-import "@radix-ui/themes/styles.css";
-import { ClientOnly } from "./ClientOnly";
 
 export { PageShell };
 

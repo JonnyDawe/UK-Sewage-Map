@@ -1,6 +1,8 @@
 import { AppThemeProvider } from "../../components/Theme/ThemeProvider";
 import AppTheme from "../../components/Theme/AppTheme";
 import MapView from "../../components/MapView/MapView";
+import "@radix-ui/themes/styles.css";
+import "../../styles/index.css";
 
 export default function () {
     return (
