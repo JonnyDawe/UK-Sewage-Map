@@ -29,11 +29,11 @@ async function render(pageContext: PageContextServer) {
     <html lang="en">
     <head>
     <meta charset="UTF-8" />
-    <link rel="apple-touch-icon" sizes="180x180" href="public/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png" />
-    <link rel="manifest" href="public/site.webmanifest" />
-    <link rel="mask-icon" href="public/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/dist/client/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/dist/client/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/dist/client/favicon-16x16.png" />
+    <link rel="manifest" href="/dist/client/site.webmanifest" />
+    <link rel="mask-icon" href="/dist/client/safari-pinned-tab.svg" color="#5bbad5" />
     <link
         disabled
         id="arcgis-maps-sdk-theme-dark"
@@ -62,7 +62,7 @@ async function render(pageContext: PageContextServer) {
         property="description"
         content="Real-Time Thames Sewage Discharge Monitoring | Sewage Map - Stay Updated on Sewage Pollution"
     />
-    <meta property="og:image" content="${BaseUrl}//api/og${
+    <meta property="og:image" content="${BaseUrl}/api/og${
         PermitNumber ? `?PermitNumber=${PermitNumber}` : ""
     }" />
     <meta property="og:title" content="Sewage Map" />
