@@ -6,6 +6,7 @@ import ReactDOMServer from "react-dom/server";
 import { PageShell } from "./PageShell";
 import { escapeInject, dangerouslySkipEscape } from "vike/server";
 import type { PageContextServer } from "./types";
+
 import React from "react";
 
 async function render(pageContext: PageContextServer) {
@@ -29,11 +30,11 @@ async function render(pageContext: PageContextServer) {
     <html lang="en">
     <head>
     <meta charset="UTF-8" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/dist/client/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/dist/client/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/dist/client/favicon-16x16.png" />
-    <link rel="manifest" href="/dist/client/site.webmanifest" />
-    <link rel="mask-icon" href="/dist/client/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <link
         disabled
         id="arcgis-maps-sdk-theme-dark"
@@ -70,7 +71,7 @@ async function render(pageContext: PageContextServer) {
         property="og:description"
         content="Real-Time Thames Sewage Discharge Monitoring | Sewage Map - Stay Updated on Sewage Pollution"
     />
-    <meta property="og:url" content="https://www.sewagemap.co.uk/" />
+    <meta property="og:url" content="${BaseUrl}" />
     <title>Sewage Map</title>
 </head>
       <body>
