@@ -23,6 +23,7 @@ async function render(pageContext: PageContextServer) {
     // const title = (documentProps && documentProps.title) || "Vite SSR app";
     // const desc = (documentProps && documentProps.description) || "App using Vite + Vike";
     const PermitNumber = pageContext.urlParsed.search?.["PermitNumber"] ?? "";
+    const BaseUrl = pageContext.urlParsed.origin ?? "";
 
     const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="en">
@@ -48,8 +49,8 @@ async function render(pageContext: PageContextServer) {
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="twitter:image" content="https://www.sewagemap.co.uk/api/og${
-        PermitNumber ? `PermitNumber=${PermitNumber}` : ""
+    <meta name="twitter:image" content="${BaseUrl}/api/og${
+        PermitNumber ? `?PermitNumber=${PermitNumber}` : ""
     }" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sewage Map" />
@@ -61,8 +62,8 @@ async function render(pageContext: PageContextServer) {
         property="description"
         content="Real-Time Thames Sewage Discharge Monitoring | Sewage Map - Stay Updated on Sewage Pollution"
     />
-    <meta property="og:image" content="https://www.sewagemap.co.uk/api/og${
-        PermitNumber ? `PermitNumber=${PermitNumber}` : ""
+    <meta property="og:image" content="${BaseUrl}//api/og${
+        PermitNumber ? `?PermitNumber=${PermitNumber}` : ""
     }" />
     <meta property="og:title" content="Sewage Map" />
     <meta
