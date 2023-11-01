@@ -16,7 +16,6 @@ import { getDischargePointLayer } from "../layers/dischargeSources";
 import { getRiverDischargeLayer } from "../layers/riverDischarge";
 import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
 import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
-import { router } from "../../main";
 import { removeURLParameter, updateURLParameter } from "../url";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;

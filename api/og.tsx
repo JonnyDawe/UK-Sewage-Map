@@ -79,7 +79,7 @@ export default async function handler(request: VercelRequest) {
                         width: "100%",
                         display: "flex",
                         flexDirection: "column",
-                        padding: "24px",
+                        padding: "24px 80px",
                         backgroundImage: 'url("https://www.sewagemap.co.uk/opengraphsocial.png")',
                         backgroundSize: "100% 100%",
                         fontSize: 32,

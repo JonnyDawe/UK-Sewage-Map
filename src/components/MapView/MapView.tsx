@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils";
 import MapOverlay from "./MapOverlay";
 import { AppThemeContext } from "../Theme/ThemeProvider";
-import { useParams, useSearchParams } from "react-router-dom";
+import { usePageContext } from "../../../renderer/usePageContext";
 
 const MapContainer = styled.div`
     position: absolute;
@@ -34,8 +34,8 @@ function MapView() {
     const { appearance } = React.useContext(AppThemeContext).theme;
     const mode = appearance === "dark" ? "dark" : "light";
 
-    const [searchParams] = useSearchParams();
-    const csoId = searchParams.get("PermitNumber") ?? "";
+    const { urlParsed } = usePageContext();
+    const csoId = urlParsed.search?.["PermitNumber"] ?? "";
 
     React.useEffect(() => {
         let asyncCleanup: Promise<() => void>;
