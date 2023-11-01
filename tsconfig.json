@@ -58,7 +58,7 @@
         "allowSyntheticDefaultImports": true
     },
     /* Specify files to include in compilation. */
-    "include": ["src", "api"],
+    "include": ["src", "api", "renderer"],
 
     /* Referenced configuration file. */
     "references": [{ "path": "./tsconfig.node.json" }]
