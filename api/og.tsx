@@ -4,7 +4,8 @@ import { DischargeHistoricalDataJSON, DischargeHistoryPeriod } from "../src/util
 import {
     calculateTotalDischargeLength,
     formatTime,
-    getDischargeDataForPermitNumber
+    getDischargeDataForPermitNumber,
+    isDateWithin2023
 } from "../src/utils/discharge/discharge.utils";
 
 export const config = {
@@ -17,11 +18,13 @@ function generateDisplayData(jsonData: DischargeHistoricalDataJSON, permitNumber
         permitNumber
     );
 
+    const dischargesThisYear = discharges.filter((discharge) => isDateWithin2023(discharge.start));
+
     return {
         locationName,
         permitNumber,
         receivingWaterCourse,
-        totalDischarge: formatTime(calculateTotalDischargeLength(discharges), false)
+        totalDischarge: formatTime(calculateTotalDischargeLength(dischargesThisYear), false)
     };
 }
 
