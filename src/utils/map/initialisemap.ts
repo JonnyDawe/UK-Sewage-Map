@@ -20,28 +20,11 @@ import { removeURLParameter, updateURLParameter } from "../url";
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
 
-interface MapApp {
-    view?: esriMapView;
-    map?: esriMap;
-}
-
 export async function initialiseMapview(
     mapElement: HTMLDivElement,
     theme: "light" | "dark",
-    csoId: string,
-    signal?: AbortSignal
-): Promise<{ cleanup: () => void; app: MapApp }> {
-    signal?.addEventListener("abort", () => {
-        cleanup();
-    });
-
-    const app: MapApp = {};
-
-    function cleanup() {
-        app.map?.destroy();
-        app.view?.destroy();
-    }
-
+    csoId: string
+): Promise<__esri.MapView> {
     const dischargeSourceLayer = getDischargePointLayer();
     const dischargeTraceLayer = getRiverDischargeLayer();
     const thamesTidalLayer = getThamesTidalLayer();
@@ -154,17 +137,12 @@ export async function initialiseMapview(
         }
     });
 
-    app.map = map;
-    app.view = mapView;
-
     if (mapView.width <= 544) {
         mapView.padding.bottom = window.visualViewport?.height
             ? window.visualViewport.height * 0.3
             : 0;
     }
-
-    await reactiveUtils.whenOnce(() => mapView.ready);
-    return { cleanup, app };
+    return mapView;
 }
 function initialiseMapViewWidgets(mapView: esriMapView) {
     initialiseSearchWidget(mapView);
