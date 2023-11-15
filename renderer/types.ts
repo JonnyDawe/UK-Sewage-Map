@@ -1,14 +1,8 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 export type {
-    PageContextServer,
-    /*
-  // When using Client Routing https://vike.dev/clientRouting
-  PageContextClient,
-  PageContext,
-  /*/
-    // When using Server Routing
+    PageContextWithServerRouting as PageContext,
     PageContextClientWithServerRouting as PageContextClient,
-    PageContextWithServerRouting as PageContext
-    //*/
+    PageContextServer
 } from "vike/types";
 export type { PageProps };
 

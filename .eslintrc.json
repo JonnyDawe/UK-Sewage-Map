@@ -38,6 +38,7 @@
         "import",
         "@typescript-eslint",
         "simple-import-sort",
+        "react-refresh",
         "prettier"
     ],
     "rules": {
