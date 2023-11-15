@@ -1,4 +1,5 @@
 import React from "react";
+
 import { MapContext } from "./MapView";
 
 type MountedMapsContextValue = {
@@ -16,7 +17,7 @@ export const MountedMapsContext = React.createContext<MountedMapsContextValue>({
 export const MapProvider = ({ children }: React.PropsWithChildren) => {
     const [maps, setMaps] = React.useState<{ [id: string]: __esri.MapView }>({});
 
-    const onMapMount = React.useCallback((map: __esri.MapView, id: string = "default") => {
+    const onMapMount = React.useCallback((map: __esri.MapView, id = "default") => {
         setMaps((currMaps) => {
             if (id === "current") {
                 throw new Error("'current' cannot be used as map id");
@@ -28,7 +29,7 @@ export const MapProvider = ({ children }: React.PropsWithChildren) => {
         });
     }, []);
 
-    const onMapUnmount = React.useCallback((id: string = "default") => {
+    const onMapUnmount = React.useCallback((id = "default") => {
         setMaps((currMaps) => {
             if (currMaps[id]) {
                 const nextMaps = { ...currMaps };

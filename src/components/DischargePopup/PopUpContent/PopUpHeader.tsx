@@ -1,27 +1,13 @@
 import styled from "@emotion/styled";
+import { Flex, Heading, Text } from "@radix-ui/themes";
 
 import { ERRORICON, GREENTICKICON, POOICON } from "../../../static/hostedImages";
 import { AlertStatus } from "../../../utils/discharge/types";
-import { Box, Flex, Heading, Text } from "@radix-ui/themes";
 import { Em } from "../../common/Text";
-
-const Header = styled.div`
-    display: flex;
-    gap: 8px;
-    padding: 8px 0px;
-    flex-direction: row;
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-`;
 
 const Icon = styled.img`
     width: 30px;
     height: 30px;
-`;
-
-const SubTitle = styled.p`
-    font-size: 0.9rem;
-    color: var(--river-blue);
 `;
 
 function getDischargeIcon(alertStatus: AlertStatus) {

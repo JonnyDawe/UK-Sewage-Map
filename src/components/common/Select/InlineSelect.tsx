@@ -1,6 +1,5 @@
-import { DropdownMenu, Button } from "@radix-ui/themes";
 import { CaretDownIcon } from "@radix-ui/react-icons";
-import React from "react";
+import { Button, DropdownMenu } from "@radix-ui/themes";
 
 interface SelectOption {
     value: number | string;

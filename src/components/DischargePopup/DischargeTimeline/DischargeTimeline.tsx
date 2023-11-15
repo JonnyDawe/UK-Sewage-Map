@@ -1,12 +1,9 @@
-import { Chart } from "react-google-charts";
 import styled from "@emotion/styled";
+import { Text } from "@radix-ui/themes";
+import React from "react";
+import { Chart } from "react-google-charts";
 import useSWR from "swr";
 
-import {
-    DischargeHistoricalData,
-    DischargeHistoricalDataJSON,
-    DischargeHistoryPeriod
-} from "../../../utils/discharge/types";
 import {
     calculateTotalDischargeLength,
     formatTime,
@@ -17,9 +14,12 @@ import {
     isDateWithin2023,
     isDateWithinLastnMonths
 } from "../../../utils/discharge/discharge.utils";
-import { Text } from "@radix-ui/themes";
+import {
+    DischargeHistoricalData,
+    DischargeHistoricalDataJSON,
+    DischargeHistoryPeriod
+} from "../../../utils/discharge/types";
 import { InLineSelect } from "../../common/Select/InlineSelect";
-import React from "react";
 
 const CustomChart = styled(Chart)`
     svg {

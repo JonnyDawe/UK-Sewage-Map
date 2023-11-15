@@ -1,4 +1,4 @@
-import React, { useState, useEffect, LazyExoticComponent, ComponentType } from "react";
+import React, { ComponentType, LazyExoticComponent, useEffect, useState } from "react";
 
 type ClientOnlyProps = {
     fallback: React.ReactNode;

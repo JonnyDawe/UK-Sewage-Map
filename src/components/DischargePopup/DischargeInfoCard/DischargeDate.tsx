@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-
-import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
-import { getDischargeDateObject } from "../../../utils/discharge/discharge.utils";
 import { Flex, Text } from "@radix-ui/themes";
+
+import { getDischargeDateObject } from "../../../utils/discharge/discharge.utils";
+import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
 
 function getBGColorFromAlertStatus(alertStatus: AlertStatus): string {
     switch (alertStatus) {

@@ -1,12 +1,13 @@
-import { ImageResponse } from "@vercel/og";
 import type { VercelRequest } from "@vercel/node";
-import { DischargeHistoricalDataJSON, DischargeHistoryPeriod } from "../src/utils/discharge/types";
+import { ImageResponse } from "@vercel/og";
+
 import {
     calculateTotalDischargeLength,
     formatTime,
     getDischargeDataForPermitNumber,
     isDateWithin2023
 } from "../src/utils/discharge/discharge.utils";
+import { DischargeHistoricalDataJSON } from "../src/utils/discharge/types";
 
 export const config = {
     runtime: "edge"
@@ -197,7 +198,7 @@ export default async function handler(request: VercelRequest) {
                                 <path
                                     d="M0 7.35559L12.85 12.2517C25.7 17.2397 51.4 22.2687 77.1 24.7971C102.8 27.3256 128.5 26.8939 154.2 19.6073C179.9 12.1827 205.6 9.88408 231.3 12.2517C257 14.7112 282.7 22.0668 308.4 30.6406C334.1 39.3065 359.8 41.6051 385.5 41.674C411.2 41.6051 436.9 39.3064 462.6 33.1002C488.3 26.8939 514 17.2397 539.7 19.6073C565.4 22.0668 591.1 36.778 616.8 36.778C642.5 36.778 668.2 22.0668 693.9 13.4929C719.6 4.82711 745.3 2.52849 758.15 1.21827L771 0V263H758.15C745.3 263 719.6 263 693.9 263C668.2 263 642.5 263 616.8 263C591.1 263 565.4 263 539.7 263C514 263 488.3 263 462.6 263C436.9 263 411.2 263 385.5 263C359.8 263 334.1 263 308.4 263C282.7 263 257 263 231.3 263C205.6 263 179.9 263 154.2 263C128.5 263 102.8 263 77.1 263C51.4 263 25.7 263 12.85 263H0L0 7.35559Z"
                                     fill="#0099FF"
-                                    fill-opacity="0.1"
+                                    fillOpacity="0.1"
                                 />
                             </svg>
                         </div>
@@ -210,7 +211,7 @@ export default async function handler(request: VercelRequest) {
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                         >
-                            <g clip-path="url(#clip0_567_1128)">
+                            <g clipPath="url(#clip0_567_1128)">
                                 <path
                                     d="M15.5848 52.4813C15.5848 52.4813 20.4596 57.8477 21.0506 58.1458C21.6414 58.4439 27.1072 59.7856 27.9936 59.3383C28.8799 58.8911 38.0387 53.5247 38.0387 53.5247C38.0387 53.5247 44.3908 48.4565 45.7204 47.413C47.0499 46.3696 51.6293 35.6368 52.0725 34.8918C52.5156 34.1465 52.9588 24.4573 52.5156 23.7115C52.0725 22.9662 54.2883 26.3947 51.777 22.2209C49.2657 18.047 38.9249 6.12137 38.9249 6.12137L25.3344 4.18347L13.6643 8.95357L7.31218 15.6616L2.73279 27.8848L7.31218 42.4935L15.5848 52.4813Z"
                                     fill="white"

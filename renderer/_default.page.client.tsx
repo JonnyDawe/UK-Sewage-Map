@@ -1,9 +1,10 @@
 export { render };
 
+import React from "react";
 import { hydrateRoot } from "react-dom/client";
+
 import { PageShell } from "./PageShell";
 import type { PageContextClient } from "./types";
-import React from "react";
 
 // This render() hook only supports SSR, see https://vike.dev/render-modes for how to modify render() to support SPA
 async function render(pageContext: PageContextClient) {

@@ -1,9 +1,9 @@
-import BasemapToggleVM from "@arcgis/core/widgets/BasemapToggle/BasemapToggleViewModel";
-import React from "react";
 import Handles from "@arcgis/core/core/Handles";
 import { watch } from "@arcgis/core/core/reactiveUtils";
+import BasemapToggleVM from "@arcgis/core/widgets/BasemapToggle/BasemapToggleViewModel";
+import React from "react";
 
-export function useBaseMapToggleModel({ ...props }: __esri.BasemapToggleViewModelProperties) {
+export function useBaseMapToggleModel(props: __esri.BasemapToggleViewModelProperties) {
     const [basemapToggleVM, setBasemapToggleVm] =
         React.useState<__esri.BasemapToggleViewModel | null>(null);
 
@@ -16,7 +16,7 @@ export function useBaseMapToggleModel({ ...props }: __esri.BasemapToggleViewMode
         return () => {
             basemapToggleModel.destroy();
         };
-    }, [props.view]);
+    }, [props]);
 
     React.useEffect(() => {
         if (!basemapToggleVM) return () => {};

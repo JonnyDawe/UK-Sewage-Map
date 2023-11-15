@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { Theme as ThemePrimitive } from "@radix-ui/themes";
-import { AppThemeContext } from "./ThemeProvider";
 import React from "react";
+
+import { AppThemeContext } from "./ThemeProvider";
 
 const Theme = styled(ThemePrimitive)`
     padding: 0;

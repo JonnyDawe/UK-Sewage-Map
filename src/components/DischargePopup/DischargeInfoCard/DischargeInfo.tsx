@@ -1,13 +1,12 @@
-import styled from "@emotion/styled";
+import { Box, Flex, Separator, Text } from "@radix-ui/themes";
 
 import { useUTCTime } from "../../../hooks/useUTCTime";
-import PulsatingBadge from "../../ActiveBadge/ActiveBadge";
-import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
 import {
     formatShortDate,
     getFormattedTimeInterval
 } from "../../../utils/discharge/discharge.utils";
-import { Box, Text, Separator, Flex } from "@radix-ui/themes";
+import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
+import PulsatingBadge from "../../ActiveBadge/ActiveBadge";
 
 function getDischargeDescriptionFromAlert(alertStatus: AlertStatus, dischargeStart: number | null) {
     switch (alertStatus) {

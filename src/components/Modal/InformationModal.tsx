@@ -1,10 +1,14 @@
+import styled from "@emotion/styled";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import React from "react";
 import Wave from "react-wavify";
-import styled from "@emotion/styled";
 
 import { useOnFirstVisit } from "../../hooks/useOnUserFirstVisit";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
+import MapButton from "../common/Buttons/MapButton";
+import Dialog from "../common/Dialog/Dialog";
+import { ModalHeader } from "../common/Dialog/DialogTitle";
 import {
     CloseIcon,
     HydrologyModelIcon,
@@ -12,13 +16,9 @@ import {
     WasteWaterIcon,
     WaterInfoIcon
 } from "../common/Icons";
-import MapButton from "../common/Buttons/MapButton";
-import TextInfoList from "../TextInfoList";
-import { ModalHeader } from "../common/Dialog/DialogTitle";
-import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
-import AppTheme from "../Theme/AppTheme";
-import Dialog from "../common/Dialog/Dialog";
 import { Em, Link } from "../common/Text";
+import TextInfoList from "../TextInfoList/TextInfoList";
+import AppTheme from "../Theme/AppTheme";
 
 const BackgroundWave = styled(Wave)`
     position: absolute;

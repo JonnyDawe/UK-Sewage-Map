@@ -1,8 +1,8 @@
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Box, Slider, Text } from "@radix-ui/themes";
 import React from "react";
 
 import { RainviewerItem } from "./config";
-import { Box, Slider, Text } from "@radix-ui/themes";
 
 type TimeSliderProps = {
     currentTimePath: RainviewerItem;

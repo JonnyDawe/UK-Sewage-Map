@@ -1,5 +1,6 @@
-import React from "react";
 import * as promiseUtils from "@arcgis/core/core/promiseUtils";
+import React from "react";
+
 import MapOverlay from "./MapOverlay";
 import { MountedMapsContext } from "./useMapView";
 
