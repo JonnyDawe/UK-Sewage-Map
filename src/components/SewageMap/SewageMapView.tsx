@@ -1,7 +1,8 @@
 import React from "react";
+
 import { usePageContext } from "../../../renderer/usePageContext";
-import { AppThemeContext } from "../Theme/ThemeProvider";
 import MapView from "../common/Map/MapView";
+import { AppThemeContext } from "../Theme/ThemeProvider";
 
 async function loadMap(container: HTMLDivElement, theme: "dark" | "light", csoId: string) {
     const { initialiseMapview } = await import("../../utils/map/initialisemap");

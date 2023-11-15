@@ -1,5 +1,5 @@
-import * as PrimitiveDialog from "@radix-ui/react-dialog";
 import styled from "@emotion/styled";
+import * as PrimitiveDialog from "@radix-ui/react-dialog";
 
 const Overlay = styled(PrimitiveDialog.Overlay)`
     background-color: var(--blackA9);

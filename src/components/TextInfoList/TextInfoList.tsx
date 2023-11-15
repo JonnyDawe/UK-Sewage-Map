@@ -10,8 +10,6 @@ const IconContainer = styled.div`
     width: 40px;
 `;
 
-// No need for a separate styled component for children, as it's a regular div.
-
 const TextInfoList = ({ icon, children }: React.PropsWithChildren<{ icon: React.ReactNode }>) => {
     return (
         <Container>

@@ -1,6 +1,6 @@
 import WebTileLayer from "@arcgis/core/layers/WebTileLayer.js";
+import { Flex } from "@radix-ui/themes";
 import React from "react";
-import styled from "@emotion/styled";
 import useSWR from "swr";
 
 import { Config, RAINVIEWERCOVERAGEURL, RainviewerItem } from "./config";
@@ -11,7 +11,6 @@ import {
     generateTileID,
     getRoundUpUnixTs
 } from "./Utils";
-import { Flex } from "@radix-ui/themes";
 
 // fetch task for Rainviewer
 async function fetchTimePaths(url: string) {

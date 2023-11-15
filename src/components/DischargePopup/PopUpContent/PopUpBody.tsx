@@ -1,13 +1,13 @@
-import Wave from "react-wavify";
 import styled from "@emotion/styled";
+import { Box } from "@radix-ui/themes";
+import Wave from "react-wavify";
 
 import { usePrefersReducedMotion } from "../../../hooks/usePrefersReducedMotion";
-import Tabs from "../../common/Tabs";
+import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
+import Tabs from "../../common/Tabs/Tabs";
 import { DischargeDate } from "../DischargeInfoCard/DischargeDate";
 import { DischargeInfo } from "../DischargeInfoCard/DischargeInfo";
 import Timeline from "../DischargeTimeline/DischargeTimeline";
-import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
-import { Box } from "@radix-ui/themes";
 
 const ContentWrapper = styled(Box)`
     width: 100%;

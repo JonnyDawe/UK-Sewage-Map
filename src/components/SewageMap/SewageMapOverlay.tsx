@@ -1,11 +1,12 @@
-import React from "react";
 import styled from "@emotion/styled";
+import React from "react";
+
+import { MapContext } from "../common/Map/MapView";
+import { useMap } from "../common/Map/useMapView";
 import { DarkModeToggle } from "../DarkModeToggle/DarkModeToggle";
 import Footer from "../Footer/Footer";
 import InformationModal from "../Modal/InformationModal";
 import RainRadarPopover from "../RainRadar/RainRadarPopover";
-import { MapContext } from "../common/Map/MapView";
-import { useMap } from "../common/Map/useMapView";
 
 const ModalLaunchButtonWrapper = styled.div`
     pointer-events: all;

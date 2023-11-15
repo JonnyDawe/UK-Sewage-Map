@@ -1,19 +1,19 @@
 import { CloseIcon } from "./Close";
 import { HydrologyModelIcon } from "./HydrologyModel";
 import { InfoIcon } from "./Info";
+import { MoonIcon } from "./Moon";
 import { RainIcon } from "./Rain";
+import { SunIcon } from "./Sun";
 import { WasteWaterIcon } from "./WasteWater";
 import { WaterInfoIcon } from "./WaterInfo";
-import { SunIcon } from "./Sun";
-import { MoonIcon } from "./Moon";
 
 export {
     CloseIcon,
     HydrologyModelIcon,
     InfoIcon,
-    RainIcon,
-    WasteWaterIcon,
-    WaterInfoIcon,
     MoonIcon,
-    SunIcon
+    RainIcon,
+    SunIcon,
+    WasteWaterIcon,
+    WaterInfoIcon
 };

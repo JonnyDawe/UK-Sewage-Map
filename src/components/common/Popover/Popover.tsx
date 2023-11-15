@@ -1,5 +1,5 @@
-import * as PrimitivePopover from "@radix-ui/react-popover";
 import styled from "@emotion/styled";
+import * as PrimitivePopover from "@radix-ui/react-popover";
 
 const Content = styled(PrimitivePopover.Content)`
     border-radius: 4px;

@@ -1,5 +1,6 @@
-import GenericTheme from "./GenericTheme";
 import styled from "@emotion/styled";
+
+import GenericTheme from "./GenericTheme";
 
 /**  This is where we might define different themes and color overides. 
 

@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-
-import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
-import { CloseIcon, RainIcon } from "../common/Icons";
-import MapButton from "../common/Buttons/MapButton";
-import Popover from "../common/Popover";
-import RainRadar from "./RainRadar";
-import AppTheme from "../Theme/AppTheme";
 import { Flex, Heading } from "@radix-ui/themes";
+
+import MapButton from "../common/Buttons/MapButton";
+import { CloseIcon, RainIcon } from "../common/Icons";
+import Popover from "../common/Popover/Popover";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import AppTheme from "../Theme/AppTheme";
+import RainRadar from "./RainRadar";
 
 const Title = styled.p`
     font-size: 1.2rem;
