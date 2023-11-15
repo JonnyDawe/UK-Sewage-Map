@@ -1,6 +1,7 @@
-import { defineConfig } from "vite";
-import vike from "vike/plugin";
+/// <reference types="vitest"/>
 import react from "@vitejs/plugin-react-swc";
+import vike from "vike/plugin";
+import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,5 +15,12 @@ export default defineConfig({
             jsxImportSource: "@emotion/react"
         }),
         vike()
-    ]
+    ],
+
+    test: {
+        globals: true,
+        environment: "jsdom",
+        setupFiles: "./src/test/setup.ts",
+        deps: {}
+    }
 });

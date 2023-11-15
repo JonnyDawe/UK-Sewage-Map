@@ -47,6 +47,7 @@
     },
     "devDependencies": {
         "@swc/plugin-emotion": "2.5.87",
+        "@testing-library/react": "^14.1.0",
         "@types/react": "^18.0.25",
         "@types/react-dom": "^18.0.8",
         "@typescript-eslint/eslint-plugin": "^5.10.2",
