@@ -1,6 +1,3 @@
-import "@radix-ui/themes/styles.css";
-import "../../styles/index.css";
-
 import { MapProvider } from "../../components/common/Map/useMapView";
 import { SewageMapOverlay } from "../../components/SewageMap/SewageMapOverlay";
 import { SewageMapView } from "../../components/SewageMap/SewageMapView";
