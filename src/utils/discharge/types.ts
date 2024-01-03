@@ -36,5 +36,6 @@ export enum DischargeHistoryPeriod {
     Last12Months,
     Last6Months,
     Last3Months,
-    StartOf2023
+    StartOf2023,
+    StartOf2024
 }
