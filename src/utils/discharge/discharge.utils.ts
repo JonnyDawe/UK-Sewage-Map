@@ -240,15 +240,16 @@ export function isDateWithinLastnMonths(date: Date, n: number) {
 }
 
 /**
- * Checks if a given date is within the year 2023.
+ * Checks if a given date is within a specified year.
  *
  * @param {Date} date - The date to check.
- * @returns {boolean} Returns true if the date is within the year 2023, false otherwise.
+ * @param {number} year - The year to check within.
+ * @returns {boolean} Returns true if the date is within the specified year, false otherwise.
  */
-export function isDateWithin2023(date: Date) {
-    const startOf2023 = new Date(2023, 0, 1); // January is 0-based
-    const endOf2023 = new Date(2023, 11, 31);
-    return date >= startOf2023 && date <= endOf2023;
+export function isDateWithinYear(date: Date, year: number) {
+    const startOfYear = new Date(year, 0, 1); // January is 0-based
+    const endOfYear = new Date(year, 11, 31);
+    return date >= startOfYear && date <= endOfYear;
 }
 
 /**

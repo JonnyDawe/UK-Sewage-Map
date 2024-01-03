@@ -11,8 +11,8 @@ import {
     getDischargeDataForLocation,
     getDischargeDateObject,
     getFormattedTimeInterval,
-    isDateWithin2023,
-    isDateWithinLastnMonths
+    isDateWithinLastnMonths,
+    isDateWithinYear
 } from "../../../utils/discharge/discharge.utils";
 import {
     DischargeHistoricalData,
@@ -68,7 +68,11 @@ function getFilteredDischarges(
             );
         case DischargeHistoryPeriod.StartOf2023:
             return dischargeData.discharges.filter((discharge) =>
-                isDateWithin2023(discharge.start)
+                isDateWithinYear(discharge.start, 2023)
+            );
+        case DischargeHistoryPeriod.StartOf2024:
+            return dischargeData.discharges.filter((discharge) =>
+                isDateWithinYear(discharge.start, 2024)
             );
         default:
             return [];
@@ -85,6 +89,8 @@ function getStartDateOfInterest(period: DischargeHistoryPeriod) {
             return getDatenMonthsAgo(new Date(), 3);
         case DischargeHistoryPeriod.StartOf2023:
             return new Date(2023, 0, 1);
+        case DischargeHistoryPeriod.StartOf2024:
+            return new Date(2024, 0, 1);
         default:
             return undefined;
     }
@@ -209,7 +215,8 @@ function Timeline({ locationName }: { locationName: string }) {
                         { value: DischargeHistoryPeriod.Last3Months, label: "Last 3 months" },
                         { value: DischargeHistoryPeriod.Last6Months, label: "Last 6 months" },
                         { value: DischargeHistoryPeriod.Last12Months, label: "Last 12 months" },
-                        { value: DischargeHistoryPeriod.StartOf2023, label: "Start of the year" }
+                        { value: DischargeHistoryPeriod.StartOf2023, label: "Entirety of 2023" },
+                        { value: DischargeHistoryPeriod.StartOf2024, label: "Start of the Year" }
                     ]}
                     value={selectedPeriod}
                     onChange={(selectedPeriod) => {
