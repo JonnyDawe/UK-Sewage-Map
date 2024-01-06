@@ -62,7 +62,7 @@ export default async function handler(request: VercelRequest) {
         const permitNumber = searchParams.get("PermitNumber")?.slice(0, 100);
 
         const dischargesUpToPresent = await fetch(
-            "https://thamessewage.s3.eu-west-2.amazonaws.com/discharges_to_date/up_to_now.json"
+            "https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now.json"
         );
 
         // If the status code is not in the range 200-299,

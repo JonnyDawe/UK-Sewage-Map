@@ -4,7 +4,7 @@ import CIMSymbol from "@arcgis/core/symbols/CIMSymbol.js";
 
 export function getRiverDischargeLayer() {
     const geojsonlayer = new GeoJSONLayer({
-        url: "https://thamessewage.s3.eu-west-2.amazonaws.com/now/now.geojson",
+        url: "https://d1kmd884co9q6x.cloudfront.net/now/now.geojson",
         copyright: "Sewage Map",
         renderer: {
             type: "simple", // autocasts as new SimpleRenderer()

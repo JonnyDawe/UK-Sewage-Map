@@ -38,7 +38,7 @@ const fetchTimeStamp = async (url: string): Promise<Date> => {
 
 function Footer() {
     const { data, isLoading } = useSWR(
-        "https://thamessewage.s3.eu-west-2.amazonaws.com/now/timestamp.txt",
+        "https://d1kmd884co9q6x.cloudfront.net/now/timestamp.txt",
         fetchTimeStamp
     );
 

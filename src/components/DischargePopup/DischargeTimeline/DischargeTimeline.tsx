@@ -144,7 +144,7 @@ async function fetchHistoricDischargeData(url: string) {
 function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
     const startFormatted = getDischargeDateObject(discharge.start);
     return `<div
-            style="  
+            style="
             min-width:160px;
             background-color: var(--color-panel-solid);
             color: var(--gray-12);
@@ -182,7 +182,7 @@ function Timeline({ locationName }: { locationName: string }) {
         isLoading,
         error
     } = useSWR(
-        "https://thamessewage.s3.eu-west-2.amazonaws.com/discharges_to_date/up_to_now.json",
+        "https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now.json",
         fetchHistoricDischargeData
     );
 
