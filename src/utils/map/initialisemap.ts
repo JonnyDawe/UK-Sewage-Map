@@ -170,7 +170,7 @@ function initialiseSearchWidget(mapView: esriMapView) {
         sources: [
             new LocatorSearchSource({
                 placeholder: "Find address or place",
-                url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+                url: "https://utility.arcgis.com/usrsvcs/servers/4b613e3cb0ca4e7fb3ce8e99e5cd7a41/rest/services/World/GeocodeServer",
                 countryCode: "GB",
                 suggestionsEnabled: true,
                 minSuggestCharacters: 2,

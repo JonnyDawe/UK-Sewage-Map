@@ -55,25 +55,43 @@ function getFilteredDischarges(
 ) {
     switch (period) {
         case DischargeHistoryPeriod.Last12Months:
-            return dischargeData.discharges.filter((discharge) =>
-                isDateWithinLastnMonths(discharge.start, 12)
-            );
         case DischargeHistoryPeriod.Last6Months:
-            return dischargeData.discharges.filter((discharge) =>
-                isDateWithinLastnMonths(discharge.start, 6)
-            );
-        case DischargeHistoryPeriod.Last3Months:
-            return dischargeData.discharges.filter((discharge) =>
-                isDateWithinLastnMonths(discharge.start, 3)
-            );
+        case DischargeHistoryPeriod.Last3Months: {
+            const months =
+                period === DischargeHistoryPeriod.Last12Months
+                    ? 12
+                    : period === DischargeHistoryPeriod.Last6Months
+                    ? 6
+                    : 3;
+            return dischargeData.discharges
+                .map((discharge) => {
+                    if (
+                        !isDateWithinLastnMonths(discharge.start, months) &&
+                        isDateWithinLastnMonths(discharge.end, months)
+                    ) {
+                        const newStart = new Date();
+                        newStart.setMonth(newStart.getMonth() - months);
+                        return { ...discharge, start: newStart };
+                    }
+                    return discharge;
+                })
+                .filter((discharge) => isDateWithinLastnMonths(discharge.end, months));
+        }
         case DischargeHistoryPeriod.StartOf2023:
-            return dischargeData.discharges.filter((discharge) =>
-                isDateWithinYear(discharge.start, 2023)
-            );
-        case DischargeHistoryPeriod.StartOf2024:
-            return dischargeData.discharges.filter((discharge) =>
-                isDateWithinYear(discharge.start, 2024)
-            );
+        case DischargeHistoryPeriod.StartOf2024: {
+            const year = period === DischargeHistoryPeriod.StartOf2023 ? 2023 : 2024;
+            return dischargeData.discharges
+                .map((discharge) => {
+                    if (
+                        !isDateWithinYear(discharge.start, year) &&
+                        isDateWithinYear(discharge.end, year)
+                    ) {
+                        return { ...discharge, start: new Date(year, 0, 1) };
+                    }
+                    return discharge;
+                })
+                .filter((discharge) => isDateWithinYear(discharge.end, year));
+        }
         default:
             return [];
     }
