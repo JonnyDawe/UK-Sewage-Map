@@ -6,23 +6,22 @@ import UniqueValueRenderer from "@arcgis/core/renderers/UniqueValueRenderer";
 import SizeVariable from "@arcgis/core/renderers/visualVariables/SizeVariable.js";
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol";
 
+import arcade from "@/constants/dischargeSourceRendererArcade";
+import { ERRORICON, GREENTICKICON, POOICON } from "@/constants/hostedImages";
+
 import {
     setEsriPopupHTMLContent,
     setEsriPopupTitle
 } from "../../components/DischargePopup/popupfactory";
-import dischargeRendererValueExpression from "../../static/dischargeSourceRendererArcade.js?raw";
-import recentDischargeUrl from "../../static/error-warning-fill-map-icon.png";
-import pooUrl from "../../static/poo.png";
-import notDischargingUrl from "../../static/shield-check-fill-map-icon.png";
 
-const valueExpression = dischargeRendererValueExpression;
+const valueExpression = arcade;
 const uniqueValueGroups = [
     new UniqueValueGroup({
         classes: [
             new UniqueValueClass({
                 label: "Discharging",
                 symbol: new PictureMarkerSymbol({
-                    url: pooUrl,
+                    url: POOICON,
                     width: "32",
                     height: "32"
                 }),
@@ -31,7 +30,7 @@ const uniqueValueGroups = [
             new UniqueValueClass({
                 label: "Not Discharging",
                 symbol: new PictureMarkerSymbol({
-                    url: notDischargingUrl,
+                    url: GREENTICKICON,
                     width: "16",
                     height: "16"
                 }),
@@ -40,7 +39,7 @@ const uniqueValueGroups = [
             new UniqueValueClass({
                 label: "Recent Discharge",
                 symbol: new PictureMarkerSymbol({
-                    url: recentDischargeUrl,
+                    url: ERRORICON,
                     width: "20",
                     height: "20"
                 }),

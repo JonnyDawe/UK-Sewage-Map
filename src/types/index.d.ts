@@ -18,3 +18,8 @@ declare module "sewage-discharge-map" {
 
     export { DischargeSourceFeature, DischargeSourceFeatureSet };
 }
+declare global {
+    interface HTMLLinkElement {
+        disabled?: boolean;
+    }
+}

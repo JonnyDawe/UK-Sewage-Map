@@ -12,13 +12,14 @@ import Search from "@arcgis/core/widgets/Search";
 import LocatorSearchSource from "@arcgis/core/widgets/Search/LocatorSearchSource";
 import { SymbolAnimationManager } from "arcgis-animate-markers-plugin";
 
-import { getDischargePointLayer } from "../layers/dischargeSources";
-import { getRiverDischargeLayer } from "../layers/riverDischarge";
-import { getThamesTidalLayer } from "../layers/thamesTidalPolygon";
+import { getDischargePointLayer } from "../../constants/layers/dischargeSources";
+import { getRiverDischargeLayer } from "../../constants/layers/riverDischarge";
+import { getThamesTidalLayer } from "../../constants/layers/thamesTidalPolygon";
 import { MarkerHoverPopAnimation } from "../MarkerHoverPopAnimation";
-import { removeURLParameter, updateURLParameter } from "../url";
 
-esriConfig.apiKey = import.meta.env.VITE_ESRI_PUBLIC_API_KEY;
+esriConfig.apiKey = process.env.NEXT_PUBLIC_ESRI_PUBLIC_API_KEY ?? "";
+const darkBasemapId = process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_DARK ?? "darkbasemapid";
+const lightBasemapId = process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_LIGHT ?? "lightbasemapid";
 
 export async function initialiseMapview(
     mapElement: HTMLDivElement,
@@ -32,8 +33,8 @@ export async function initialiseMapview(
     const map = new esriMap({
         basemap:
             theme === "light"
-                ? new Basemap({ portalItem: { id: import.meta.env.VITE_ESRI_BASEMAP_ID_LIGHT } })
-                : new Basemap({ portalItem: { id: import.meta.env.VITE_ESRI_BASEMAP_ID_DARK } }),
+                ? new Basemap({ portalItem: { id: lightBasemapId } })
+                : new Basemap({ portalItem: { id: darkBasemapId } }),
         layers: [thamesTidalLayer, dischargeTraceLayer, dischargeSourceLayer]
     });
 
@@ -99,8 +100,6 @@ export async function initialiseMapview(
         () => mapView.popup?.selectedFeature,
         async (graphic) => {
             if (graphic?.layer === dischargeSourceLayer || graphic?.layer === null) {
-                updateURLParameter("PermitNumber", graphic.attributes["PermitNumber"] ?? "");
-
                 mapView.popup.viewModel.location = mapView.popup.selectedFeature
                     .geometry as __esri.Point;
                 const selectedAnimatedGraphic = symbolAnimationManager.getAnimatedGraphic({
@@ -126,7 +125,6 @@ export async function initialiseMapview(
         (visible, wasVisible) => {
             if (wasVisible && !visible && mapView.ready) {
                 MarkerPopEffectManager.activeGraphic = null;
-                removeURLParameter("PermitNumber");
             }
         }
     );

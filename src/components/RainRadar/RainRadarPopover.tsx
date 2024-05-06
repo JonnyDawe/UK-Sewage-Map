@@ -8,13 +8,6 @@ import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 import AppTheme from "../Theme/AppTheme";
 import RainRadar from "./RainRadar";
 
-const Title = styled.p`
-    font-size: 1.2rem;
-    line-height: 1;
-    color: var(--font-1);
-    font-weight: 500;
-`;
-
 const RainRadarPopover = ({ view }: { view: __esri.MapView }) => {
     return (
         <ErrorBoundary>

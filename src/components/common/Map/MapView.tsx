@@ -7,7 +7,7 @@ import { MountedMapsContext } from "./useMapView";
 interface MapViewProps {
     id: string;
     style?: React.CSSProperties;
-    initialiseMap: (container: HTMLDivElement) => Promise<__esri.MapView>;
+    initistyledaliseMap: (container: HTMLDivElement) => Promise<__esri.MapView>;
 }
 
 export type MapContextValue = {
@@ -42,7 +42,7 @@ const MapView = React.forwardRef(function MapView(
                 .then(async (loadedMapView) => {
                     // if in vite development mode add a small wait here to handle
                     // React strict mode double run of useEffect.
-                    if (import.meta.env.DEV) {
+                    if (process.env.DEV) {
                         await setTimeout(() => {}, 1000);
                     }
 

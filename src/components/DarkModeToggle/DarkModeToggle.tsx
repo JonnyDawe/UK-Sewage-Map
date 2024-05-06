@@ -15,9 +15,11 @@ export function DarkModeToggle({ view }: { view: __esri.MapView }) {
             view,
             nextBasemap:
                 initialTheme === "light"
-                    ? new Basemap({ portalItem: { id: import.meta.env.VITE_ESRI_BASEMAP_ID_DARK } })
+                    ? new Basemap({
+                          portalItem: { id: process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_DARK }
+                      })
                     : new Basemap({
-                          portalItem: { id: import.meta.env.VITE_ESRI_BASEMAP_ID_LIGHT }
+                          portalItem: { id: process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_LIGHT }
                       })
         }),
         [view, initialTheme]

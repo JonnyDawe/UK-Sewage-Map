@@ -21,7 +21,9 @@ const Overlay = styled(PrimitiveDialog.Overlay)`
 const Content = styled(PrimitiveDialog.Content)`
     background-color: var(--color-panel-solid);
     border-radius: 6px;
-    box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+    box-shadow:
+        hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+        hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
     position: fixed;
     top: 50%;
     left: 50%;

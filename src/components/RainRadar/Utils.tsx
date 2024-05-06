@@ -59,12 +59,6 @@ export const getRoundUpUnixTs = (): number => {
     return roundDate / 1000;
 };
 
-const ColorGrid = styled.div`
-    flex-grow: 1;
-    display: grid;
-    grid-auto-columns: auto;
-`;
-
 /**
  * Generate Colour scheme for Rainviewer
  * @param code colour code

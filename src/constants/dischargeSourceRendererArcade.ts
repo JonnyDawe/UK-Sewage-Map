@@ -1,4 +1,4 @@
-/* eslint-disable */
+const arcade = ` 
 var statuses = ["Not Discharging", "Recent Discharge", "Discharging", "Offline"];
 
 var index = 3;
@@ -18,4 +18,6 @@ if (
 } else if (Lower(Trim($feature.AlertStatus)) == "offline") {
     index = 3;
 }
-return statuses[index];
+return statuses[index];`;
+
+export default arcade;

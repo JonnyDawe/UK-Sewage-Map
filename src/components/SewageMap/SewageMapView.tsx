@@ -1,7 +1,8 @@
+"use client";
+import dynamic from "next/dynamic";
 import React from "react";
 
-import { usePageContext } from "../../../renderer/usePageContext";
-import MapView from "../common/Map/MapView";
+import MapView from "../common/Map/newMapView";
 import { AppThemeContext } from "../Theme/ThemeProvider";
 
 async function loadMap(container: HTMLDivElement, theme: "dark" | "light", csoId: string) {
@@ -9,20 +10,17 @@ async function loadMap(container: HTMLDivElement, theme: "dark" | "light", csoId
     return initialiseMapview(container, theme, csoId);
 }
 
+const MapNoSSR = dynamic<{ defaultTheme: "light" | "dark" }>(
+    () => import("@components/common/Map/newMapView"),
+    {
+        ssr: false
+    }
+);
+
 export function SewageMapView({ children }: React.PropsWithChildren) {
     const { appearance } = React.useContext(AppThemeContext).theme;
     const mode = appearance === "dark" ? "dark" : "light";
-    const { urlParsed } = usePageContext();
-    const csoId = urlParsed.search?.["PermitNumber"] ?? "";
+    const csoId = "";
 
-    return (
-        <MapView
-            id="sewagemap"
-            initialiseMap={(container) => {
-                return loadMap(container, mode, csoId);
-            }}
-        >
-            {children}
-        </MapView>
-    );
+    return <MapNoSSR defaultTheme={mode} />;
 }

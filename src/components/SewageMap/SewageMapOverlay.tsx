@@ -1,7 +1,6 @@
+"use client";
 import styled from "@emotion/styled";
-import React from "react";
 
-import { MapContext } from "../common/Map/MapView";
 import { useMap } from "../common/Map/useMapView";
 import { DarkModeToggle } from "../DarkModeToggle/DarkModeToggle";
 import Footer from "../Footer/Footer";
