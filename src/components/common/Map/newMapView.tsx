@@ -15,6 +15,11 @@ import { Flex } from "@radix-ui/themes";
 import { SymbolAnimationManager } from "arcgis-animate-markers-plugin";
 import { ArcLocate, ArcMapView, ArcSearch, ArcUI } from "arcgis-react";
 
+import { DarkModeToggle } from "@/components/DarkModeToggle/DarkModeToggle";
+import Footer from "@/components/Footer/Footer";
+import InformationModal from "@/components/Modal/InformationModal";
+import RainRadarPopover from "@/components/RainRadar/RainRadarPopover";
+import { SewageMapOverlay } from "@/components/SewageMap/SewageMapOverlay";
 import { getDischargePointLayer } from "@/constants/layers/dischargeSources";
 import { getRiverDischargeLayer } from "@/constants/layers/riverDischarge";
 import { getThamesTidalLayer } from "@/constants/layers/thamesTidalPolygon";
@@ -38,6 +43,11 @@ const SearchWrapper = styled(ArcUI)`
         padding-top: 0px;
         padding-bottom: 50px;
     }
+`;
+
+const MapOverlay = styled(ArcUI)`
+    inset: 0;
+    pointer-events: none !important;
 `;
 
 export default function MapView({ defaultTheme }: { defaultTheme: "light" | "dark" }) {
@@ -75,7 +85,9 @@ export default function MapView({ defaultTheme }: { defaultTheme: "light" | "dar
             }}
             popup={
                 new Popup({
-                    collapseEnabled: false,
+                    visibleElements: {
+                        collapseButton: false
+                    },
                     highlightEnabled: false
                 })
             }
@@ -99,6 +111,9 @@ export default function MapView({ defaultTheme }: { defaultTheme: "light" | "dar
                     ]}
                 />
             </SearchWrapper>
+            <MapOverlay position="manual">
+                <SewageMapOverlay />
+            </MapOverlay>
         </ArcMapView>
     );
 }

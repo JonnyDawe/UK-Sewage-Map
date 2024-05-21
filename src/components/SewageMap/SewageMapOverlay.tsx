@@ -1,7 +1,7 @@
 "use client";
 import styled from "@emotion/styled";
+import { useCurrentMapView } from "arcgis-react";
 
-import { useMap } from "../common/Map/useMapView";
 import { DarkModeToggle } from "../DarkModeToggle/DarkModeToggle";
 import Footer from "../Footer/Footer";
 import InformationModal from "../Modal/InformationModal";
@@ -18,7 +18,7 @@ const ModalLaunchButtonWrapper = styled.div`
 `;
 
 export function SewageMapOverlay() {
-    const { current: currentMapView } = useMap();
+    const currentMapView = useCurrentMapView();
 
     if (!currentMapView) {
         return null;

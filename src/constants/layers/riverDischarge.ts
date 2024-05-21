@@ -19,7 +19,7 @@ export function getRiverDischargeLayer() {
 
     let lastTimestamp = 0;
     let offset = 0;
-    const stepDuration = 70; // 100ms
+    const stepDuration = 100; // 100ms
 
     function animate(timestamp: number) {
         if (!lastTimestamp) {
