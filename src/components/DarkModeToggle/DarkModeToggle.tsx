@@ -11,8 +11,8 @@ import { AppThemeContext } from "../Theme/ThemeProvider";
 export function DarkModeToggle() {
     const view = useCurrentMapView();
     const { toggleColorMode } = React.useContext(AppThemeContext);
-    const { theme } = useTheme();
-    const [initialTheme] = React.useState(theme === "dark" ? "dark" : "light");
+    const { resolvedTheme } = useTheme();
+    const [initialTheme] = React.useState(resolvedTheme === "dark" ? "dark" : "light");
 
     const baseMapToggleModelInput = React.useMemo(
         () => ({
@@ -45,7 +45,7 @@ export function DarkModeToggle() {
                 }
             }}
         >
-            {theme === "light" ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
+            {resolvedTheme === "light" ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
         </MapButton>
     );
 }

@@ -11,10 +11,10 @@ const MapNoSSR = dynamic<
 });
 
 const SewageMapView = ({ csoId }: { csoId?: string }) => {
-    const { theme } = useTheme();
+    const { resolvedTheme } = useTheme();
     const { current: initialCSOId } = React.useRef(csoId);
     const { current: initialTheme } = React.useRef<"light" | "dark">(
-        theme === "dark" ? "dark" : "light"
+        resolvedTheme === "dark" ? "dark" : "light"
     );
 
     return <MapNoSSR defaultTheme={initialTheme} csoId={initialCSOId}></MapNoSSR>;

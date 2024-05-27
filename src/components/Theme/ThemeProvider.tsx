@@ -42,7 +42,7 @@ function AppThemeProvider({
     isChild,
     children
 }: React.PropsWithChildren<{ theme: Partial<ThemeOptions>; isChild: boolean }>) {
-    const { theme: appearance, setTheme } = useTheme();
+    const { resolvedTheme: appearance, setTheme } = useTheme();
 
     React.useEffect(() => {
         if (!isChild) {
