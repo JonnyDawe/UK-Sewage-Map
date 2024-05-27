@@ -14,7 +14,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
     try {
         return {
-            metadataBase: new URL("https://www.maponice.com"),
+            metadataBase: new URL("https://www.sewagemap.co.uk"),
             title: "Sewage Map",
             description:
                 "Real-Time Thames Sewage Discharge Monitoring | Sewage Map - Stay Updated on Sewage Pollution",
