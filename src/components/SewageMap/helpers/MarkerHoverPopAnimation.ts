@@ -150,6 +150,5 @@ export class MarkerHoverPopAnimation {
 
     destroy() {
         this.hoverHandler.remove();
-        console.log(this.hoverHandler);
     }
 }

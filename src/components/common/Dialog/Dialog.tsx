@@ -65,9 +65,11 @@ const CloseCornerButton = styled(PrimitiveDialog.Close)`
     right: 10px;
 `;
 
-export default {
+const DialogComponent = {
     ...PrimitiveDialog,
     CloseCornerButton,
     Content,
     Overlay
 };
+
+export default DialogComponent;

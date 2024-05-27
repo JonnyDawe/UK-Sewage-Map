@@ -120,7 +120,6 @@ const useOnDischargeSourceLayerCreate = (
         handleLayerCreated();
 
         return () => {
-            console.log("DischargePointFeatureLayer unmounted");
             symbolAnimationManager.removeAllAnimatedGraphics();
 
             markerHoverPopAnimation.destroy();

@@ -12,6 +12,7 @@ import { DischargePointFeatureLayer } from "@/components/SewageMap/layers/discha
 import { RiverDischargeGeoJsonLayer } from "@/components/SewageMap/layers/riverDischarge";
 import { ThamesTidalFeatureLayer } from "@/components/SewageMap/layers/thamesTidalPolygon";
 import { MapUI } from "@/components/SewageMap/MapUI";
+import useInitialTheme from "@/hooks/useInitialTheme";
 
 esriConfig.apiKey = process.env.NEXT_PUBLIC_ESRI_PUBLIC_API_KEY ?? "";
 const darkBasemapId = process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_DARK ?? "darkbasemapid";
@@ -39,20 +40,17 @@ const MapOverlay = styled(ArcUI)`
     pointer-events: none !important;
 `;
 
-export default React.memo(function MapView({
-    defaultTheme,
-    csoId
-}: {
-    defaultTheme: "light" | "dark";
-    csoId?: string;
-}) {
-    console.log("MapView rendered", defaultTheme, csoId);
-
+export default React.memo(function MapView({ csoId }: { csoId?: string }) {
     const { current: initialCSOId } = React.useRef(csoId);
+    const initialTheme = useInitialTheme();
+
+    if (!initialTheme) {
+        return null; // block rendering until the initial theme is resolved
+    }
 
     const map = new esriMap({
         basemap:
-            defaultTheme === "light"
+            initialTheme === "light"
                 ? new Basemap({ portalItem: { id: lightBasemapId } })
                 : new Basemap({ portalItem: { id: darkBasemapId } })
     });
