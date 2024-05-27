@@ -41,7 +41,8 @@
         "react-dom": "^18.2.0",
         "react-google-charts": "^4.0.1",
         "react-wavify": "^1.8.3",
-        "swr": "^2.2.1"
+        "swr": "^2.2.1",
+        "vitest": "^1.6.0"
     },
     "devDependencies": {
         "@swc/plugin-emotion": "2.5.87",
