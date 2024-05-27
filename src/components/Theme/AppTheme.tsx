@@ -19,8 +19,12 @@ const Theme = styled(GenericTheme)`
 */
 
 const Theme = styled(GenericTheme)`
-    --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    --default-font-family: var(--font-roboto) !important;
+    --heading-font-family: var(--font-roboto) !important;
+    --code-font-family: var(--font-roboto) !important;
+    --strong-font-family: var(--font-roboto) !important;
+    --em-font-family: var(--font-roboto) !important;
+    --quote-font-family: var(--font-roboto) !important;
 
     --river-blue: #0954a5;
     --light-river-blue: #52a9ff;

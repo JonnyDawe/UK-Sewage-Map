@@ -89,7 +89,7 @@ body,
 }
 
 body {
-    font-family: var(--font-lexend);
+    font-family: var(--font-roboto);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;

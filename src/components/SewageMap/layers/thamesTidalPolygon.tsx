@@ -1,6 +1,6 @@
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import SimpleRenderer from "@arcgis/core/renderers/SimpleRenderer.js";
 import CIMSymbol from "@arcgis/core/symbols/CIMSymbol.js";
+import { ArcFeatureLayer } from "arcgis-react";
 
 const tidalHatchSymbol = new CIMSymbol({
     data: {
@@ -42,11 +42,15 @@ const tidalHatchSymbol = new CIMSymbol({
     }
 });
 
-export function getThamesTidalLayer() {
-    return new FeatureLayer({
-        url: "https://services1.arcgis.com/e5YqQVeOlRe9Wmq5/arcgis/rest/services/GLA_Tidal_Water/FeatureServer/0",
-        renderer: new SimpleRenderer({
-            symbol: tidalHatchSymbol
-        })
-    });
+export function ThamesTidalFeatureLayer() {
+    return (
+        <ArcFeatureLayer
+            url="https://services1.arcgis.com/e5YqQVeOlRe9Wmq5/arcgis/rest/services/GLA_Tidal_Water/FeatureServer/0"
+            renderer={
+                new SimpleRenderer({
+                    symbol: tidalHatchSymbol
+                })
+            }
+        ></ArcFeatureLayer>
+    );
 }

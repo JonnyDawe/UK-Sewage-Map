@@ -2,7 +2,7 @@
     border-radius: var(--search-border-radius, 2px) !important;
     border: var(--river-blue, blue) 1px solid !important;
     max-width: var(--search-input-max-width, 85vw) !important;
-    width: var(--search-input-width, 480px)!important;
+    width: var(--search-input-width, 480px) !important;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -77,7 +77,7 @@
     flex: 1 0;
 }
 .esri-search__input {
-    border-radius: var(--search-border-radius, 2px) 0px 0px var(--search-border-radius, 2px)!important;
+    border-radius: var(--search-border-radius, 2px) 0px 0px var(--search-border-radius, 2px) !important;
     display: block;
     width: 100%;
     margin: 0;
@@ -103,7 +103,7 @@
     align-self: flex-end;
 }
 .esri-search__submit-button {
-    border-radius: 0px var(--search-border-radius, 2px) var(--search-border-radius, 2px) 0px!important;
+    border-radius: 0px var(--search-border-radius, 2px) var(--search-border-radius, 2px) 0px !important;
     border-top: none;
     border-right: none;
     border-bottom: none;
@@ -200,7 +200,7 @@
     font-size: 16px;
 }
 [dir="rtl"] .esri-search__submit-button {
-    border-radius: var(--search-border-radius, 2px) 0px 0px var(--search-border-radius, 2px)!important;
+    border-radius: var(--search-border-radius, 2px) 0px 0px var(--search-border-radius, 2px) !important;
     border-left: none;
     border-right: solid 1px rgba(110, 110, 110, 0.3);
 }
@@ -287,5 +287,6 @@
 }
 
 .esri-popup__main-container {
-    width: var(--map-popup-width, 440px)!important;
+    width: var(--map-popup-width, 440px) !important;
+    max-width: 100%;
 }

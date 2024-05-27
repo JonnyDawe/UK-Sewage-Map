@@ -1,7 +1,6 @@
 "use client";
 import { ThemeOptions } from "@radix-ui/themes";
-import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
-import { ThemeProviderProps } from "next-themes/dist/types";
+import { useTheme } from "next-themes";
 import * as React from "react";
 
 interface ThemeContextProps {
@@ -11,16 +10,7 @@ interface ThemeContextProps {
 
 type ColorMode = "light" | "dark";
 
-function updateDocumentBodyThemeClass(colorMode: ColorMode) {
-    if (document?.body) {
-        document.body.classList.remove("light", "dark");
-        document.body.classList.add(colorMode);
-    }
-}
-
 function updateDarkMode(colorMode: ColorMode) {
-    updateDocumentBodyThemeClass(colorMode);
-
     const dark = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-dark");
     const light = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-light");
 
@@ -52,16 +42,16 @@ function AppThemeProvider({
     isChild,
     children
 }: React.PropsWithChildren<{ theme: Partial<ThemeOptions>; isChild: boolean }>) {
-    const { setTheme } = useTheme();
+    const { theme: appearance, setTheme } = useTheme();
 
     React.useEffect(() => {
         if (!isChild) {
-            updateDarkMode(theme.appearance === "light" ? "light" : "dark");
+            updateDarkMode(appearance === "light" ? "light" : "dark");
         }
     }, []);
 
     const toggleColorMode = () => {
-        const newMode = theme.appearance === "light" ? "dark" : "light";
+        const newMode = appearance === "light" ? "dark" : "light";
         setTheme(newMode);
         updateDarkMode(newMode);
     };
@@ -73,8 +63,4 @@ function AppThemeProvider({
     );
 }
 
-function NextThemeProvider({ children, ...props }: ThemeProviderProps) {
-    return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
-}
-
-export { AppThemeContext, AppThemeProvider, NextThemeProvider, useAppTheme };
+export { AppThemeContext, AppThemeProvider, useAppTheme };

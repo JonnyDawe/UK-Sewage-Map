@@ -1,13 +1,12 @@
 "use client";
 import styled from "@emotion/styled";
-import { useCurrentMapView } from "arcgis-react";
 
 import { DarkModeToggle } from "../DarkModeToggle/DarkModeToggle";
 import Footer from "../Footer/Footer";
 import InformationModal from "../Modal/InformationModal";
 import RainRadarPopover from "../RainRadar/RainRadarPopover";
 
-const ModalLaunchButtonWrapper = styled.div`
+const ButtonsGroup = styled.div`
     pointer-events: all;
     position: absolute;
     top: 16px;
@@ -17,20 +16,14 @@ const ModalLaunchButtonWrapper = styled.div`
     gap: 8px;
 `;
 
-export function SewageMapOverlay() {
-    const currentMapView = useCurrentMapView();
-
-    if (!currentMapView) {
-        return null;
-    }
-
+export function MapUI() {
     return (
         <>
-            <ModalLaunchButtonWrapper>
+            <ButtonsGroup>
                 <InformationModal></InformationModal>
-                <RainRadarPopover view={currentMapView}></RainRadarPopover>
-                <DarkModeToggle view={currentMapView}></DarkModeToggle>
-            </ModalLaunchButtonWrapper>
+                <RainRadarPopover></RainRadarPopover>
+                <DarkModeToggle></DarkModeToggle>
+            </ButtonsGroup>
             <Footer></Footer>
         </>
     );

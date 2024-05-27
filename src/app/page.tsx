@@ -1,11 +1,11 @@
-"use client";
-import { SewageMapOverlay } from "@/components/SewageMap/SewageMapOverlay";
-import { SewageMapView } from "@/components/SewageMap/SewageMapView";
+import { SewageMapView } from "@/components/SewageMap/LazyMapView";
 
-export default function MapPage() {
-    return (
-        <SewageMapView>
-            <SewageMapOverlay></SewageMapOverlay>
-        </SewageMapView>
-    );
+export default function MapPage({
+    searchParams
+}: {
+    searchParams?: {
+        PermitNumber?: string;
+    };
+}) {
+    return <SewageMapView csoId={searchParams?.PermitNumber ?? undefined} />;
 }

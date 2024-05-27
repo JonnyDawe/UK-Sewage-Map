@@ -8,7 +8,7 @@ import {
     SymbolAnimationManager
 } from "arcgis-animate-markers-plugin";
 
-import { throttleAsync } from "./throttle";
+import { throttleAsync } from "../../../utils/throttle";
 
 /** Example - create a pop-up animation effect on a map when a marker is
  * hovered over.
@@ -84,6 +84,11 @@ export class MarkerHoverPopAnimation {
                 firstLayerGraphic.symbol = await symbolUtils.getDisplayedSymbol(firstLayerGraphic, {
                     scale: this.mapView.scale
                 });
+                firstLayerGraphic.set("sourceLayer", {
+                    objectIdField: (
+                        this.symbolAnimationManager.parentLayerView as __esri.FeatureLayerView
+                    ).layer.objectIdField
+                });
                 this.activeGraphic = firstLayerGraphic;
             } else {
                 this.mapView.container.style.cursor = "default";
@@ -95,7 +100,12 @@ export class MarkerHoverPopAnimation {
 
     private _activeGraphic: __esri.Graphic | null = null;
     public set activeGraphic(hitGraphic: __esri.Graphic | null) {
-        if (hitGraphic && this.symbolAnimationManager.hasAnimatedGraphic({ graphic: hitGraphic })) {
+        if (
+            hitGraphic &&
+            this.symbolAnimationManager.hasAnimatedGraphic({
+                graphic: hitGraphic
+            })
+        ) {
             return;
         }
 
@@ -131,12 +141,15 @@ export class MarkerHoverPopAnimation {
         animatedGraphic.symbolAnimation.start({
             to: { scale: 1, rotate: 0 },
             onFinish: () => {
-                this.symbolAnimationManager.removeAnimatedGraphic({ graphic: animatedGraphic });
+                this.symbolAnimationManager.removeAnimatedGraphic({
+                    graphic: animatedGraphic
+                });
             }
         });
     }
 
     destroy() {
         this.hoverHandler.remove();
+        console.log(this.hoverHandler);
     }
 }

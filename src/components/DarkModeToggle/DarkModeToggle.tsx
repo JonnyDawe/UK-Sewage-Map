@@ -1,4 +1,6 @@
 import Basemap from "@arcgis/core/Basemap";
+import { useCurrentMapView } from "arcgis-react";
+import { useTheme } from "next-themes";
 import React from "react";
 
 import { useBaseMapToggleModel } from "../../hooks/useBaseMapToggleModel";
@@ -6,9 +8,11 @@ import MapButton from "../common/Buttons/MapButton";
 import { MoonIcon, SunIcon } from "../common/Icons";
 import { AppThemeContext } from "../Theme/ThemeProvider";
 
-export function DarkModeToggle({ view }: { view: __esri.MapView }) {
-    const { theme, toggleColorMode } = React.useContext(AppThemeContext);
-    const [initialTheme] = React.useState(theme.appearance);
+export function DarkModeToggle() {
+    const view = useCurrentMapView();
+    const { toggleColorMode } = React.useContext(AppThemeContext);
+    const { theme } = useTheme();
+    const [initialTheme] = React.useState(theme === "dark" ? "dark" : "light");
 
     const baseMapToggleModelInput = React.useMemo(
         () => ({
@@ -41,7 +45,7 @@ export function DarkModeToggle({ view }: { view: __esri.MapView }) {
                 }
             }}
         >
-            {theme.appearance === "light" ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
+            {theme === "light" ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
         </MapButton>
     );
 }

@@ -2,16 +2,15 @@
 // @ts-nocheck - This file is not type checked as the link tag is allowed to have a disabled property
 import "@/styles/index.css";
 
-import { Lexend_Exa } from "next/font/google";
-
-import { NextThemeProvider } from "@/components/Theme/ThemeProvider";
+import { Roboto_Flex } from "next/font/google";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { Providers } from "./providers";
 
-const LexendFont = Lexend_Exa({
+const LexendFont = Roboto_Flex({
     subsets: ["latin"],
-    display: "swap",
-    variable: "--font-lexend"
+    display: "auto",
+    variable: "--font-roboto"
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -31,11 +30,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     disabled
                 />
             </head>
-
             <body className={LexendFont.className}>
-                <NextThemeProvider>
+                <NextThemesProvider attribute="class">
                     <Providers>{children}</Providers>
-                </NextThemeProvider>
+                </NextThemesProvider>
             </body>
         </html>
     );

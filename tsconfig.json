@@ -50,6 +50,6 @@
         "types": ["./src/types/index.d.ts"]
     },
     /* Specify files to include in compilation. */
-    "include": ["src", "api", ".next/types/**/*.ts"],
+    "include": ["src", "src/app/api", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }
