@@ -61,8 +61,8 @@ function getFilteredDischarges(
                 period === DischargeHistoryPeriod.Last12Months
                     ? 12
                     : period === DischargeHistoryPeriod.Last6Months
-                    ? 6
-                    : 3;
+                      ? 6
+                      : 3;
             return dischargeData.discharges
                 .map((discharge) => {
                     if (
@@ -169,8 +169,8 @@ function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
             padding: 5px;
         >
             <h2 style="font-size:1.1rem; margin-bottom:4px">${startFormatted.day} ${
-        startFormatted.month
-    } ${startFormatted.year}</h2>
+                startFormatted.month
+            } ${startFormatted.year}</h2>
             <p>Duration: ${getFormattedTimeInterval(
                 discharge.start.getTime(),
                 discharge.end.getTime()

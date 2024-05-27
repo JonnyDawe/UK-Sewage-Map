@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Flex, Heading } from "@radix-ui/themes";
+import { useCurrentMapView } from "arcgis-react";
 
 import MapButton from "../common/Buttons/MapButton";
 import { CloseIcon, RainIcon } from "../common/Icons";
@@ -8,14 +9,9 @@ import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 import AppTheme from "../Theme/AppTheme";
 import RainRadar from "./RainRadar";
 
-const Title = styled.p`
-    font-size: 1.2rem;
-    line-height: 1;
-    color: var(--font-1);
-    font-weight: 500;
-`;
+const RainRadarPopover = () => {
+    const view = useCurrentMapView();
 
-const RainRadarPopover = ({ view }: { view: __esri.MapView }) => {
     return (
         <ErrorBoundary>
             <Popover.Root>

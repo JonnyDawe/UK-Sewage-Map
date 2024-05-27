@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap");
 @import "./esri-overides.css";
 @import "./css-reset.css";
 
@@ -90,8 +89,7 @@ body,
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-        "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: var(--font-roboto);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
@@ -101,30 +99,8 @@ body {
     cursor: pointer;
 }
 
-.searchWrapper {
-    pointer-events: none !important;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    top: 0;
-    bottom: unset;
-    padding-top: 15px;
-    padding-bottom: 0px;
-}
-
-.searchWidget {
-    pointer-events: auto;
-}
-
 @media (max-width: 640px) {
-    .searchWrapper {
-        bottom: 0;
-        top: unset;
-        padding-top: 0px;
-        padding-bottom: 50px;
-    }
-
-    .searchWrapper .esri-menu {
+    .esri-search .esri-menu {
         top: auto;
         bottom: 100%;
     }

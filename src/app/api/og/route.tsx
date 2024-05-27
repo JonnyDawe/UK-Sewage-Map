@@ -1,17 +1,15 @@
-import type { VercelRequest } from "@vercel/node";
-import { ImageResponse } from "@vercel/og";
+import { ImageResponse } from "next/og";
+import { NextRequest } from "next/server";
 
 import {
     calculateTotalDischargeLength,
     formatTime,
     getDischargeDataForPermitNumber,
     isDateWithinYear
-} from "../src/utils/discharge/discharge.utils";
-import { DischargeHistoricalDataJSON } from "../src/utils/discharge/types";
+} from "../../../utils/discharge/discharge.utils";
+import { DischargeHistoricalDataJSON } from "../../../utils/discharge/types";
 
-export const config = {
-    runtime: "edge"
-};
+export const runtime = "edge";
 
 function generateDisplayData(jsonData: DischargeHistoricalDataJSON, permitNumber: string) {
     const { discharges, locationName, receivingWaterCourse } = getDischargeDataForPermitNumber(
@@ -31,12 +29,11 @@ function generateDisplayData(jsonData: DischargeHistoricalDataJSON, permitNumber
     };
 }
 
-export default async function handler(request: VercelRequest) {
+// Image generation
+export async function GET({ nextUrl }: NextRequest) {
     try {
-        const { searchParams } = new URL(request.url ?? "");
-
         // ?PermitNumber=<PermitNumber>
-        const hasPermitNumber = searchParams.has("PermitNumber");
+        const hasPermitNumber = nextUrl.searchParams.has("PermitNumber");
 
         if (!hasPermitNumber) {
             return new ImageResponse(
@@ -59,7 +56,7 @@ export default async function handler(request: VercelRequest) {
             );
         }
 
-        const permitNumber = searchParams.get("PermitNumber")?.slice(0, 100);
+        const permitNumber = nextUrl.searchParams.get("PermitNumber")?.slice(0, 100);
 
         const dischargesUpToPresent = await fetch(
             "https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now.json"
@@ -280,8 +277,8 @@ export default async function handler(request: VercelRequest) {
                 height: 630
             }
         );
-    } catch (e: any) {
-        console.log(`${e.message}`);
+    } catch (e) {
+        console.log(e);
         return new Response(`Failed to generate the image`, {
             status: 500
         });

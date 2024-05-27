@@ -1,5 +1,7 @@
+"use client";
 import { ThemeOptions } from "@radix-ui/themes";
-import React from "react";
+import { useTheme } from "next-themes";
+import * as React from "react";
 
 interface ThemeContextProps {
     theme: Partial<ThemeOptions>;
@@ -8,32 +10,15 @@ interface ThemeContextProps {
 
 type ColorMode = "light" | "dark";
 
-function isColorMode(value: string): value is ColorMode {
-    return value === "light" || value === "dark";
-}
-
-function updateDocumentBodyThemeClass(colorMode: ColorMode) {
-    if (document?.body) {
-        document.body.classList.remove("light", "dark");
-        document.body.classList.add(colorMode);
-    }
-}
-
-const updateDarkMode = (colorMode: ColorMode) => {
-    updateDocumentBodyThemeClass(colorMode);
-
-    // Get references to the dark and light theme links in the DOM
+function updateDarkMode(colorMode: ColorMode) {
     const dark = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-dark");
     const light = document.querySelector<HTMLLinkElement>("#arcgis-maps-sdk-theme-light");
 
-    // Check if both dark and light theme links were found
     if (dark && light) {
-        // Set the 'disabled' property of the links based on the colorMode
         dark.disabled = colorMode === "light";
         light.disabled = colorMode === "dark";
     }
 
-    // Toggle Calcite mode if the element with class 'calcite-mode-dark' is found
     const calciteMode = document.querySelector(
         `.calcite-mode-${colorMode === "dark" ? "light" : "dark"}`
     );
@@ -41,56 +26,41 @@ const updateDarkMode = (colorMode: ColorMode) => {
         calciteMode.classList.remove("calcite-mode-dark", "calcite-mode-light");
         calciteMode.classList.add(`calcite-mode-${colorMode}`);
     }
-};
+}
 
 const AppThemeContext = React.createContext<ThemeContextProps>({
     theme: {},
     toggleColorMode: () => {}
 });
 
-const AppThemeProvider = ({
+function useAppTheme() {
+    return React.useContext(AppThemeContext);
+}
+
+function AppThemeProvider({
     theme,
+    isChild,
     children
-}: React.PropsWithChildren<{ theme: Partial<ThemeOptions> }>) => {
-    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const [colorMode, setColorMode] = React.useState<ColorMode>(() => {
-        let colorMode: ColorMode;
-        if (theme.appearance) {
-            colorMode = theme.appearance === "light" ? "light" : "dark";
-        } else {
-            const localStorageValue = window.localStorage.getItem("color-mode");
-            colorMode = localStorageValue
-                ? isColorMode(localStorageValue)
-                    ? localStorageValue
-                    : prefersDarkMode
-                    ? "dark"
-                    : "light"
-                : prefersDarkMode
-                ? "dark"
-                : "light";
-        }
-
-        window.localStorage.setItem("color-mode", colorMode);
-
-        return colorMode;
-    });
+}: React.PropsWithChildren<{ theme: Partial<ThemeOptions>; isChild: boolean }>) {
+    const { resolvedTheme: appearance, setTheme } = useTheme();
 
     React.useEffect(() => {
-        window.localStorage.setItem("color-mode", colorMode);
-        updateDarkMode(colorMode);
-    }, [colorMode]);
+        if (!isChild) {
+            updateDarkMode(appearance === "light" ? "light" : "dark");
+        }
+    }, []);
 
     const toggleColorMode = () => {
-        setColorMode((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
+        const newMode = appearance === "light" ? "dark" : "light";
+        setTheme(newMode);
+        updateDarkMode(newMode);
     };
 
     return (
-        <AppThemeContext.Provider
-            value={{ toggleColorMode, theme: { ...theme, appearance: colorMode } }}
-        >
+        <AppThemeContext.Provider value={{ toggleColorMode, theme: { ...theme } }}>
             {children}
         </AppThemeContext.Provider>
     );
-};
+}
 
-export { AppThemeContext, AppThemeProvider };
+export { AppThemeContext, AppThemeProvider, useAppTheme };

@@ -1,27 +1,15 @@
 import GeoJSONLayer from "@arcgis/core/layers/GeoJSONLayer";
 import SimpleRenderer from "@arcgis/core/renderers/SimpleRenderer.js";
 import CIMSymbol from "@arcgis/core/symbols/CIMSymbol.js";
+import LineSymbol from "@arcgis/core/symbols/LineSymbol.js";
+import { ArcGeoJSONLayer } from "arcgis-react";
 
-export function getRiverDischargeLayer() {
-    const geojsonlayer = new GeoJSONLayer({
-        url: "https://d1kmd884co9q6x.cloudfront.net/now/now.geojson",
-        copyright: "Sewage Map",
-        renderer: {
-            type: "simple", // autocasts as new SimpleRenderer()
-            symbol: {
-                type: "simple-line", // autocasts as new SimpleLineSymbol()
-                color: "#733f2e",
-                width: "6px",
-                style: "solid"
-            }
-        } as any
-    });
-
+export function RiverDischargeGeoJsonLayer() {
     let lastTimestamp = 0;
     let offset = 0;
-    const stepDuration = 70; // 100ms
+    const stepDuration = 100; // 100ms
 
-    function animate(timestamp: number) {
+    function animate(layer: GeoJSONLayer, timestamp: number) {
         if (!lastTimestamp) {
             lastTimestamp = timestamp;
         }
@@ -33,7 +21,7 @@ export function getRiverDischargeLayer() {
             lastTimestamp = timestamp;
         }
 
-        geojsonlayer.renderer = new SimpleRenderer({
+        layer.renderer = new SimpleRenderer({
             symbol: new CIMSymbol({
                 data: {
                     type: "CIMSymbolReference",
@@ -81,11 +69,24 @@ export function getRiverDischargeLayer() {
             })
         });
 
-        requestAnimationFrame(animate); // Call animate again on the next frame
+        requestAnimationFrame((timestamp) => animate(layer, timestamp)); // Call animate again on the next frame
     }
 
-    // Start the animation
-    requestAnimationFrame(animate);
-
-    return geojsonlayer;
+    return (
+        <ArcGeoJSONLayer
+            url="https://d1kmd884co9q6x.cloudfront.net/now/now.geojson"
+            copyright="Sewage Map"
+            renderer={
+                new SimpleRenderer({
+                    symbol: new LineSymbol({
+                        color: "#733f2e",
+                        width: "6px"
+                    })
+                })
+            }
+            onLayerCreated={(layer) => {
+                requestAnimationFrame((timestamp) => animate(layer, timestamp));
+            }}
+        />
+    );
 }

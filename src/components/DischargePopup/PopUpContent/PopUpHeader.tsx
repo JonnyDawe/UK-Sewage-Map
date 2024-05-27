@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Flex, Heading, Text } from "@radix-ui/themes";
 
-import { ERRORICON, GREENTICKICON, POOICON } from "../../../static/hostedImages";
+import { ERRORICON, GREENTICKICON, POOICON } from "../../../constants/hostedImages";
 import { AlertStatus } from "../../../utils/discharge/types";
 import { Em } from "../../common/Text";
 

@@ -23,6 +23,7 @@ export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }
                     grayColor: "gray",
                     panelBackground: "solid"
                 }}
+                isChild={true}
             >
                 <AppTheme>
                     <PopUpBody
@@ -48,6 +49,7 @@ export function setEsriPopupTitle({ graphic }: { graphic: __esri.Graphic }) {
                         grayColor: "gray",
                         panelBackground: "solid"
                     }}
+                    isChild={true}
                 >
                     <AppTheme>
                         <PopUpHeader {...{ alertStatus, feeds, location }}></PopUpHeader>
