@@ -1,8 +1,6 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
-
 import {
     calculateTotalDischargeLength,
     formatTime,
@@ -11,9 +9,7 @@ import {
 } from "../../../utils/discharge/discharge.utils";
 import { DischargeHistoricalDataJSON } from "../../../utils/discharge/types";
 
-export const config = {
-    runtime: "edge"
-};
+export const runtime = "edge";
 
 function generateDisplayData(jsonData: DischargeHistoricalDataJSON, permitNumber: string) {
     const { discharges, locationName, receivingWaterCourse } = getDischargeDataForPermitNumber(
