@@ -52,7 +52,11 @@ export async function GET({ nextUrl }: NextRequest) {
                             fontWeight: 600
                         }}
                     ></div>
-                )
+                ),
+                {
+                    width: 1200,
+                    height: 630
+                }
             );
         }
 
