@@ -5,8 +5,7 @@ import Wave from "react-wavify";
 import { usePrefersReducedMotion } from "../../../hooks/usePrefersReducedMotion";
 import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
 import Tabs from "../../common/Tabs/Tabs";
-import { DischargeDate } from "../DischargeInfoCard/DischargeDate";
-import { DischargeInfo } from "../DischargeInfoCard/DischargeInfo";
+import { DischargeInfoCard } from "../DischargeInfoCard/DischargeInfoCard";
 import Timeline from "../DischargeTimeline/DischargeTimeline";
 
 const ContentWrapper = styled(Box)`
@@ -102,14 +101,10 @@ export function PopUpBody({
                         <Tabs.Content value="latest">
                             <DataCardWrapper>
                                 <ActiveDischargeContent>
-                                    <DischargeDate
-                                        alertStatus={alertStatus}
+                                    <DischargeInfoCard
                                         dischargeInterval={dischargeInterval}
-                                    ></DischargeDate>
-                                    <DischargeInfo
                                         alertStatus={alertStatus}
-                                        dischargeInterval={dischargeInterval}
-                                    ></DischargeInfo>
+                                    ></DischargeInfoCard>
                                 </ActiveDischargeContent>
                             </DataCardWrapper>
                         </Tabs.Content>
