@@ -5,7 +5,6 @@ import LineSymbol from "@arcgis/core/symbols/LineSymbol.js";
 import { ArcGeoJSONLayer } from "arcgis-react";
 
 export function RiverDischargeGeoJsonLayer() {
-    console.log("RiverDischargeGeoJsonLayer render");
     let lastTimestamp = 0;
     let offset = 0;
     const stepDuration = 100; // 100ms

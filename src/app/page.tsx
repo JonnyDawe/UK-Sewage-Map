@@ -35,5 +35,5 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default function MapPage({ searchParams }: Props) {
-    return <SewageMapView csoId={searchParams?.PermitNumber ?? undefined} />;
+    return <SewageMapView csoId={searchParams?.PermitNumber} />;
 }
