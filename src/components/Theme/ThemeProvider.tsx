@@ -44,7 +44,7 @@ function AppThemeProvider({
     isChild,
     children
 }: React.PropsWithChildren<{ theme: Partial<ThemeOptions>; isChild: boolean }>) {
-    const { theme: currentTheme, setTheme } = useTheme();
+    const { resolvedTheme: currentTheme, setTheme } = useTheme();
 
     const initialTheme = useInitialTheme();
 
