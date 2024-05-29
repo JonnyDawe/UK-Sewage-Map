@@ -3,6 +3,8 @@ import { ThemeOptions } from "@radix-ui/themes";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
+import useInitialTheme from "@/hooks/useInitialTheme";
+
 interface ThemeContextProps {
     theme: Partial<ThemeOptions>;
     toggleColorMode: () => void;
@@ -42,16 +44,18 @@ function AppThemeProvider({
     isChild,
     children
 }: React.PropsWithChildren<{ theme: Partial<ThemeOptions>; isChild: boolean }>) {
-    const { resolvedTheme: appearance, setTheme } = useTheme();
+    const { theme: currentTheme, setTheme } = useTheme();
+
+    const initialTheme = useInitialTheme();
 
     React.useEffect(() => {
         if (!isChild) {
-            updateDarkMode(appearance === "light" ? "light" : "dark");
+            updateDarkMode(initialTheme === "light" ? "light" : "dark");
         }
-    }, []);
+    }, [initialTheme, isChild]);
 
     const toggleColorMode = () => {
-        const newMode = appearance === "light" ? "dark" : "light";
+        const newMode = currentTheme === "light" ? "dark" : "light";
         setTheme(newMode);
         updateDarkMode(newMode);
     };
