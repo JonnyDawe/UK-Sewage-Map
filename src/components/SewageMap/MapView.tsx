@@ -41,6 +41,7 @@ const MapOverlay = styled(ArcUI)`
 `;
 
 export default React.memo(function MapView({ csoId }: { csoId?: string }) {
+    console.log("MapView render");
     const { current: initialCSOId } = React.useRef(csoId);
     const initialTheme = useInitialTheme();
 

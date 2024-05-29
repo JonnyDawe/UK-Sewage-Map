@@ -49,7 +49,7 @@ function AppThemeProvider({
     const initialTheme = useInitialTheme();
 
     React.useEffect(() => {
-        if (!isChild) {
+        if (initialTheme && !isChild) {
             updateDarkMode(initialTheme === "light" ? "light" : "dark");
         }
     }, [initialTheme, isChild]);
