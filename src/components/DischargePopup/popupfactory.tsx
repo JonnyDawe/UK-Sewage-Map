@@ -27,7 +27,9 @@ export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }
             >
                 <AppTheme>
                     <PopUpBody
-                        {...{ dischargeInterval, alertStatus, locationName: location }}
+                        dischargeInterval={dischargeInterval}
+                        alertStatus={alertStatus}
+                        locationName={location}
                     ></PopUpBody>
                 </AppTheme>
             </AppThemeProvider>
