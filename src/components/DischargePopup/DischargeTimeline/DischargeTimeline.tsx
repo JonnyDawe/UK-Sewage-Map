@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Text } from "@radix-ui/themes";
+import { Box, Text } from "@radix-ui/themes";
 import React from "react";
 import { Chart } from "react-google-charts";
 import useSWR from "swr";
@@ -170,7 +170,6 @@ async function fetchHistoricDischargeData(url: string) {
 // Fetch the last updated date of the historic discharge data
 // - This is stored in a .txt file
 const fetchTimeStamp = async (url: string): Promise<Date> => {
-    return new Date();
     const res = await fetch(url);
 
     // If the status code is not in the range 200-299,
@@ -291,14 +290,16 @@ function Timeline({ locationName }: { locationName: string }) {
                     avoidOverlappingGridLines: false
                 }}
             ></CustomChart>
-            {lastUpdatedDate && (
-                <SubText style={{ bottom: "8px", left: "8px" }}>
-                    Last Updated <b>{formatShortDate(lastUpdatedDate)}</b>
+            <Box pt={"1"}>
+                {lastUpdatedDate && (
+                    <SubText style={{ bottom: "8px", left: "8px" }}>
+                        Last Updated <b>{formatShortDate(lastUpdatedDate)}</b>
+                    </SubText>
+                )}
+                <SubText style={{ bottom: "8px", right: "8px" }}>
+                    Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
                 </SubText>
-            )}
-            <SubText style={{ bottom: "8px", right: "8px" }}>
-                Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
-            </SubText>
+            </Box>
         </TimeLineWrapper>
     );
 }
