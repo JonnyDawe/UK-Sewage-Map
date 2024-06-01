@@ -40,22 +40,8 @@ const MapOverlay = styled(ArcUI)`
     pointer-events: none !important;
 `;
 
-export default React.memo(function MapView({ csoId }: { csoId?: string }) {
-    const { current: initialCSOId } = React.useRef(csoId);
-    const initialTheme = useInitialTheme();
-
-    if (!initialTheme) {
-        return null; // block rendering until the initial theme is resolved
-    }
-
-    const map = new esriMap({
-        basemap:
-            initialTheme === "light"
-                ? new Basemap({ portalItem: { id: lightBasemapId } })
-                : new Basemap({ portalItem: { id: darkBasemapId } })
-    });
-
-    return (
+const MemoizedMapView = React.memo(
+    ({ initialCSOId, map }: { initialCSOId: string | undefined; map: esriMap }) => (
         <ArcMapView
             style={{ height: "100%" }}
             constraints={{
@@ -100,8 +86,30 @@ export default React.memo(function MapView({ csoId }: { csoId?: string }) {
                 <MapUI />
             </MapOverlay>
         </ArcMapView>
+    )
+);
+
+export default function MapView({ csoId }: { csoId?: string }) {
+    const { current: initialCSOId } = React.useRef(csoId);
+    const initialTheme = useInitialTheme();
+
+    const map = React.useMemo(
+        () =>
+            new esriMap({
+                basemap:
+                    initialTheme === "light"
+                        ? new Basemap({ portalItem: { id: lightBasemapId } })
+                        : new Basemap({ portalItem: { id: darkBasemapId } })
+            }),
+        [initialTheme]
     );
-});
+
+    if (!initialTheme) {
+        return null; // block rendering until the initial theme is resolved
+    }
+
+    return <MemoizedMapView map={map} initialCSOId={initialCSOId}></MemoizedMapView>;
+}
 
 const SearchHackWrapper = () => {
     const props = {

@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const useInitialTheme = () => {
     const { resolvedTheme } = useTheme();
@@ -11,7 +11,9 @@ const useInitialTheme = () => {
         }
     }, [resolvedTheme, initialTheme]);
 
-    return initialTheme;
+    const memoizedInitialTheme = useMemo(() => initialTheme, [initialTheme]);
+
+    return memoizedInitialTheme;
 };
 
 export default useInitialTheme;

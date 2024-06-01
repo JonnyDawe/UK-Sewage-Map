@@ -11,9 +11,7 @@ const MapNoSSR = dynamic<React.PropsWithChildren<{ csoId?: string }>>(
 );
 
 const SewageMapView = ({ csoId }: { csoId?: string }) => {
-    const { current: initialCSOId } = React.useRef(csoId);
-
-    return <MapNoSSR csoId={initialCSOId}></MapNoSSR>;
+    return <MapNoSSR csoId={csoId}></MapNoSSR>;
 };
 
 export { SewageMapView };
