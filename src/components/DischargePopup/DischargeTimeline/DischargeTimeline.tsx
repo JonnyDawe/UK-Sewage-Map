@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Text } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import React from "react";
 import { Chart } from "react-google-charts";
 import useSWR from "swr";
@@ -203,8 +203,15 @@ function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
 }
 
 const SubText = styled.span`
-    position: absolute;
     font-size: 0.7rem;
+    b {
+        display: inline-block;
+    }
+    @container (min-width: 400px) {
+        b {
+            display: inline;
+        }
+    }
 `;
 
 const TimeLineWrapper = styled.div`
@@ -263,43 +270,50 @@ function Timeline({ locationName }: { locationName: string }) {
                     }}
                 />
             </Text>
-            {locationData.dischargeChartData.length === 1 && (
+            {locationData.dischargeChartData.length === 1 ? (
                 <Text size={"2"}>
                     No Recorded Discharge since {dischargeStartDate.day} {dischargeStartDate.month}{" "}
                     {dischargeStartDate.year}
                 </Text>
+            ) : (
+                <CustomChart
+                    chartType="Timeline"
+                    data={locationData.dischargeChartData}
+                    width="100%"
+                    height="120px"
+                    options={{
+                        timeline: {
+                            showRowLabels: false,
+                            singleColor: "#733f2e",
+                            barLabelStyle: {
+                                fontSize: 20
+                            }
+                        },
+                        hAxis: {
+                            minValue: getStartDateOfInterest(selectedPeriod),
+                            maxValue: new Date()
+                        },
+                        tooltip: { html: true },
+                        avoidOverlappingGridLines: false
+                    }}
+                ></CustomChart>
             )}
-            <CustomChart
-                chartType="Timeline"
-                data={locationData.dischargeChartData}
-                width="100%"
-                height="120px"
-                options={{
-                    timeline: {
-                        showRowLabels: false,
-                        singleColor: "#733f2e",
-                        barLabelStyle: {
-                            fontSize: 20
-                        }
-                    },
-                    hAxis: {
-                        minValue: getStartDateOfInterest(selectedPeriod),
-                        maxValue: new Date()
-                    },
-                    tooltip: { html: true },
-                    avoidOverlappingGridLines: false
+            <Flex
+                direction={"row"}
+                justify={"between"}
+                style={{
+                    containerType: "inline-size"
                 }}
-            ></CustomChart>
-            <Box pt={"1"}>
+            >
                 {lastUpdatedDate && (
-                    <SubText style={{ bottom: "8px", left: "8px" }}>
+                    <SubText>
                         Last Updated <b>{formatShortDate(lastUpdatedDate)}</b>
                     </SubText>
                 )}
-                <SubText style={{ bottom: "8px", right: "8px" }}>
+                <SubText>
                     Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
                 </SubText>
-            </Box>
+            </Flex>
         </TimeLineWrapper>
     );
 }
