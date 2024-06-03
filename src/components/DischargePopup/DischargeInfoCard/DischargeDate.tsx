@@ -53,7 +53,7 @@ export function DischargeDate({ alertStatus, dischargeInterval }: DischargeDateP
                     } as React.CSSProperties
                 }
             >
-                <Text size={"8"}>N/A</Text>
+                <Text size={"6"}>N/A</Text>
             </Container>
         );
     }
