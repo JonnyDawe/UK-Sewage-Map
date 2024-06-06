@@ -1,4 +1,4 @@
-export type AlertStatus = "Not Discharging" | "Recent Discharge" | "Discharging";
+export type AlertStatus = "Not Discharging" | "Recent Discharge" | "Discharging" | "Offline";
 
 export type DischargeInterval = {
     start: number | null;
