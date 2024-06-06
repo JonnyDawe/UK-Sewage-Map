@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import React from "react";
 import Wave from "react-wavify";
 
@@ -77,10 +77,10 @@ const InformationModal = () => {
                                     level={2}
                                 ></ModalHeader>
 
-                                <Flex direction={"column"} gap={"4"}>
+                                <Flex direction={"column"} gap={"4"} mb="4">
                                     <Text>
                                         This map shows, in real-time, which river sections are
-                                        downstream of sewage discharges from storm overflows. 
+                                        downstream of sewage discharges from storm overflows.
                                     </Text>
                                     <TextInfoList icon={<WaterInfoIcon></WaterInfoIcon>}>
                                         <Heading as={"h3"} size={"4"}>
@@ -95,12 +95,13 @@ const InformationModal = () => {
                                             <Link href="https://www.thameswater.co.uk/edm-map">
                                                 real-time updates
                                             </Link>{" "}
-                                            on storm overflows. Such overflows release
-                                            untreated, diluted sewage into the environment. Currently, 
-                                            only Thames Water provide an API to the raw EDM data, so 
-                                            the map is limited to the Thames Basin. More water companies
-                                            have committed to sharing their sewer overflow monitoring data
-                                            with the public, so map coverage should expand in the future.
+                                            on storm overflows. Such overflows release untreated,
+                                            diluted sewage into the environment. Currently, only
+                                            Thames Water provide an API to the raw EDM data, so the
+                                            map is limited to the Thames Basin. More water companies
+                                            have committed to sharing their sewer overflow
+                                            monitoring data with the public, so map coverage should
+                                            expand in the future.
                                         </Text>
                                     </TextInfoList>
                                     <TextInfoList icon={<HydrologyModelIcon></HydrologyModelIcon>}>
@@ -108,10 +109,10 @@ const InformationModal = () => {
                                             Hydrology Model{" "}
                                         </Heading>
                                         <Text>
-                                            To identify river stretches downstream of an overflow, we
-                                            combine the real-time EDM data with a basic hydrological
-                                            model. Using the{" "}
-                                            Center for Ecology and Hydrology’s{" "}
+                                            To identify river stretches downstream of an overflow,
+                                            we combine the real-time EDM data with a basic
+                                            hydrological model. Using the Center for Ecology and
+                                            Hydrology’s{" "}
                                             <Link href="https://www.ceh.ac.uk/data/integrated-hydrological-digital-terrain-model">
                                                 Integrated Hydrological Digital Terrain Model
                                             </Link>
@@ -121,11 +122,14 @@ const InformationModal = () => {
                                             does not consider dilution, river flow, or dispersion
                                             effects on pollutant concentration. Since water
                                             companies do not provide real-time data on discharge
-                                            volume or pollutant concentrations, accurately modelling these
-                                            effects is very difficult. Consequently, on its own, 
-                                            <strong>this map should not be used to assess pollution
-                                            risk</strong> at a specific location, for example, for 
-                                            bathing water quality.
+                                            volume or pollutant concentrations, accurately modelling
+                                            these effects is very difficult. Consequently, on its
+                                            own,
+                                            <Em>
+                                                this map should not be used to assess pollution risk
+                                            </Em>{" "}
+                                            at a specific location, for example, for bathing water
+                                            quality.
                                         </Text>
                                     </TextInfoList>
                                     <TextInfoList icon={<WasteWaterIcon></WasteWaterIcon>}>
@@ -137,9 +141,10 @@ const InformationModal = () => {
                                             <Link href="https://www.bbc.co.uk/news/science-environment-68665335">
                                                 data for 2023
                                             </Link>
-                                            , sewage overflows released
-                                            untreated sewage for total duration of 3.6 million hours. Untreated sewage overflows are responsible for
-                                            releasing various pollutants, including{" "}
+                                            , sewage overflows released untreated sewage for total
+                                            duration of 3.6 million hours. Untreated sewage
+                                            overflows are responsible for releasing various
+                                            pollutants, including{" "}
                                             <Link href="https://www.nature.com/articles/s41893-021-00718-2">
                                                 microplastics
                                             </Link>
@@ -151,21 +156,35 @@ const InformationModal = () => {
                                             <Link href="https://www.sciencedirect.com/science/article/pii/S0048969723029030">
                                                 human effluent
                                             </Link>
-                                            , into the environment. 
+                                            , into the environment.
                                         </Text>
                                     </TextInfoList>
                                     <Text mt={"2"}>
-                                        <strong>Further information, and full source code is available on GitHub:</strong>{" "}
+                                        <strong>
+                                            For more information and to see the full source code,
+                                            visit our GitHub pages:
+                                        </strong>{" "}
+                                        <br></br>
+                                    </Text>
+                                    <Flex gap={"2"} justify={"start"}>
                                         <Link href="https://github.com/AlexLipp/thames-sewage ">
-                                            backend{" "}
-                                        </Link>, 
+                                            backend
+                                        </Link>
+                                        <Separator orientation="vertical"></Separator>
                                         <Link href="https://github.com/JonnyDawe/UK-Sewage-Map/ ">
-                                            frontend{" "}
-                                            </Link>. Whilst every effort has been made to ensure accuracy, this is 
-                                            experimental software and errors may occur. If you see any issues please 
-                                            reach out to us so we can fix them (see GitHub links above). If you have 
-                                            any suggestions, we would love to hear them; if you're a developer and
-                                            would like to contribute, please get in touch! 
+                                            frontend
+                                        </Link>
+                                    </Flex>
+
+                                    <Text mt={"2"}>
+                                        Whilst every effort has been made to ensure accuracy, this
+                                        is experimental software and errors may occur. If you see
+                                        any issues please reach out to us so we can fix them (see
+                                        GitHub links above).
+                                    </Text>
+
+                                    <Text mt={"2"}>
+                                        <strong>We welcome suggestions and contributions!</strong>
                                     </Text>
                                 </Flex>
                                 <Flex justify={"end"} direction={"row"} pt={"2"}>
