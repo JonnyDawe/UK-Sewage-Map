@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import React from "react";
 import Wave from "react-wavify";
 
@@ -77,12 +77,10 @@ const InformationModal = () => {
                                     level={2}
                                 ></ModalHeader>
 
-                                <Flex direction={"column"} gap={"4"}>
+                                <Flex direction={"column"} gap={"4"} mb="4">
                                     <Text>
-                                        This map shows real-time information about river sections
-                                        that might be affected by sewage discharges from combined
-                                        sewer overflows. Currently, it is limited to the Thames
-                                        basin, which is managed by <Em>Thames Water</Em>.
+                                        This map shows, in real-time, which river sections are
+                                        downstream of sewage discharges from storm overflows.
                                     </Text>
                                     <TextInfoList icon={<WaterInfoIcon></WaterInfoIcon>}>
                                         <Heading as={"h3"} size={"4"}>
@@ -93,14 +91,17 @@ const InformationModal = () => {
                                             <Link href="https://www.thameswater.co.uk/about-us/performance/river-health/storm-discharge-and-event-duration-monitoring">
                                                 Event Duration Monitoring
                                             </Link>{" "}
-                                            (EDM) by <Em>Thames Water</Em>, providing almost{" "}
+                                            (EDM) by Thames Water, providing near{" "}
                                             <Link href="https://www.thameswater.co.uk/edm-map">
                                                 real-time updates
                                             </Link>{" "}
-                                            on combined sewer overflows (CSOs). CSOs release
-                                            untreated, diluted sewage into the environment. Starting
-                                            in 2023, more water companies have committed to sharing
-                                            their sewer overflow monitoring data with the public.
+                                            on storm overflows. Such overflows release untreated,
+                                            diluted sewage into the environment. Currently, only
+                                            Thames Water provide an API to the raw EDM data, so the
+                                            map is limited to the Thames Basin. More water companies
+                                            have committed to sharing their sewer overflow
+                                            monitoring data with the public, so map coverage should
+                                            expand in the future.
                                         </Text>
                                     </TextInfoList>
                                     <TextInfoList icon={<HydrologyModelIcon></HydrologyModelIcon>}>
@@ -108,22 +109,27 @@ const InformationModal = () => {
                                             Hydrology Model{" "}
                                         </Heading>
                                         <Text>
-                                            To identify river stretches affected by active CSOs, we
-                                            combine real-time EDM data with a basic hydrological
-                                            model. Using the{" "}
-                                            <Em>Center for Ecology and Hydrology’s</Em>{" "}
+                                            To identify river stretches downstream of an overflow,
+                                            we combine the real-time EDM data with a basic
+                                            hydrological model. Using the Center for Ecology and
+                                            Hydrology’s{" "}
                                             <Link href="https://www.ceh.ac.uk/data/integrated-hydrological-digital-terrain-model">
                                                 Integrated Hydrological Digital Terrain Model
                                             </Link>
-                                            , we track CSO discharges downstream along non-tidal
+                                            , we track sewage discharges downstream along non-tidal
                                             river networks. We highlight areas downstream of active
-                                            and recent discharges in brown, indicating the potential
-                                            risk of sewage pollution. Please note that this approach
+                                            and recent discharges in brown. This simple approach
                                             does not consider dilution, river flow, or dispersion
                                             effects on pollutant concentration. Since water
-                                            companies do not release real-time data on discharge
-                                            quantity or concentration, accurately modelling these
-                                            effects is very difficult.
+                                            companies do not provide real-time data on discharge
+                                            volume or pollutant concentrations, accurately modelling
+                                            these effects is very difficult. Consequently, on its
+                                            own,
+                                            <Em>
+                                                this map should not be used to assess pollution risk
+                                            </Em>{" "}
+                                            at a specific location, for example, for bathing water
+                                            quality.
                                         </Text>
                                     </TextInfoList>
                                     <TextInfoList icon={<WasteWaterIcon></WasteWaterIcon>}>
@@ -131,35 +137,54 @@ const InformationModal = () => {
                                             Waste Water
                                         </Heading>
                                         <Text>
-                                            According to the <Em>Environment Agency’s</Em>{" "}
-                                            <Link href="https://www.gov.uk/government/news/environment-agency-publishes-event-duration-monitoring-data-for-2022">
-                                                data for 2022
+                                            According to the Environment Agency’s{" "}
+                                            <Link href="https://www.bbc.co.uk/news/science-environment-68665335">
+                                                data for 2023
                                             </Link>
-                                            , there were 301,091 instances when CSOs released
-                                            untreated sewage. These discharges happened over a total
-                                            duration of 1.75 million hours. CSOs are responsible for
-                                            releasing various pollutants, including{" "}
+                                            , sewage overflows released untreated sewage for total
+                                            duration of 3.6 million hours. Untreated sewage
+                                            overflows are responsible for releasing various
+                                            pollutants, including{" "}
                                             <Link href="https://www.nature.com/articles/s41893-021-00718-2">
                                                 microplastics
                                             </Link>
                                             ,{" "}
-                                            <Link href="https://www.sciencedirect.com/science/article/pii/S0048969718349519">
+                                            <Link href="https://www.sciencedirect.com/science/article/pii/S0048969724029747">
                                                 illegal drugs
                                             </Link>
                                             , and{" "}
                                             <Link href="https://www.sciencedirect.com/science/article/pii/S0048969723029030">
                                                 human effluent
                                             </Link>
-                                            , into the environment. In 2022, the goal to clean up
-                                            waterways in England by 2027 was postponed by 36 years
-                                            to 2063.
+                                            , into the environment.
                                         </Text>
                                     </TextInfoList>
                                     <Text mt={"2"}>
-                                        <strong>Find out more at:</strong>{" "}
+                                        <strong>
+                                            For more information and to see the full source code,
+                                            visit our GitHub pages:
+                                        </strong>{" "}
+                                        <br></br>
+                                    </Text>
+                                    <Flex gap={"2"} justify={"start"}>
                                         <Link href="https://github.com/AlexLipp/thames-sewage ">
-                                            https://github.com/AlexLipp/thames-sewage{" "}
+                                            backend
                                         </Link>
+                                        <Separator orientation="vertical"></Separator>
+                                        <Link href="https://github.com/JonnyDawe/UK-Sewage-Map/ ">
+                                            frontend
+                                        </Link>
+                                    </Flex>
+
+                                    <Text mt={"2"}>
+                                        Whilst every effort has been made to ensure accuracy, this
+                                        is experimental software and errors may occur. If you see
+                                        any issues please reach out to us so we can fix them (see
+                                        GitHub links above).
+                                    </Text>
+
+                                    <Text mt={"2"}>
+                                        <strong>We welcome suggestions and contributions!</strong>
                                     </Text>
                                 </Flex>
                                 <Flex justify={"end"} direction={"row"} pt={"2"}>
