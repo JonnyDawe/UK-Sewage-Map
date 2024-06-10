@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
-import { Text } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import React from "react";
 import { Chart } from "react-google-charts";
 import useSWR from "swr";
 
 import {
     calculateTotalDischargeLength,
+    formatShortDate,
     formatTime,
     getDatenMonthsAgo,
     getDischargeDataForLocation,
@@ -119,7 +120,6 @@ function processDataForLocation(
     locationName: string,
     selectedPeriod: DischargeHistoryPeriod
 ) {
-    const dischargeData = getDischargeDataForLocation(jsonData, locationName);
     const columns = [
         { type: "string", id: "Location" },
         { type: "string", id: "Start Date String" },
@@ -127,6 +127,14 @@ function processDataForLocation(
         { type: "date", id: "Start" },
         { type: "date", id: "End" }
     ];
+
+    if (!jsonData)
+        return {
+            dischargeChartData: [columns],
+            totalDischarge: 0
+        };
+
+    const dischargeData = getDischargeDataForLocation(jsonData, locationName);
 
     const dischargesForSelectedPeriod = getFilteredDischarges(dischargeData, selectedPeriod);
 
@@ -159,6 +167,22 @@ async function fetchHistoricDischargeData(url: string) {
     return res.json();
 }
 
+// Fetch the last updated date of the historic discharge data
+// - This is stored in a .txt file
+const fetchTimeStamp = async (url: string): Promise<Date> => {
+    const res = await fetch(url);
+
+    // If the status code is not in the range 200-299,
+    // we still try to parse and throw it.
+    if (!res.ok) {
+        const error = new Error("An error occurred while fetching the Timestamp.");
+        throw error;
+    }
+
+    const dataString = await res.text();
+    return new Date(dataString);
+};
+
 function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
     const startFormatted = getDischargeDateObject(discharge.start);
     return `<div
@@ -179,10 +203,15 @@ function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
 }
 
 const SubText = styled.span`
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
     font-size: 0.7rem;
+    b {
+        display: inline-block;
+    }
+    @container (min-width: 400px) {
+        b {
+            display: inline;
+        }
+    }
 `;
 
 const TimeLineWrapper = styled.div`
@@ -204,7 +233,12 @@ function Timeline({ locationName }: { locationName: string }) {
         fetchHistoricDischargeData
     );
 
-    if (isLoading) {
+    const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useSWR(
+        "https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/timestamp.txt",
+        fetchTimeStamp
+    );
+
+    if (isLoading || lastUpdatedLoading) {
         return <p>Loading...</p>;
     }
 
@@ -214,15 +248,9 @@ function Timeline({ locationName }: { locationName: string }) {
 
     const locationData = processDataForLocation(historicDataJSON, locationName, selectedPeriod);
 
-    //no data rows
-    if (locationData?.dischargeChartData?.length === 1) {
-        const dateobj = getDischargeDateObject(
-            getStartDateOfInterest(selectedPeriod) ?? new Date()
-        );
-        return (
-            <p>{`No Recorded Discharge since ${dateobj.day} ${dateobj.month} ${dateobj.year} `}</p>
-        );
-    }
+    const dischargeStartDate = getDischargeDateObject(
+        getStartDateOfInterest(selectedPeriod) ?? new Date()
+    );
 
     return (
         <TimeLineWrapper>
@@ -242,30 +270,50 @@ function Timeline({ locationName }: { locationName: string }) {
                     }}
                 />
             </Text>
-            <CustomChart
-                chartType="Timeline"
-                data={locationData.dischargeChartData}
-                width="100%"
-                height="120px"
-                options={{
-                    timeline: {
-                        showRowLabels: false,
-                        singleColor: "#733f2e",
-                        barLabelStyle: {
-                            fontSize: 20
-                        }
-                    },
-                    hAxis: {
-                        minValue: getStartDateOfInterest(selectedPeriod),
-                        maxValue: new Date()
-                    },
-                    tooltip: { html: true },
-                    avoidOverlappingGridLines: false
+            {locationData.dischargeChartData.length === 1 ? (
+                <Text size={"2"}>
+                    No Recorded Discharge since {dischargeStartDate.day} {dischargeStartDate.month}{" "}
+                    {dischargeStartDate.year}
+                </Text>
+            ) : (
+                <CustomChart
+                    chartType="Timeline"
+                    data={locationData.dischargeChartData}
+                    width="100%"
+                    height="120px"
+                    options={{
+                        timeline: {
+                            showRowLabels: false,
+                            singleColor: "#733f2e",
+                            barLabelStyle: {
+                                fontSize: 20
+                            }
+                        },
+                        hAxis: {
+                            minValue: getStartDateOfInterest(selectedPeriod),
+                            maxValue: new Date()
+                        },
+                        tooltip: { html: true },
+                        avoidOverlappingGridLines: false
+                    }}
+                ></CustomChart>
+            )}
+            <Flex
+                direction={"row"}
+                justify={"between"}
+                style={{
+                    containerType: "inline-size"
                 }}
-            ></CustomChart>
-            <SubText>
-                Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
-            </SubText>
+            >
+                {lastUpdatedDate && (
+                    <SubText>
+                        Last Updated <b>{formatShortDate(lastUpdatedDate)}</b>
+                    </SubText>
+                )}
+                <SubText>
+                    Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
+                </SubText>
+            </Flex>
         </TimeLineWrapper>
     );
 }
