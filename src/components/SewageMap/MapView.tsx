@@ -125,6 +125,7 @@ const SearchHackWrapper = () => {
                 maxSuggestions: 4
             })
         ]
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
     return <ArcSearch {...props} />;
 };

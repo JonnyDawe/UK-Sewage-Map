@@ -18,6 +18,8 @@ function getDischargeDescriptionFromAlert(alertStatus: AlertStatus, dischargeSta
             return dischargeStart
                 ? "Historic Discharge Event 🤕"
                 : "No Recorded Discharge since 1st April 2022";
+        case "Offline":
+            return "Data Unavailable 🤔";
     }
 }
 
@@ -72,6 +74,11 @@ export function DischargeInfo({ alertStatus, dischargeInterval }: DischargeInfoT
             <Text as="p" size="3">
                 {getDischargeDescriptionFromAlert(alertStatus, dischargeInterval.start)}
             </Text>
+            {alertStatus === "Offline" && (
+                <Text as="p" size={"2"}>
+                    This monitoring station is currently showing as offline...
+                </Text>
+            )}
             {dischargeInterval.start != null && (
                 <>
                     <DateRange dischargeInterval={dischargeInterval}></DateRange>

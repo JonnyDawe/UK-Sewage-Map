@@ -1,5 +1,7 @@
 import { Tabs as PrimitiveTab } from "@radix-ui/themes";
 
-export default {
+const Tabs = {
     ...PrimitiveTab
 };
+
+export default Tabs;

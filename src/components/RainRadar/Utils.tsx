@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { Flex, Grid, Text } from "@radix-ui/themes";
 
 import { rainColorCodes } from "./config";

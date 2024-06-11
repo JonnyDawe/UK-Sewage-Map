@@ -36,7 +36,7 @@ const uniqueValueGroups = [
             new UniqueValueClass({
                 label: "Unknown Status",
                 symbol: new PictureMarkerSymbol({ url: UNKNOWNICON, width: "20", height: "20" }),
-                values: "offline"
+                values: "Offline"
             })
         ]
     })

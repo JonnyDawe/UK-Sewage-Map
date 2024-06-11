@@ -52,7 +52,11 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
     const { data: radarTimePaths } = useSWR(RAINVIEWERCOVERAGEURL, fetchTimePaths, {
         refreshInterval: refreshInterval()
     });
-    const timePathList = [...(radarTimePaths?.past ?? []), ...(radarTimePaths?.nowcast ?? [])];
+
+    const timePathList = React.useMemo(
+        () => [...(radarTimePaths?.past ?? []), ...(radarTimePaths?.nowcast ?? [])],
+        [radarTimePaths]
+    );
 
     // generate web tile layer
     const generateWebTileLayer = React.useCallback(
@@ -137,9 +141,9 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
     // time path list hook
     React.useEffect(() => {
         if (radarTimePaths) {
-            if (currentTimePath === null) {
-                setCurrentTimePath(radarTimePaths.past[radarTimePaths.past.length - 1]);
-            }
+            setCurrentTimePath((current) =>
+                current === null ? radarTimePaths.past[radarTimePaths.past.length - 1] : current
+            );
             pastTimePathRef.current = radarTimePaths.past[radarTimePaths.past.length - 2];
             timePathList.forEach((tp) => {
                 loadMapTask(tp);
@@ -148,7 +152,7 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
         return () => {
             mapCleanupTask();
         };
-    }, [loadMapTask, mapCleanupTask, radarTimePaths]);
+    }, [loadMapTask, mapCleanupTask, radarTimePaths, timePathList]);
 
     // time path hook
     React.useEffect(() => {
