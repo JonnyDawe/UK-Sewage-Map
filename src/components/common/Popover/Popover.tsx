@@ -91,9 +91,11 @@ const Arrow = styled(PrimitivePopover.Arrow)`
     fill: var(--color-panel-solid);
 `;
 
-export default {
+const PopoverComponents = {
     ...PrimitivePopover,
     Arrow,
     CloseCornerButton,
     Content
 };
+
+export default PopoverComponents;

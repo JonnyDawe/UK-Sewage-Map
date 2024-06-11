@@ -38,19 +38,16 @@ export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeDat
  * @returns An AlertStatus value ("Not Discharging", "Recent Discharge", or "Discharging").
  */
 function getAlertStatus(alertPast48Hours: boolean, alertStatusField: string): AlertStatus {
-    if (
-        alertPast48Hours === true &&
-        alertStatusField != "discharging" &&
-        alertStatusField != "offline"
-    ) {
-        return "Recent Discharge";
-    } else if (alertStatusField == "not discharging") {
-        return "Not Discharging";
-    } else if (alertStatusField == "discharging") {
-        return "Discharging";
+    switch (alertStatusField) {
+        case "offline":
+            return "Offline";
+        case "discharging":
+            return "Discharging";
+        case "not discharging":
+            return "Not Discharging";
+        default:
+            return alertPast48Hours ? "Recent Discharge" : "Not Discharging";
     }
-
-    return "Not Discharging"; // Default to "Not Discharging" if conditions are not met.
 }
 
 /**

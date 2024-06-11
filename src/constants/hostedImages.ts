@@ -1,6 +1,4 @@
-export const POOICON =
-    "https://res.cloudinary.com/dwnvivbjn/image/upload/v1691485967/SewageMap/poo_qklfln.png";
-export const ERRORICON =
-    "https://res.cloudinary.com/dwnvivbjn/image/upload/v1691485967/SewageMap/error-warning-fill_cpnllp.png";
-export const GREENTICKICON =
-    "https://res.cloudinary.com/dwnvivbjn/image/upload/v1691485968/SewageMap/shield-check-fill_vc4ehu.png";
+export const POOICON = "/images/poo.png";
+export const ERRORICON = "/images/error-warning-fill.png";
+export const GREENTICKICON = "/images/shield-check-fill.png";
+export const UNKNOWNICON = "/images/unknown-source.png";

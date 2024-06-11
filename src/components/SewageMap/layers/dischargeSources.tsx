@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 import arcadeRenderer from "@/constants/dischargeSourceRendererArcade";
-import { ERRORICON, GREENTICKICON, POOICON } from "@/constants/hostedImages";
+import { ERRORICON, GREENTICKICON, POOICON, UNKNOWNICON } from "@/constants/hostedImages";
 
 import { setEsriPopupHTMLContent, setEsriPopupTitle } from "../../DischargePopup/popupfactory";
 import { MarkerHoverPopAnimation } from "../helpers/MarkerHoverPopAnimation";
@@ -20,18 +20,23 @@ const uniqueValueGroups = [
         classes: [
             new UniqueValueClass({
                 label: "Discharging",
-                symbol: new PictureMarkerSymbol({ url: POOICON, width: "32", height: "32" }),
+                symbol: new PictureMarkerSymbol({ url: POOICON, width: "40", height: "40" }),
                 values: "Discharging"
             }),
             new UniqueValueClass({
                 label: "Not Discharging",
-                symbol: new PictureMarkerSymbol({ url: GREENTICKICON, width: "16", height: "16" }),
+                symbol: new PictureMarkerSymbol({ url: GREENTICKICON, width: "20", height: "20" }),
                 values: "Not Discharging"
             }),
             new UniqueValueClass({
                 label: "Recent Discharge",
-                symbol: new PictureMarkerSymbol({ url: ERRORICON, width: "20", height: "20" }),
+                symbol: new PictureMarkerSymbol({ url: ERRORICON, width: "24", height: "24" }),
                 values: "Recent Discharge"
+            }),
+            new UniqueValueClass({
+                label: "Unknown Status",
+                symbol: new PictureMarkerSymbol({ url: UNKNOWNICON, width: "20", height: "20" }),
+                values: "Offline"
             })
         ]
     })

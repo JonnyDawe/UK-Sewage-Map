@@ -1,16 +1,10 @@
-import styled from "@emotion/styled";
 import { Flex, Heading, Text } from "@radix-ui/themes";
 
-import { ERRORICON, GREENTICKICON, POOICON } from "../../../constants/hostedImages";
+import { ERRORICON, GREENTICKICON, POOICON, UNKNOWNICON } from "../../../constants/hostedImages";
 import { AlertStatus } from "../../../utils/discharge/types";
 import { Em } from "../../common/Text";
 
-const Icon = styled.img`
-    width: 30px;
-    height: 30px;
-`;
-
-function getDischargeIcon(alertStatus: AlertStatus) {
+function getDischargeIcon(alertStatus: AlertStatus): string {
     switch (alertStatus) {
         case "Discharging":
             return POOICON;
@@ -18,6 +12,8 @@ function getDischargeIcon(alertStatus: AlertStatus) {
             return ERRORICON;
         case "Not Discharging":
             return GREENTICKICON;
+        case "Offline":
+            return UNKNOWNICON;
     }
 }
 
@@ -28,9 +24,15 @@ type DischargePopupHeaderType = {
 };
 
 export function PopUpHeader({ alertStatus, location, feeds }: DischargePopupHeaderType) {
+    const pathname = window.location.origin;
     return (
         <Flex gap="2">
-            <Icon src={getDischargeIcon(alertStatus)}></Icon>
+            <img
+                alt={alertStatus}
+                width={30}
+                height={30}
+                src={pathname + getDischargeIcon(alertStatus)}
+            ></img>
             <div>
                 <Heading size={"4"} as="h3" trim={"end"}>
                     {location}

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Flex, Text } from "@radix-ui/themes";
 import React from "react";
 import { Chart } from "react-google-charts";
 import useSWR from "swr";

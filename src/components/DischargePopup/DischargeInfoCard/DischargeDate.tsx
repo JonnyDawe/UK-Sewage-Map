@@ -12,6 +12,8 @@ function getBGColorFromAlertStatus(alertStatus: AlertStatus): string {
             return "--orange-a3";
         case "Not Discharging":
             return "--green-a3";
+        case "Offline":
+            return "--slate-a3";
     }
 }
 
@@ -23,6 +25,8 @@ function getColorFromAlertStatus(alertStatus: AlertStatus): string {
             return "--orange-a11";
         case "Not Discharging":
             return "--green-a11";
+        case "Offline":
+            return "--slate-a11";
     }
 }
 
