@@ -2,6 +2,7 @@
 // @ts-nocheck - This file is not type checked as the link tag is allowed to have a disabled property
 import "@/styles/index.css";
 
+import { Analytics } from "@vercel/analytics/react";
 import { Roboto_Flex } from "next/font/google";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <NextThemesProvider attribute="class">
                     <Providers>{children}</Providers>
                 </NextThemesProvider>
+                <Analytics />
             </body>
         </html>
     );
