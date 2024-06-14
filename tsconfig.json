@@ -45,7 +45,6 @@
                 "name": "next"
             }
         ],
-        "incremental": true,
         "esModuleInterop": true,
         "types": ["./src/types/index.d.ts"]
     },
