@@ -9,11 +9,14 @@ import { ArcFeatureLayer, useCurrentMapView, useWatchEffect, useWhenEffect } fro
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-import arcadeRenderer from "@/constants/dischargeSourceRendererArcade";
 import { ERRORICON, GREENTICKICON, POOICON, UNKNOWNICON } from "@/constants/hostedImages";
+import arcadeRenderer from "@/constants/thamesdischargeSourceRendererArcade";
 
 import { setEsriPopupHTMLContent, setEsriPopupTitle } from "../../DischargePopup/popupfactory";
 import { MarkerHoverPopAnimation } from "../helpers/MarkerHoverPopAnimation";
+
+// This component is used to display the discharge points for *only* the Thame Water CSOs. This is because
+// the Thames Water data is much more detailed and requires a different renderer to display the data correctly.
 
 const uniqueValueGroups = [
     new UniqueValueGroup({
@@ -175,7 +178,7 @@ const useOnDischargeSourceLayerCreate = (
     );
 };
 
-export function DischargePointFeatureLayer({ initialCsoId }: { initialCsoId?: string }) {
+export function ThamesDischargePointFeatureLayer({ initialCsoId }: { initialCsoId?: string }) {
     const mapView = useCurrentMapView();
     const [featureLayerView, setFeatureLayerView] = React.useState<__esri.FeatureLayerView>();
 

@@ -8,8 +8,9 @@ import styled from "@emotion/styled";
 import { ArcLocate, ArcMapView, ArcSearch, ArcUI } from "arcgis-react";
 import React from "react";
 
-import { DischargePointFeatureLayer } from "@/components/SewageMap/layers/dischargeSources";
+import { OtherDischargePointFeatureLayer } from "@/components/SewageMap/layers/otherdischargeSources";
 import { RiverDischargeGeoJsonLayer } from "@/components/SewageMap/layers/riverDischarge";
+import { ThamesDischargePointFeatureLayer } from "@/components/SewageMap/layers/thamesdischargeSources";
 import { ThamesTidalFeatureLayer } from "@/components/SewageMap/layers/thamesTidalPolygon";
 import { MapUI } from "@/components/SewageMap/MapUI";
 import useInitialTheme from "@/hooks/useInitialTheme";
@@ -74,8 +75,8 @@ const MemoizedMapView = React.memo(
         >
             <ThamesTidalFeatureLayer />
             <RiverDischargeGeoJsonLayer />
-            <DischargePointFeatureLayer initialCsoId={initialCSOId} />
-
+            <ThamesDischargePointFeatureLayer initialCsoId={initialCSOId} />
+            <OtherDischargePointFeatureLayer initialCsoId={initialCSOId} />
             <ArcUI position="top-left">
                 <ArcLocate />
             </ArcUI>
