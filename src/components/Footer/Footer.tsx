@@ -38,14 +38,14 @@ const fetchTimeStamp = async (url: string): Promise<Date> => {
 
 function Footer() {
     const { data, isLoading } = useSWR(
-        "https://d1kmd884co9q6x.cloudfront.net/now/timestamp.txt",
+        "https://d1kmd884co9q6x.cloudfront.net/downstream_impact/thames/thames_timestamp.txt",
         fetchTimeStamp
     );
 
     if (!isLoading && data) {
         return (
             <FooterWrapper>
-                {`Downstream predictions last updated ${formatShortDate(data)}`}
+                {`Downstream predictions last updated ~${formatShortDate(data)}`}
             </FooterWrapper>
         );
     }

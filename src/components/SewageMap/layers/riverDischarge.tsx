@@ -69,7 +69,7 @@ export function RiverDischargeGeoJsonLayer() {
             })
         });
 
-        // requestAnimationFrame((timestamp) => animate(layer, timestamp)); // Call animate again on the next frame
+        requestAnimationFrame((timestamp) => animate(layer, timestamp)); // Call animate again on the next frame
     }
 
     const urls = [
