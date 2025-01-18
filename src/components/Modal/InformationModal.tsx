@@ -88,20 +88,19 @@ const InformationModal = () => {
                                         </Heading>
                                         <Text>
                                             The data is collected through{" "}
-                                            <Link href="https://www.thameswater.co.uk/about-us/performance/river-health/storm-discharge-and-event-duration-monitoring">
+                                            <Link href="https://www.streamwaterdata.co.uk/pages/storm-overflows-data">
                                                 Event Duration Monitoring
                                             </Link>{" "}
-                                            (EDM) by Thames Water, providing near{" "}
-                                            <Link href="https://www.thameswater.co.uk/edm-map">
-                                                real-time updates
-                                            </Link>{" "}
-                                            on storm overflows. Such overflows release untreated,
-                                            diluted sewage into the environment. Currently, only
-                                            Thames Water provide an API to the raw EDM data, so the
-                                            map is limited to the Thames Basin. More water companies
-                                            have committed to sharing their sewer overflow
-                                            monitoring data with the public, so map coverage should
-                                            expand in the future.
+                                            by individual water companies, providing near-real time
+                                            data on storm overflows. Such overflows release
+                                            untreated, diluted sewage into the environment.
+                                            Currently, only Thames Water provide an API to
+                                            historical sewage spill data. We wrote an article about
+                                            why water companies need to be more transparent with
+                                            environmental models and data in{" "}
+                                            <Link href="https://theconversation.com/water-companies-now-have-to-release-live-sewage-spill-data-heres-why-more-transparency-is-the-key-to-cleaner-rivers-239444">
+                                                The Conversation.
+                                            </Link>
                                         </Text>
                                     </TextInfoList>
                                     <TextInfoList icon={<HydrologyModelIcon></HydrologyModelIcon>}>
@@ -116,20 +115,23 @@ const InformationModal = () => {
                                             <Link href="https://www.ceh.ac.uk/data/integrated-hydrological-digital-terrain-model">
                                                 Integrated Hydrological Digital Terrain Model
                                             </Link>
-                                            , we track sewage discharges downstream along non-tidal
-                                            river networks. We highlight areas downstream of active
-                                            and recent discharges in brown. This simple approach
-                                            does not consider dilution, river flow, or dispersion
-                                            effects on pollutant concentration. Since water
-                                            companies do not provide real-time data on discharge
-                                            volume or pollutant concentrations, accurately modelling
-                                            these effects is very difficult. Consequently, on its
-                                            own,
+                                            , we track sewage discharges downstream along{" "}
+                                            <Em>non-tidal</Em> river networks. We highlight areas
+                                            downstream of active and recent discharges in brown.
+                                            This simple approach does not consider dilution, river
+                                            flow, or dispersion effects on pollutant concentration.
+                                            Since water companies do not provide real-time data on
+                                            discharge volume or pollutant concentrations, accurately
+                                            modelling these effects is very difficult. Consequently,
+                                            on its own,{" "}
                                             <Em>
-                                                this map should not be used to assess pollution risk
+                                                this map should not be used to assess pollution or
+                                                health risks
                                             </Em>{" "}
                                             at a specific location, for example, for bathing water
-                                            quality.
+                                            quality. Note that, the simple hydrological model may
+                                            produce 'unexpected' results in some areas, for instance
+                                            in lakes or where rivers are tidal very far in-land.
                                         </Text>
                                     </TextInfoList>
                                     <TextInfoList icon={<WasteWaterIcon></WasteWaterIcon>}>
@@ -161,13 +163,21 @@ const InformationModal = () => {
                                     </TextInfoList>
                                     <Text mt={"2"}>
                                         <strong>
+                                            This site was created by{" "}
+                                            <Link href="https://alexlipp.github.io/">
+                                                Alex Lipp (UCL)
+                                            </Link>{" "}
+                                            &{" "}
+                                            <Link href="https://bsky.app/profile/did:plc:yxxm76jvxcsuzg6ahfjiek3y">
+                                                Jonny Dawe.
+                                            </Link>{" "}
                                             For more information and to see the full source code,
-                                            visit our GitHub pages:
+                                            visit the GitHub repositories:
                                         </strong>{" "}
                                         <br></br>
                                     </Text>
                                     <Flex gap={"2"} justify={"start"}>
-                                        <Link href="https://github.com/AlexLipp/thames-sewage ">
+                                        <Link href="https://github.com/AlexLipp/sewage-map ">
                                             backend
                                         </Link>
                                         <Separator orientation="vertical"></Separator>
