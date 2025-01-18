@@ -45,7 +45,7 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
     const [currentTimePath, setCurrentTimePath] = React.useState<RainviewerItem | null>(null);
 
     const handleTimeSliderChange = (index: number) => {
-        setCurrentTimePath(timePathList[index]);
+        setCurrentTimePath(timePathList[index] ?? null);
     };
 
     // get available image list
@@ -112,7 +112,7 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
             if (view !== null) {
                 let oldLayers: __esri.Layer[] = [];
 
-                const newLayers = findLayersByIdKeyword(view.map.layers, `${tPath.time}`);
+                const [newLayer] = findLayersByIdKeyword(view.map.layers, `${tPath.time}`);
 
                 if (pastTimePathRef.current && pastTimePathRef.current.time !== tPath.time) {
                     oldLayers = findLayersByIdKeyword(
@@ -121,16 +121,19 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
                     );
                 }
 
-                if (newLayers.length !== 0) {
-                    newLayers[0].listMode = "show";
-                    newLayers[0].visible = true;
+                if (newLayer) {
+                    newLayer.listMode = "show";
+                    newLayer.visible = true;
                     if (oldLayers.length !== 0) {
-                        setTimeout(() => {
-                            // delayHideRef.current = requestAnimationFrame(() => {
-                            oldLayers[0].listMode = "hide";
-                            oldLayers[0].visible = false;
-                            // });
-                        }, 80);
+                        const firstOldLayer = oldLayers[0];
+                        if (firstOldLayer) {
+                            setTimeout(() => {
+                                // delayHideRef.current = requestAnimationFrame(() => {
+                                firstOldLayer.listMode = "hide";
+                                firstOldLayer.visible = false;
+                                // });
+                            }, 80);
+                        }
                     }
                 }
             }
@@ -142,9 +145,11 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
     React.useEffect(() => {
         if (radarTimePaths) {
             setCurrentTimePath((current) =>
-                current === null ? radarTimePaths.past[radarTimePaths.past.length - 1] : current
+                current === null
+                    ? (radarTimePaths.past[radarTimePaths.past.length - 1] ?? null)
+                    : current
             );
-            pastTimePathRef.current = radarTimePaths.past[radarTimePaths.past.length - 2];
+            pastTimePathRef.current = radarTimePaths.past[radarTimePaths.past.length - 2] ?? null;
             timePathList.forEach((tp) => {
                 loadMapTask(tp);
             });
@@ -157,7 +162,9 @@ const RainRadar = ({ colorScheme, opacity, view }: Config) => {
     // time path hook
     React.useEffect(() => {
         timePathRef.current = currentTimePath;
-        currentTimePath && smoothShowHideMapTask(currentTimePath);
+        if (currentTimePath) {
+            smoothShowHideMapTask(currentTimePath);
+        }
         return () => {
             pastTimePathRef.current = currentTimePath;
         };

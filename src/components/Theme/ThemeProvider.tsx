@@ -1,12 +1,12 @@
 "use client";
-import { ThemeOptions } from "@radix-ui/themes";
+import { ThemeProps } from "@radix-ui/themes";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
 import useInitialTheme from "@/hooks/useInitialTheme";
 
 interface ThemeContextProps {
-    theme: Partial<ThemeOptions>;
+    theme: Partial<ThemeProps>;
     toggleColorMode: () => void;
 }
 
@@ -43,7 +43,7 @@ function AppThemeProvider({
     theme,
     isChild,
     children
-}: React.PropsWithChildren<{ theme: Partial<ThemeOptions>; isChild: boolean }>) {
+}: React.PropsWithChildren<{ theme: Partial<ThemeProps>; isChild: boolean }>) {
     const { resolvedTheme: currentTheme, setTheme } = useTheme();
 
     const initialTheme = useInitialTheme();

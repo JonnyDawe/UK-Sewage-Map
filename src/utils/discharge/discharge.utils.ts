@@ -108,7 +108,7 @@ export function getDischargeDateObject(date: Date | number): {
 } {
     date = new Date(date);
     return {
-        month: MONTH_NAMES_SHORT[date.getMonth()],
+        month: MONTH_NAMES_SHORT[date.getMonth()] ?? "",
         day: date.getDate(),
         year: date.getFullYear()
     };
@@ -173,15 +173,15 @@ export function getDischargeDataForLocation(
     locationName: string
 ): DischargeHistoricalData {
     const dischargeKeys = findKeysByValue(jsonData.LocationName, locationName);
+    const [firstValue] = dischargeKeys;
     return {
         locationName,
-        receivingWaterCourse:
-            dischargeKeys.length > 0 ? jsonData.ReceivingWaterCourse[dischargeKeys[0]] : "",
-        permitNumber: dischargeKeys.length > 0 ? jsonData.PermitNumber[dischargeKeys[0]] : "",
+        receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? "") : "",
+        permitNumber: firstValue ? (jsonData.PermitNumber[firstValue] ?? "") : "",
         discharges: dischargeKeys.map((key) => {
             return {
-                start: new Date(jsonData.StartDateTime[key]),
-                end: new Date(jsonData.StopDateTime[key])
+                start: new Date(jsonData.StartDateTime[key]!),
+                end: new Date(jsonData.StopDateTime[key]!)
             };
         })
     };
@@ -198,15 +198,16 @@ export function getDischargeDataForPermitNumber(
     permitNumber: string
 ): DischargeHistoricalData {
     const dischargeKeys = findKeysByValue(jsonData.PermitNumber, permitNumber);
+    const [firstValue] = dischargeKeys;
+
     return {
         permitNumber,
-        receivingWaterCourse:
-            dischargeKeys.length > 0 ? jsonData.ReceivingWaterCourse[dischargeKeys[0]] : "",
-        locationName: dischargeKeys.length > 0 ? jsonData.LocationName[dischargeKeys[0]] : "",
+        receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? "") : "",
+        locationName: firstValue ? (jsonData.LocationName[firstValue] ?? "") : "",
         discharges: dischargeKeys.map((key) => {
             return {
-                start: new Date(jsonData.StartDateTime[key]),
-                end: new Date(jsonData.StopDateTime[key])
+                start: new Date(jsonData.StartDateTime[key]!),
+                end: new Date(jsonData.StopDateTime[key]!)
             };
         })
     };

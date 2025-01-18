@@ -1,5 +1,6 @@
 import { Flex, Heading } from "@radix-ui/themes";
-import { useCurrentMapView } from "arcgis-react";
+
+import { useCurrentMapView } from "@/arcgis/hooks";
 
 import MapButton from "../common/Buttons/MapButton";
 import { CloseIcon, RainIcon } from "../common/Icons";

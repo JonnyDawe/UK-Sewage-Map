@@ -1,8 +1,8 @@
 import Basemap from "@arcgis/core/Basemap";
-import { useCurrentMapView } from "arcgis-react";
 import { useTheme } from "next-themes";
 import React from "react";
 
+import { useCurrentMapView } from "@/arcgis/hooks";
 import useInitialTheme from "@/hooks/useInitialTheme";
 
 import { useBaseMapToggleModel } from "../../hooks/useBaseMapToggleModel";

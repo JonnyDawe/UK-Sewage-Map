@@ -20,13 +20,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <head>
                 <link
                     rel="stylesheet"
-                    href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
+                    href="https://js.arcgis.com/4.31/esri/themes/light/main.css"
                     id="arcgis-maps-sdk-theme-light"
                     disabled
                 />
                 <link
                     rel="stylesheet"
-                    href="https://js.arcgis.com/4.29/esri/themes/dark/main.css"
+                    href="https://js.arcgis.com/4.31/esri/themes/dark/main.css"
                     id="arcgis-maps-sdk-theme-dark"
                     disabled
                 />

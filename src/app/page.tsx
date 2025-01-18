@@ -4,12 +4,13 @@ import { type Metadata } from "next/types";
 import { SewageMapView } from "@/components/SewageMap/LazyMapView";
 
 type Props = {
-    searchParams: {
+    searchParams: Promise<{
         PermitNumber?: string;
-    };
+    }>;
 };
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+    const searchParams = await props.searchParams;
     const permitNumber = searchParams?.PermitNumber ?? "";
 
     try {
@@ -29,11 +30,12 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
                 ]
             }
         };
-    } catch (e) {
+    } catch {
         notFound();
     }
 }
 
-export default function MapPage({ searchParams }: Props) {
+export default async function MapPage(props: Props) {
+    const searchParams = await props.searchParams;
     return <SewageMapView csoId={searchParams?.PermitNumber} />;
 }

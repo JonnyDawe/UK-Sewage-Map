@@ -1,3 +1,10 @@
+import "@arcgis/map-components/dist/components/arcgis-map";
+import "@arcgis/map-components/dist/components/arcgis-legend";
+import "@arcgis/map-components/dist/components/arcgis-locate";
+import "@arcgis/map-components/dist/components/arcgis-placement";
+import "@arcgis/map-components/dist/components/arcgis-scale-bar";
+import "@arcgis/map-components/dist/components/arcgis-search";
+
 import Basemap from "@arcgis/core/Basemap";
 import esriConfig from "@arcgis/core/config";
 import Extent from "@arcgis/core/geometry/Extent.js";
@@ -5,7 +12,6 @@ import SpatialReference from "@arcgis/core/geometry/SpatialReference.js";
 import esriMap from "@arcgis/core/Map";
 import LocatorSearchSource from "@arcgis/core/widgets/Search/LocatorSearchSource";
 import styled from "@emotion/styled";
-import { ArcLocate, ArcMapView, ArcSearch, ArcUI } from "arcgis-react";
 import React from "react";
 
 import { DischargePointFeatureLayer } from "@/components/SewageMap/layers/dischargeSources";
@@ -15,10 +21,11 @@ import { MapUI } from "@/components/SewageMap/MapUI";
 import useInitialTheme from "@/hooks/useInitialTheme";
 
 esriConfig.apiKey = process.env.NEXT_PUBLIC_ESRI_PUBLIC_API_KEY ?? "";
+esriConfig.apiKey = process.env.NEXT_PUBLIC_ESRI_PUBLIC_API_KEY ?? "";
 const darkBasemapId = process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_DARK ?? "darkbasemapid";
 const lightBasemapId = process.env.NEXT_PUBLIC_ESRI_BASEMAP_ID_LIGHT ?? "lightbasemapid";
 
-const SearchWrapper = styled(ArcUI)`
+const SearchWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -35,14 +42,9 @@ const SearchWrapper = styled(ArcUI)`
     }
 `;
 
-const MapOverlay = styled(ArcUI)`
-    inset: 0;
-    pointer-events: none !important;
-`;
-
 const MemoizedMapView = React.memo(
     ({ initialCSOId, map }: { initialCSOId: string | undefined; map: esriMap }) => (
-        <ArcMapView
+        <arcgis-map
             style={{ height: "100%" }}
             constraints={{
                 minZoom: 7
@@ -75,17 +77,20 @@ const MemoizedMapView = React.memo(
             <ThamesTidalFeatureLayer />
             <RiverDischargeGeoJsonLayer />
             <DischargePointFeatureLayer initialCsoId={initialCSOId} />
+            <arcgis-placement position="top-left">
+                <arcgis-locate />
+            </arcgis-placement>
 
-            <ArcUI position="top-left">
-                <ArcLocate />
-            </ArcUI>
-            <SearchWrapper position="manual">
-                <SearchHackWrapper />
-            </SearchWrapper>
-            <MapOverlay position="manual">
+            <arcgis-placement position="top-right">
+                <SearchWrapper>
+                    <SearchHackWrapper />
+                </SearchWrapper>
+            </arcgis-placement>
+
+            <arcgis-placement position="bottom-left">
                 <MapUI />
-            </MapOverlay>
-        </ArcMapView>
+            </arcgis-placement>
+        </arcgis-map>
     )
 );
 
@@ -125,7 +130,6 @@ const SearchHackWrapper = () => {
                 maxSuggestions: 4
             })
         ]
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
-    return <ArcSearch {...props} />;
+    };
+    return <arcgis-search {...props} />;
 };

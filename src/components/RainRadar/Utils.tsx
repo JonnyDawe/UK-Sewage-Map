@@ -71,8 +71,8 @@ export const generateColorLegend = (code: string) => {
     return (
         <Flex gap={"2"}>
             <Text size={"1"}>Light</Text>
-            <Grid grow={"1"} columns={`${colorList.length ?? 0}`}>
-                {colorList.map((c: string) => {
+            <Grid flexGrow={"1"} columns={`${colorList?.length ?? 0}`}>
+                {colorList?.map((c: string) => {
                     return (
                         <div
                             key={`${code}-${c}`}

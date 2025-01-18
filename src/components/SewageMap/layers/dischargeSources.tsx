@@ -4,16 +4,15 @@ import UniqueValueGroup from "@arcgis/core/renderers/support/UniqueValueGroup";
 import UniqueValueRenderer from "@arcgis/core/renderers/UniqueValueRenderer";
 import SizeVariable from "@arcgis/core/renderers/visualVariables/SizeVariable";
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol";
-import { SymbolAnimationManager } from "arcgis-animate-markers-plugin";
-import { ArcFeatureLayer, useCurrentMapView, useWatchEffect, useWhenEffect } from "arcgis-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
+import { ArcFeatureLayer } from "@/arcgis/components/ArcLayer/generated/ArcFeatureLayer";
+import { useCurrentMapView, useWatchEffect, useWhenEffect } from "@/arcgis/hooks";
 import arcadeRenderer from "@/constants/dischargeSourceRendererArcade";
 import { ERRORICON, GREENTICKICON, POOICON, UNKNOWNICON } from "@/constants/hostedImages";
 
 import { setEsriPopupHTMLContent, setEsriPopupTitle } from "../../DischargePopup/popupfactory";
-import { MarkerHoverPopAnimation } from "../helpers/MarkerHoverPopAnimation";
 
 const uniqueValueGroups = [
     new UniqueValueGroup({
@@ -78,35 +77,9 @@ const useOnDischargeSourceLayerCreate = (
 ) => {
     const pathname = usePathname();
     const { replace } = useRouter();
-    const [symbolAnimationManager, setSymbolAnimationManager] =
-        React.useState<SymbolAnimationManager>();
 
     React.useEffect(() => {
         if (!mapView || !layerView) return;
-
-        const symbolAnimationManager = new SymbolAnimationManager({
-            mapView: mapView,
-            layerView: layerView
-        });
-
-        const animationLayer = symbolAnimationManager.animationGraphicsLayer;
-
-        // ensure the animation layer is always on top
-        const index = mapView.map.layers.findIndex((layer) => layer === layerView.layer);
-        mapView.map.layers.reorder(animationLayer, index);
-
-        setSymbolAnimationManager(symbolAnimationManager);
-
-        const markerHoverPopAnimation = new MarkerHoverPopAnimation({
-            symbolAnimationManager: symbolAnimationManager,
-            mapView,
-            layerView: layerView,
-            to: { scale: 1.5, rotate: 5 },
-            easingConfig: {
-                type: "spring",
-                options: { tension: 280, friction: 80 }
-            }
-        });
 
         const handleLayerCreated = async () => {
             if (initialCsoId) {
@@ -123,12 +96,6 @@ const useOnDischargeSourceLayerCreate = (
         };
 
         handleLayerCreated();
-
-        return () => {
-            symbolAnimationManager.removeAllAnimatedGraphics();
-
-            markerHoverPopAnimation.destroy();
-        };
     }, [initialCsoId, layerView, mapView]);
 
     useWhenEffect(
@@ -158,10 +125,8 @@ const useOnDischargeSourceLayerCreate = (
     useWatchEffect(
         () => mapView?.popup?.selectedFeature,
         async (graphic) => {
-            if (!mapView || !layerView || !symbolAnimationManager) return;
+            if (!mapView || !layerView) return;
             if (graphic?.layer === layerView.layer || graphic?.layer === null) {
-                symbolAnimationManager.removeAllAnimatedGraphics();
-
                 if (graphic.attributes["PermitNumber"]) {
                     const params = new URLSearchParams();
                     params.set("PermitNumber", graphic.attributes["PermitNumber"]);

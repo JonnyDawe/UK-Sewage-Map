@@ -2,7 +2,8 @@ import GeoJSONLayer from "@arcgis/core/layers/GeoJSONLayer";
 import SimpleRenderer from "@arcgis/core/renderers/SimpleRenderer.js";
 import CIMSymbol from "@arcgis/core/symbols/CIMSymbol.js";
 import LineSymbol from "@arcgis/core/symbols/LineSymbol.js";
-import { ArcGeoJSONLayer } from "arcgis-react";
+
+import { ArcGeoJSONLayer } from "@/arcgis/components/ArcLayer/generated/ArcGeoJSONLayer";
 
 export function RiverDischargeGeoJsonLayer() {
     let lastTimestamp = 0;

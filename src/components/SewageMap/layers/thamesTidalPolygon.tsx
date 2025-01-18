@@ -1,6 +1,7 @@
 import SimpleRenderer from "@arcgis/core/renderers/SimpleRenderer.js";
 import CIMSymbol from "@arcgis/core/symbols/CIMSymbol.js";
-import { ArcFeatureLayer } from "arcgis-react";
+
+import { ArcFeatureLayer } from "@/arcgis/components/ArcLayer/generated/ArcFeatureLayer";
 
 const tidalHatchSymbol = new CIMSymbol({
     data: {

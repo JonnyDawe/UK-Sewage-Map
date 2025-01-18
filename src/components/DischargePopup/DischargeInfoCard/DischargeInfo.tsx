@@ -70,7 +70,7 @@ export function DischargeInfo({ alertStatus, dischargeInterval }: DischargeInfoT
     const [currentUTCTime] = useUTCTime();
 
     return (
-        <Flex direction={"column"} justify={"center"} gap={"1"} grow={"1"} pr="2">
+        <Flex direction={"column"} justify={"center"} gap={"1"} flexGrow={"1"} pr="2">
             <Text as="p" size="3">
                 {getDischargeDescriptionFromAlert(alertStatus, dischargeInterval.start)}
             </Text>
