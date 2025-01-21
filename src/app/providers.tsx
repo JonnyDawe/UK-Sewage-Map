@@ -1,6 +1,7 @@
 "use client";
 
-import AppTheme from "../components/Theme/AppTheme";
+import { AppTheme } from "@/components/Theme/AppTheme";
+
 import { AppThemeProvider } from "../components/Theme/ThemeProvider";
 
 export function Providers({ children }: React.PropsWithChildren) {

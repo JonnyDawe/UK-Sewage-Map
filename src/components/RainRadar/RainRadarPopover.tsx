@@ -6,7 +6,7 @@ import MapButton from "../common/Buttons/MapButton";
 import { CloseIcon, RainIcon } from "../common/Icons";
 import Popover from "../common/Popover/Popover";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
-import AppTheme from "../Theme/AppTheme";
+import { AppTheme } from "../Theme/AppTheme";
 import RainRadar from "./RainRadar";
 
 const RainRadarPopover = () => {

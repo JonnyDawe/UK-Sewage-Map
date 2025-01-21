@@ -3,16 +3,16 @@ import { useTheme } from "next-themes";
 import React from "react";
 
 import { useCurrentMapView } from "@/arcgis/hooks";
-import useInitialTheme from "@/hooks/useInitialTheme";
+import { useInitialTheme } from "@/components/Theme/hooks/useThemeState";
 
 import { useBaseMapToggleModel } from "../../hooks/useBaseMapToggleModel";
 import MapButton from "../common/Buttons/MapButton";
 import { MoonIcon, SunIcon } from "../common/Icons";
-import { AppThemeContext } from "../Theme/ThemeProvider";
+import { useAppTheme } from "../Theme/hooks/useAppTheme";
 
 export function DarkModeToggle() {
     const view = useCurrentMapView();
-    const { toggleColorMode } = React.useContext(AppThemeContext);
+    const { toggleColorMode } = useAppTheme();
     const { resolvedTheme } = useTheme();
 
     const initialTheme = useInitialTheme();

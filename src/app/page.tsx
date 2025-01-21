@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { type Metadata } from "next/types";
 
-import { SewageMapView } from "@/components/SewageMap/LazyMapView";
+import SewageMapView from "@/components/Map/Map";
 
 type Props = {
     searchParams: Promise<{

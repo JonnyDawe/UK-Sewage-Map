@@ -5,7 +5,7 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 
 import { getRenderPropsFromGraphic } from "../../utils/discharge/discharge.utils";
-import AppTheme from "../Theme/AppTheme";
+import { AppTheme } from "../Theme/AppTheme";
 import { AppThemeProvider } from "../Theme/ThemeProvider";
 import { PopUpBody } from "./PopUpContent/PopUpBody";
 import { PopUpHeader } from "./PopUpContent/PopUpHeader";

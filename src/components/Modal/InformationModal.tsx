@@ -18,7 +18,7 @@ import {
 } from "../common/Icons";
 import { Em, Link } from "../common/Text";
 import TextInfoList from "../TextInfoList/TextInfoList";
-import AppTheme from "../Theme/AppTheme";
+import { AppTheme } from "../Theme/AppTheme";
 
 const BackgroundWave = styled(Wave)`
     position: absolute;

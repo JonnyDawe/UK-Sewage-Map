@@ -1,6 +1,9 @@
+"use client";
 import styled from "@emotion/styled";
+import { Theme as ThemePrimitive } from "@radix-ui/themes";
+import React from "react";
 
-import GenericTheme from "./GenericTheme";
+import { useAppTheme } from "./hooks/useAppTheme";
 
 /**  This is where we might define different themes and color overides. 
 
@@ -18,7 +21,13 @@ const Theme = styled(GenericTheme)`
 
 */
 
-const Theme = styled(GenericTheme)`
+const Theme = styled(ThemePrimitive)`
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+
     --default-font-family: var(--font-roboto) !important;
     --heading-font-family: var(--font-roboto) !important;
     --code-font-family: var(--font-roboto) !important;
@@ -92,8 +101,11 @@ const Theme = styled(GenericTheme)`
     }
 `;
 
-function AppTheme({ children }: React.PropsWithChildren) {
-    return <Theme>{children}</Theme>;
+export function AppTheme({ children, className }: React.PropsWithChildren<{ className?: string }>) {
+    const { theme } = useAppTheme();
+    return (
+        <Theme className={`${className} ${theme.appearance} radix-themes`} {...theme}>
+            {children}
+        </Theme>
+    );
 }
-
-export default AppTheme;

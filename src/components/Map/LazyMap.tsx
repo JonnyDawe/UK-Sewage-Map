@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import React from "react";
 
-const MapNoSSR = dynamic(() => import("@/components/SewageMap/MapView"), {
+const MapNoSSR = dynamic(() => import("@/components/Map/Map"), {
     ssr: false
 });
 

@@ -21,6 +21,8 @@ declare module "react" {
                 React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
             "arcgis-search": TransformEventNames<ArcGisJSX.ArcgisSearch> &
                 React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+            "arcgis-zoom": TransformEventNames<ArcGisJSX.ArcgisZoom> &
+                React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
         }
     }
 }
