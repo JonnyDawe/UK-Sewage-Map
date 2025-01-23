@@ -7,7 +7,9 @@ import { SetBasemapCommand } from "@/components/Map/commands/SetBasemapCommand";
 import { useCallbackRef } from "@/hooks/useCallbackRef";
 
 import { useMapCommandExecuter } from "../../../arcgis/hooks/useMapCommandExecuter";
-import { AddDischargeSourcesCommand } from "../commands/DischargeSources/AddDischargeSourcesCommand";
+import { AddDischargeSourcesCommand } from "../commands/AddDischargeSources/AddDischargeSourcesCommand";
+import { AddRiverDischargeCommand } from "../commands/AddRiverDischarge/AddRiverDischargeCommand";
+import { AddTidalPolygonCommand } from "../commands/AddTidalPolygons/AddTidalPolygonCommand";
 
 interface UseMapInitializationProps {
     initialAssetId?: string;
@@ -45,6 +47,8 @@ export function useMapInitialization({
             const commands: MapCommand[] = [];
 
             commands.push(new SetBasemapCommand(initialTheme));
+            commands.push(new AddTidalPolygonCommand());
+            commands.push(new AddRiverDischargeCommand());
             commands.push(new AddDischargeSourcesCommand(setPathname, initialAssetId));
             executeCommands(mapInstance, commands).then((results) => {
                 const postInitCommands = results.filter(

@@ -18,8 +18,6 @@ import { useInitialTheme } from "@/components/Theme/hooks/useThemeState";
 
 import { ColorMode } from "../Theme/types";
 import { useMapInitialization } from "./hooks/useMapInitialisation";
-import { RiverDischargeGeoJsonLayer } from "./layers/riverDischarge";
-import { ThamesTidalFeatureLayer } from "./layers/thamesTidalPolygon";
 import { MapUI } from "./widgets/MapUI";
 import { SearchWidget } from "./widgets/SearchWidget/SearchWidget";
 
@@ -83,9 +81,6 @@ const Map = React.memo(({ initialCSOId, initialTheme }: MapViewProps) => {
                 highlightEnabled: true
             }}
         >
-            <ThamesTidalFeatureLayer />
-            <RiverDischargeGeoJsonLayer />
-
             <arcgis-placement position="top-left">
                 <arcgis-zoom />
             </arcgis-placement>
