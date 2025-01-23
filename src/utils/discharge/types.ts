@@ -13,8 +13,8 @@ export type DischargeDateInterval = {
 export type DischargeData = {
     alertStatus: AlertStatus;
     dischargeInterval: DischargeInterval;
-    feeds: string;
-    location: string;
+    feeds: string | null;
+    location: string | null;
 };
 
 export interface DischargeHistoricalDataJSON {

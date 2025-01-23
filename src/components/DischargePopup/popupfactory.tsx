@@ -29,7 +29,7 @@ export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }
                     <PopUpBody
                         dischargeInterval={dischargeInterval}
                         alertStatus={alertStatus}
-                        locationName={location}
+                        locationName={location ?? ""}
                     ></PopUpBody>
                 </AppTheme>
             </AppThemeProvider>
@@ -54,7 +54,9 @@ export function setEsriPopupTitle({ graphic }: { graphic: __esri.Graphic }) {
                     isChild={true}
                 >
                     <AppTheme>
-                        <PopUpHeader {...{ alertStatus, feeds, location }}></PopUpHeader>
+                        <PopUpHeader
+                            {...{ alertStatus, feeds: feeds ?? "", location: location ?? "" }}
+                        ></PopUpHeader>
                     </AppTheme>
                 </AppThemeProvider>
             </React.StrictMode>

@@ -3,10 +3,10 @@ import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import EsriMap from "@arcgis/core/Map";
 
 import { MapCommand, ViewCommand } from "@/arcgis/typings/commandtypes";
+import { validateDischargeAttributes } from "@/utils/discharge/schemas";
 
 import { dischargePopupTemplate } from "./config/dischargePopup";
 import { dischargeRenderer } from "./config/dischargeRenderer";
-import { validateDischargeAttributes } from "./config/schemas";
 
 export class AddDischargeSourcesCommand implements MapCommand {
     private featureLayer: __esri.FeatureLayer = new FeatureLayer({
@@ -61,7 +61,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
         view: __esri.MapView,
         layerView: __esri.FeatureLayerView
     ): void {
-        reactiveUtils.when(
+        reactiveUtils.watch(
             () => view.popup.visible,
             (visible) => {
                 if (!visible) {
@@ -69,15 +69,19 @@ export class AddDischargeSourcesCommand implements MapCommand {
                 }
             }
         );
-        reactiveUtils.when(
+
+        reactiveUtils.watch(
             () => view.popup.selectedFeature,
             async (graphic) => {
-                if (!graphic) return;
+                if (!graphic) {
+                    this.setPathname("");
+                    return;
+                }
                 if (graphic?.layer === layerView.layer || graphic?.layer === null) {
                     const attributes = validateDischargeAttributes(graphic.attributes);
                     if (!attributes) return;
 
-                    this.setPathname(attributes.PermitNumber);
+                    this.setPathname(attributes.PermitNumber ?? "");
                     await this.zoomToFeature(view, graphic);
                 }
             }

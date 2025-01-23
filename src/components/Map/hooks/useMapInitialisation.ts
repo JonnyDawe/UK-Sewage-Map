@@ -31,7 +31,11 @@ export function useMapInitialization({
     const router = useRouter();
     const pathname = usePathname();
     const setPathname = useCallbackRef((assetId: string) => {
-        router.push(`${pathname}?PermitNumber=${assetId}`);
+        if (!assetId) {
+            router.push(pathname);
+        } else {
+            router.push(`${pathname}?PermitNumber=${assetId}`);
+        }
     });
 
     useEffect(() => {

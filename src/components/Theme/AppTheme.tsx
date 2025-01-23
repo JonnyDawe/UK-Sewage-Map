@@ -24,6 +24,7 @@ const Theme = styled(GenericTheme)`
 const Theme = styled(ThemePrimitive)`
     padding: 0;
     margin: 0;
+    min-height: 0% !important;
     height: 100%;
     width: 100%;
     background-color: transparent;

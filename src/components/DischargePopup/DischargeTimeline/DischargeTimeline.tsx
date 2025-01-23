@@ -6,8 +6,7 @@ import useSWR from "swr";
 
 import {
     calculateTotalDischargeLength,
-    formatShortDate,
-    formatTime,
+    formatDate,
     getDatenMonthsAgo,
     getDischargeDataForLocation,
     getDischargeDateObject,
@@ -25,7 +24,7 @@ import { InLineSelect } from "../../common/Select/InlineSelect";
 const CustomChart = styled(Chart)`
     svg {
         // Background Color
-        g:nth-child(2) {
+        g:nth-of-type(2) {
             rect {
                 fill: var(--gray-a2);
             }
@@ -35,14 +34,14 @@ const CustomChart = styled(Chart)`
         }
 
         // Text
-        g:nth-child(3) {
+        g:nth-of-type(3) {
             text {
                 fill: var(--gray-12);
             }
         }
 
         // Fill
-        g:nth-child(5) {
+        g:nth-of-type(5) {
             rect {
                 fill: var(--brown-10);
             }
@@ -307,11 +306,11 @@ function Timeline({ locationName }: { locationName: string }) {
             >
                 {lastUpdatedDate && (
                     <SubText>
-                        Last Updated <b>{formatShortDate(lastUpdatedDate)}</b>
+                        Last Updated <b>{formatDate(lastUpdatedDate, "full")}</b>
                     </SubText>
                 )}
                 <SubText>
-                    Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
+                    Total Duration <b>{formatDate(locationData.totalDischarge, "timeOnly")}</b>
                 </SubText>
             </Flex>
         </TimeLineWrapper>

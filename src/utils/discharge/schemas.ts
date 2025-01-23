@@ -1,12 +1,13 @@
 import { z } from "zod";
 
 export const thamesWaterDischargeAttributesSchema = z.object({
-    AlertPast48Hours: z.enum(["true", "false"]),
-    PermitNumber: z.string(),
-    LocationName: z.string(),
-    ReceivingWaterCourse: z.string(),
-    MostRecentDischargeAlertStart: z.number(),
-    MostRecentDischargeAlertStop: z.number().nullable()
+    AlertPast48Hours: z.string().max(10).nullable(),
+    PermitNumber: z.string().max(20).nullable(),
+    LocationName: z.string().max(256).nullable(),
+    ReceivingWaterCourse: z.string().max(256).nullable(),
+    MostRecentDischargeAlertStart: z.number().nullable(), // esriFieldTypeDate
+    MostRecentDischargeAlertStop: z.number().nullable(), // esriFieldTypeDate
+    AlertStatus: z.string().max(20).nullable()
 });
 
 export type ThamesWaterDischargeAttributes = z.infer<typeof thamesWaterDischargeAttributesSchema>;

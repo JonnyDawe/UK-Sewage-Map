@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import useSWR from "swr";
 
-import { formatShortDate } from "../../utils/discharge/discharge.utils";
+import { formatDate } from "../../utils/discharge/discharge.utils";
 
 const FooterWrapper = styled.div`
     display: block;
@@ -45,7 +45,7 @@ function Footer() {
     if (!isLoading && data) {
         return (
             <FooterWrapper>
-                {`Downstream predictions last updated ${formatShortDate(data)}`}
+                {`Downstream predictions last updated ${formatDate(data, "full")}`}
             </FooterWrapper>
         );
     }

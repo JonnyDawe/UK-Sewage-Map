@@ -1,4 +1,17 @@
 import {
+    differenceInHours,
+    differenceInMilliseconds,
+    differenceInMinutes,
+    differenceInSeconds,
+    endOfYear,
+    format,
+    isWithinInterval,
+    startOfYear,
+    subMonths
+} from "date-fns";
+
+import { validateDischargeAttributes } from "./schemas";
+import {
     AlertStatus,
     DischargeData,
     DischargeHistoricalData,
@@ -9,25 +22,26 @@ import {
  * Converts an ESRI Graphic object to a DischargeData object.
  * @param graphic The ESRI Graphic object containing discharge data attributes.
  * @returns A DischargeData object containing relevant discharge information.
+ * @throws Error if the graphic attributes are invalid
  */
 export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeData {
-    // Extract relevant attributes from the graphic
+    const validatedAttributes = validateDischargeAttributes(graphic.attributes);
+    if (!validatedAttributes) {
+        throw new Error("Invalid discharge attributes");
+    }
 
-    const { attributes } = graphic;
-    const alertPast48Hours: boolean = attributes["AlertPast48Hours"] === "true";
-    const alertStatusField = (attributes["AlertStatus"] as string).trim().toLocaleLowerCase();
-    const dischargeStart = attributes["MostRecentDischargeAlertStart"];
-    const dischargeEnd = attributes["MostRecentDischargeAlertStop"];
-    const feeds = attributes["ReceivingWaterCourse"];
-    const location = attributes["LocationName"];
+    const alertPast48Hours = validatedAttributes.AlertPast48Hours === "true";
+    const alertStatusField =
+        validatedAttributes.AlertStatus?.trim().toLocaleLowerCase() ?? "not discharging";
+
     return {
         alertStatus: getAlertStatus(alertPast48Hours, alertStatusField),
         dischargeInterval: {
-            start: dischargeStart,
-            end: dischargeEnd
+            start: validatedAttributes.MostRecentDischargeAlertStart,
+            end: validatedAttributes.MostRecentDischargeAlertStop
         },
-        feeds,
-        location
+        feeds: validatedAttributes.ReceivingWaterCourse,
+        location: validatedAttributes.LocationName
     };
 }
 
@@ -62,7 +76,7 @@ export function getFormattedTimeInterval(
     end: number,
     includeSeconds = false
 ): string {
-    const difference = end - start;
+    const difference = differenceInMilliseconds(end, start);
     return formatTime(difference, includeSeconds);
 }
 
@@ -73,9 +87,10 @@ export function getFormattedTimeInterval(
  * @returns A formatted time string.
  */
 export function formatTime(difference: number, includeSeconds: boolean) {
-    const hours = Math.floor(difference / (1000 * 60 * 60));
-    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    const hours = differenceInHours(difference, 0);
+    const minutes = differenceInMinutes(difference, 0) % 60;
+    const seconds = differenceInSeconds(difference, 0) % 60;
+
     return `${hours > 0 ? `${hours} hours ` : ""}${minutes < 10 ? "0" + minutes : minutes} mins ${
         includeSeconds ? `${seconds < 10 ? "0" + seconds : seconds} sec` : ""
     } `;
@@ -115,33 +130,15 @@ export function getDischargeDateObject(date: Date | number): {
 }
 
 /**
- * Formats a Date or number representing a date to a short date string with AM/PM time.
- * @param dateNumber A Date object or a number representing a date.
- * @returns A formatted short date string (e.g., "15/02/2023 03:45 pm").
+ * Formats a date to a specified format
+ * @param date A Date object or timestamp
+ * @param formatType 'full' for date and time, 'timeOnly' for just time
  */
-export function formatShortDate(dateNumber: Date | number): string {
-    const date = new Date(dateNumber);
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${unixToAmPm(
-        dateNumber
-    )}`;
-}
-
-/**
- * Converts a Unix timestamp (Date or number) to a string with AM/PM time.
- * @param timestamp A Unix timestamp (Date object or number).
- * @returns A formatted time string in AM/PM format (e.g., "03:45 pm").
- */
-export function unixToAmPm(timestamp: Date | number): string {
-    const date = new Date(timestamp);
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "pm" : "am";
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    const outMinutes = minutes < 10 ? "0" + minutes : minutes;
-
-    return `${hours}:${outMinutes} ${ampm}`;
+export function formatDate(date: Date | number, formatType: "full" | "timeOnly" = "full"): string {
+    const dateObj = new Date(date);
+    return formatType === "full"
+        ? format(dateObj, "dd/MM/yyyy h:mm a").toLowerCase()
+        : format(dateObj, "h:mm a").toLowerCase();
 }
 
 /**
@@ -163,6 +160,31 @@ function findKeysByValue<T>(dictionary: Record<string, T>, searchValue: T): stri
 }
 
 /**
+ * Gets discharge data based on a search criterion
+ * @param jsonData The JSON data containing discharge historical information
+ * @param searchKey The key to search by ('LocationName' or 'PermitNumber')
+ * @param searchValue The value to search for
+ */
+export function getDischargeData(
+    jsonData: DischargeHistoricalDataJSON,
+    searchKey: "LocationName" | "PermitNumber",
+    searchValue: string
+): DischargeHistoricalData {
+    const dischargeKeys = findKeysByValue(jsonData[searchKey], searchValue);
+    const [firstValue] = dischargeKeys;
+
+    return {
+        locationName: firstValue ? (jsonData.LocationName[firstValue] ?? "") : "",
+        permitNumber: firstValue ? (jsonData.PermitNumber[firstValue] ?? "") : "",
+        receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? "") : "",
+        discharges: dischargeKeys.map((key) => ({
+            start: new Date(jsonData.StartDateTime[key]!),
+            end: new Date(jsonData.StopDateTime[key]!)
+        }))
+    };
+}
+
+/**
  * Converts discharge historical data in JSON format to a structured object.
  * @param jsonData The JSON data containing discharge historical information.
  * @param locationName The location name to filter the data.
@@ -172,45 +194,20 @@ export function getDischargeDataForLocation(
     jsonData: DischargeHistoricalDataJSON,
     locationName: string
 ): DischargeHistoricalData {
-    const dischargeKeys = findKeysByValue(jsonData.LocationName, locationName);
-    const [firstValue] = dischargeKeys;
-    return {
-        locationName,
-        receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? "") : "",
-        permitNumber: firstValue ? (jsonData.PermitNumber[firstValue] ?? "") : "",
-        discharges: dischargeKeys.map((key) => {
-            return {
-                start: new Date(jsonData.StartDateTime[key]!),
-                end: new Date(jsonData.StopDateTime[key]!)
-            };
-        })
-    };
+    return getDischargeData(jsonData, "LocationName", locationName);
 }
 
 /**
  * Converts discharge historical data in JSON format to a structured object.
  * @param jsonData The JSON data containing discharge historical information.
- * @param locationName The location name to filter the data.
- * @returns A structured object containing location name and associated discharge intervals.
+ * @param permitNumber The permit number to filter the data.
+ * @returns A structured object containing permit number and associated discharge intervals.
  */
 export function getDischargeDataForPermitNumber(
     jsonData: DischargeHistoricalDataJSON,
     permitNumber: string
 ): DischargeHistoricalData {
-    const dischargeKeys = findKeysByValue(jsonData.PermitNumber, permitNumber);
-    const [firstValue] = dischargeKeys;
-
-    return {
-        permitNumber,
-        receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? "") : "",
-        locationName: firstValue ? (jsonData.LocationName[firstValue] ?? "") : "",
-        discharges: dischargeKeys.map((key) => {
-            return {
-                start: new Date(jsonData.StartDateTime[key]!),
-                end: new Date(jsonData.StopDateTime[key]!)
-            };
-        })
-    };
+    return getDischargeData(jsonData, "PermitNumber", permitNumber);
 }
 
 /**
@@ -220,9 +217,7 @@ export function getDischargeDataForPermitNumber(
  * @returns A Date object representing the calculated date.
  */
 export function getDatenMonthsAgo(currentDate: Date, monthsAgo: number): Date {
-    const calculatedDate = new Date(currentDate);
-    calculatedDate.setMonth(calculatedDate.getMonth() - monthsAgo);
-    return calculatedDate;
+    return subMonths(currentDate, monthsAgo);
 }
 
 /**
@@ -233,8 +228,8 @@ export function getDatenMonthsAgo(currentDate: Date, monthsAgo: number): Date {
  */
 export function isDateWithinLastnMonths(date: Date, n: number) {
     const today = new Date();
-    const monthsAgo = new Date(today.getFullYear(), today.getMonth() - n, today.getDate());
-    return date >= monthsAgo && date <= today;
+    const monthsAgo = subMonths(today, n);
+    return isWithinInterval(date, { start: monthsAgo, end: today });
 }
 
 /**
@@ -245,9 +240,10 @@ export function isDateWithinLastnMonths(date: Date, n: number) {
  * @returns {boolean} Returns true if the date is within the specified year, false otherwise.
  */
 export function isDateWithinYear(date: Date, year: number) {
-    const startOfYear = new Date(year, 0, 1); // January is 0-based
-    const endOfYear = new Date(year, 11, 31);
-    return date >= startOfYear && date <= endOfYear;
+    return isWithinInterval(date, {
+        start: startOfYear(new Date(year, 0)),
+        end: endOfYear(new Date(year, 0))
+    });
 }
 
 /**

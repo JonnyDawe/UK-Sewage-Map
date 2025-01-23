@@ -1,10 +1,7 @@
 import { Box, Flex, Separator, Text } from "@radix-ui/themes";
 
 import { useUTCTime } from "../../../hooks/useUTCTime";
-import {
-    formatShortDate,
-    getFormattedTimeInterval
-} from "../../../utils/discharge/discharge.utils";
+import { formatDate, getFormattedTimeInterval } from "../../../utils/discharge/discharge.utils";
 import { AlertStatus, DischargeInterval } from "../../../utils/discharge/types";
 import PulsatingBadge from "../../ActiveBadge/ActiveBadge";
 
@@ -30,7 +27,7 @@ function DateText({ dateNumber, label }: { dateNumber: number; label: string }) 
                 {label}
             </Text>
             <Text as="p" size={"1"}>
-                {formatShortDate(dateNumber)}
+                {formatDate(dateNumber, "full")}
             </Text>
         </Box>
     );
