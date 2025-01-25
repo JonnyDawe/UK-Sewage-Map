@@ -320,11 +320,16 @@ function HistoricDischarges({ company, locationName }: { company: string; locati
   if (company === 'Thames Water') {
     return <DischargeTimeline locationName={locationName} />;
   }
+
+  const message =
+    company === 'Southern Water'
+      ? `${company} provides live historical sewage spill data on their website but does not make it available via an API for third-party applications. 🔒`
+      : `${company} has chosen not to share live historical sewage spill data with the public. 🙄`;
+
   return (
     <>
       <Blockquote mb={'2'} size={'2'}>
-        <b>{company}</b> has chosen not to share <b>live</b> historical sewage spill data with the
-        public. 🙄
+        {message}
         <br />
         Find information from last year at:{' '}
         <Link href="https://top-of-the-poops.org">top-of-the-poops.org</Link>
