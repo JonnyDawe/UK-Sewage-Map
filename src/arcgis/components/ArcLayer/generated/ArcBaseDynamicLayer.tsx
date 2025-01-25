@@ -1,8 +1,8 @@
-import BaseDynamicLayer from "@arcgis/core/layers/BaseDynamicLayer";
+import BaseDynamicLayer from '@arcgis/core/layers/BaseDynamicLayer';
 
-import { createLayer } from "../../../util/createLayer";
+import { createLayer } from '../../../util/createLayer';
 export const ArcBaseDynamicLayer = createLayer<
-    typeof BaseDynamicLayer,
-    __esri.BaseDynamicLayerProperties,
-    BaseDynamicLayer
+  typeof BaseDynamicLayer,
+  __esri.BaseDynamicLayerProperties,
+  BaseDynamicLayer
 >(BaseDynamicLayer);

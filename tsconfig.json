@@ -1,64 +1,36 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
-    "target": "ESNext",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
-    "jsx": "preserve",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "useDefineForClassFields": true,
-    /* Modules */
+    "target": "ES2020",
+    "useDefineForClassFields": false,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ]
-    },
-    "types": [
-      "./src/types/index.d.ts"
-    ],
-    /* JavaScript Support */
+    "skipLibCheck": true,
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    /* Bundler Mode */
+    "experimentalDecorators": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    /* Type Checking */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true,
+    "jsx": "react-jsx",
+
     /* Linting */
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    /* Next.js */
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "incremental": true
+    
+    "types": ["vitest/globals"],
+
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+    },
+
+    "jsxImportSource": "@emotion/react"
   },
-  "include": [
-    "src",
-    "src/app/api",
-    ".next/types/**/*.ts",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src","__mocks__", "public/app"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

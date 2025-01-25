@@ -1,8 +1,8 @@
-import SceneLayer from "@arcgis/core/layers/SceneLayer";
+import SceneLayer from '@arcgis/core/layers/SceneLayer';
 
-import { createLayer } from "../../../util/createLayer";
+import { createLayer } from '../../../util/createLayer';
 export const ArcSceneLayer = createLayer<
-    typeof SceneLayer,
-    __esri.SceneLayerProperties,
-    SceneLayer
+  typeof SceneLayer,
+  __esri.SceneLayerProperties,
+  SceneLayer
 >(SceneLayer);

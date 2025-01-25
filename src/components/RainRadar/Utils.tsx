@@ -1,6 +1,6 @@
-import { Flex, Grid, Text } from "@radix-ui/themes";
+import { Flex, Grid, Text } from '@radix-ui/themes';
 
-import { rainColorCodes } from "./config";
+import { rainColorCodes } from './config';
 
 /**
  * generate tile ID based on date
@@ -16,10 +16,10 @@ export const generateTileID = (date: number): string => `rainfall-radar-base-${d
  * @returns
  */
 export const findLayersByIdKeyword = (
-    layers: __esri.Collection<__esri.Layer>,
-    toFind: string
+  layers: __esri.Collection<__esri.Layer>,
+  toFind: string,
 ): __esri.Layer[] => {
-    return layers.filter((y: __esri.Layer) => y.id.includes(toFind)).toArray();
+  return layers.filter((y: __esri.Layer) => y.id.includes(toFind)).toArray();
 };
 
 /**
@@ -41,10 +41,10 @@ const roundUpTo = (roundTo: number) => (x: number) => Math.ceil(x / roundTo) * r
  * @returns
  */
 export const getRoundDownUnixTs = (): number => {
-    const roundDownTo10Minutes = roundDownTo(1000 * 60 * 10);
-    const roundDate = roundDownTo10Minutes(new Date().getTime());
+  const roundDownTo10Minutes = roundDownTo(1000 * 60 * 10);
+  const roundDate = roundDownTo10Minutes(new Date().getTime());
 
-    return roundDate / 1000;
+  return roundDate / 1000;
 };
 
 /**
@@ -52,10 +52,10 @@ export const getRoundDownUnixTs = (): number => {
  * @returns
  */
 export const getRoundUpUnixTs = (): number => {
-    const roundUpTo10Minutes = roundUpTo(1000 * 60 * 10);
-    const roundDate = roundUpTo10Minutes(new Date().getTime());
+  const roundUpTo10Minutes = roundUpTo(1000 * 60 * 10);
+  const roundDate = roundUpTo10Minutes(new Date().getTime());
 
-    return roundDate / 1000;
+  return roundDate / 1000;
 };
 
 /**
@@ -66,22 +66,17 @@ export const getRoundUpUnixTs = (): number => {
  * @returns
  */
 export const generateColorLegend = (code: string) => {
-    const colorList = rainColorCodes[code];
+  const colorList = rainColorCodes[code];
 
-    return (
-        <Flex gap={"2"}>
-            <Text size={"1"}>Light</Text>
-            <Grid flexGrow={"1"} columns={`${colorList?.length ?? 0}`}>
-                {colorList?.map((c: string) => {
-                    return (
-                        <div
-                            key={`${code}-${c}`}
-                            style={{ backgroundColor: c, gridRow: "1" }}
-                        ></div>
-                    );
-                })}
-            </Grid>
-            <Text size={"1"}>Heavy</Text>
-        </Flex>
-    );
+  return (
+    <Flex gap={'2'}>
+      <Text size={'1'}>Light</Text>
+      <Grid flexGrow={'1'} columns={`${colorList?.length ?? 0}`}>
+        {colorList?.map((c: string) => {
+          return <div key={`${code}-${c}`} style={{ backgroundColor: c, gridRow: '1' }}></div>;
+        })}
+      </Grid>
+      <Text size={'1'}>Heavy</Text>
+    </Flex>
+  );
 };

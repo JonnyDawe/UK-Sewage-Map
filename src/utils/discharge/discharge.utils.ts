@@ -1,22 +1,27 @@
 import {
-    differenceInHours,
-    differenceInMilliseconds,
-    differenceInMinutes,
-    differenceInSeconds,
-    endOfYear,
-    format,
-    isWithinInterval,
-    startOfYear,
-    subMonths
-} from "date-fns";
+  differenceInHours,
+  differenceInMilliseconds,
+  differenceInMinutes,
+  differenceInSeconds,
+  endOfYear,
+  format,
+  isWithinInterval,
+  startOfYear,
+  subMonths,
+} from 'date-fns';
 
-import { validateDischargeAttributes } from "./schemas";
 import {
-    AlertStatus,
-    DischargeData,
-    DischargeHistoricalData,
-    DischargeHistoricalDataJSON
-} from "./types";
+  ThamesWaterDischargeAttributes,
+  validateThamesWaterDischargeAttributes,
+  validateWaterCompanyDischargeAttributes,
+  WaterCompanyDischargeAttributes,
+} from './schemas';
+import {
+  AlertStatus,
+  DischargeData,
+  DischargeHistoricalData,
+  DischargeHistoricalDataJSON,
+} from './types';
 
 /**
  * Converts an ESRI Graphic object to a DischargeData object.
@@ -25,24 +30,68 @@ import {
  * @throws Error if the graphic attributes are invalid
  */
 export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeData {
-    const validatedAttributes = validateDischargeAttributes(graphic.attributes);
-    if (!validatedAttributes) {
-        throw new Error("Invalid discharge attributes");
-    }
+  const validatedThamesWaterAttributes = validateThamesWaterDischargeAttributes(graphic.attributes);
+  const validatedWaterCompanyAttributes = validateWaterCompanyDischargeAttributes(
+    graphic.attributes,
+  );
 
-    const alertPast48Hours = validatedAttributes.AlertPast48Hours === "true";
-    const alertStatusField =
-        validatedAttributes.AlertStatus?.trim().toLocaleLowerCase() ?? "not discharging";
+  if (validatedThamesWaterAttributes) {
+    return getRenderPropsFromThamesWaterAttributes(validatedThamesWaterAttributes);
+  }
 
-    return {
-        alertStatus: getAlertStatus(alertPast48Hours, alertStatusField),
-        dischargeInterval: {
-            start: validatedAttributes.MostRecentDischargeAlertStart,
-            end: validatedAttributes.MostRecentDischargeAlertStop
-        },
-        feeds: validatedAttributes.ReceivingWaterCourse,
-        location: validatedAttributes.LocationName
-    };
+  if (validatedWaterCompanyAttributes) {
+    return getRenderPropsFromWaterCompanyAttributes(validatedWaterCompanyAttributes);
+  }
+
+  throw new Error('Invalid discharge attributes');
+}
+
+function getRenderPropsFromThamesWaterAttributes(
+  attributes: ThamesWaterDischargeAttributes,
+): DischargeData {
+  const alertPast48Hours = attributes.AlertPast48Hours === 'true';
+  const alertStatusField = attributes.AlertStatus?.trim().toLocaleLowerCase() ?? 'not discharging';
+
+  return {
+    id: attributes.PermitNumber,
+    company: 'Thames Water',
+    alertStatus: getAlertStatus(alertPast48Hours, alertStatusField),
+    dischargeInterval: {
+      start: attributes.MostRecentDischargeAlertStart,
+      end: attributes.MostRecentDischargeAlertStop,
+    },
+    feeds: attributes.ReceivingWaterCourse?.toLowerCase() ?? '',
+    location: attributes.LocationName,
+  };
+}
+
+function getRenderPropsFromWaterCompanyAttributes(
+  attributes: WaterCompanyDischargeAttributes,
+): DischargeData {
+  const isDischarging = attributes.Status === 1;
+  const isOffline = attributes.Status === -1;
+  const isRecentDischarge =
+    attributes.Status === 0 &&
+    attributes.LatestEventEnd &&
+    differenceInHours(new Date(), attributes.LatestEventEnd) <= 48;
+
+  return {
+    id: attributes.Id,
+    company: attributes.Company,
+    alertStatus: isDischarging
+      ? 'Discharging'
+      : isOffline
+        ? 'Offline'
+        : isRecentDischarge
+          ? 'Recent Discharge'
+          : 'Not Discharging',
+    dischargeInterval: {
+      start: attributes.LatestEventStart,
+      end: attributes.LatestEventEnd,
+    },
+    feeds: attributes.ReceivingWaterCourse?.toLowerCase() ?? '',
+    location: '',
+  };
 }
 
 /**
@@ -52,16 +101,20 @@ export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeDat
  * @returns An AlertStatus value ("Not Discharging", "Recent Discharge", or "Discharging").
  */
 function getAlertStatus(alertPast48Hours: boolean, alertStatusField: string): AlertStatus {
-    switch (alertStatusField) {
-        case "offline":
-            return "Offline";
-        case "discharging":
-            return "Discharging";
-        case "not discharging":
-            return "Not Discharging";
-        default:
-            return alertPast48Hours ? "Recent Discharge" : "Not Discharging";
-    }
+  switch (alertStatusField) {
+    case 'offline':
+      return 'Offline';
+    case 'discharging':
+      return 'Discharging';
+    case 'not discharging':
+      if (alertPast48Hours) {
+        return 'Recent Discharge';
+      } else {
+        return 'Not Discharging';
+      }
+    default:
+      return 'Not Discharging';
+  }
 }
 
 /**
@@ -72,12 +125,12 @@ function getAlertStatus(alertPast48Hours: boolean, alertStatusField: string): Al
  * @returns A formatted time interval string (e.g., "2 hours 15 mins" or "1 hour 30 mins 45 sec").
  */
 export function getFormattedTimeInterval(
-    start: number,
-    end: number,
-    includeSeconds = false
+  start: number,
+  end: number,
+  includeSeconds = false,
 ): string {
-    const difference = differenceInMilliseconds(end, start);
-    return formatTime(difference, includeSeconds);
+  const difference = differenceInMilliseconds(end, start);
+  return formatTime(difference, includeSeconds);
 }
 
 /**
@@ -87,28 +140,28 @@ export function getFormattedTimeInterval(
  * @returns A formatted time string.
  */
 export function formatTime(difference: number, includeSeconds: boolean) {
-    const hours = differenceInHours(difference, 0);
-    const minutes = differenceInMinutes(difference, 0) % 60;
-    const seconds = differenceInSeconds(difference, 0) % 60;
+  const hours = differenceInHours(difference, 0);
+  const minutes = differenceInMinutes(difference, 0) % 60;
+  const seconds = differenceInSeconds(difference, 0) % 60;
 
-    return `${hours > 0 ? `${hours} hours ` : ""}${minutes < 10 ? "0" + minutes : minutes} mins ${
-        includeSeconds ? `${seconds < 10 ? "0" + seconds : seconds} sec` : ""
-    } `;
+  return `${hours > 0 ? `${hours} hours ` : ''}${minutes < 10 ? '0' + minutes : minutes} mins ${
+    includeSeconds ? `${seconds < 10 ? '0' + seconds : seconds} sec` : ''
+  } `;
 }
 
 const MONTH_NAMES_SHORT = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 
 /**
@@ -117,16 +170,16 @@ const MONTH_NAMES_SHORT = [
  * @returns An object with month, day, and year properties.
  */
 export function getDischargeDateObject(date: Date | number): {
-    month: string;
-    day: number;
-    year: number;
+  month: string;
+  day: number;
+  year: number;
 } {
-    date = new Date(date);
-    return {
-        month: MONTH_NAMES_SHORT[date.getMonth()] ?? "",
-        day: date.getDate(),
-        year: date.getFullYear()
-    };
+  date = new Date(date);
+  return {
+    month: MONTH_NAMES_SHORT[date.getMonth()] ?? '',
+    day: date.getDate(),
+    year: date.getFullYear(),
+  };
 }
 
 /**
@@ -134,11 +187,11 @@ export function getDischargeDateObject(date: Date | number): {
  * @param date A Date object or timestamp
  * @param formatType 'full' for date and time, 'timeOnly' for just time
  */
-export function formatDate(date: Date | number, formatType: "full" | "timeOnly" = "full"): string {
-    const dateObj = new Date(date);
-    return formatType === "full"
-        ? format(dateObj, "dd/MM/yyyy h:mm a").toLowerCase()
-        : format(dateObj, "h:mm a").toLowerCase();
+export function formatDate(date: Date | number, formatType: 'full' | 'timeOnly' = 'full'): string {
+  const dateObj = new Date(date);
+  return formatType === 'full'
+    ? format(dateObj, 'dd/MM/yyyy h:mm a').toLowerCase()
+    : format(dateObj, 'h:mm a').toLowerCase();
 }
 
 /**
@@ -148,15 +201,15 @@ export function formatDate(date: Date | number, formatType: "full" | "timeOnly" 
  * @returns An array of keys that match the search value.
  */
 function findKeysByValue<T>(dictionary: Record<string, T>, searchValue: T): string[] {
-    const keys: string[] = [];
+  const keys: string[] = [];
 
-    for (const key in dictionary) {
-        if (dictionary[key] === searchValue) {
-            keys.push(key);
-        }
+  for (const key in dictionary) {
+    if (dictionary[key] === searchValue) {
+      keys.push(key);
     }
+  }
 
-    return keys;
+  return keys;
 }
 
 /**
@@ -166,22 +219,22 @@ function findKeysByValue<T>(dictionary: Record<string, T>, searchValue: T): stri
  * @param searchValue The value to search for
  */
 export function getDischargeData(
-    jsonData: DischargeHistoricalDataJSON,
-    searchKey: "LocationName" | "PermitNumber",
-    searchValue: string
+  jsonData: DischargeHistoricalDataJSON,
+  searchKey: 'LocationName' | 'PermitNumber',
+  searchValue: string,
 ): DischargeHistoricalData {
-    const dischargeKeys = findKeysByValue(jsonData[searchKey], searchValue);
-    const [firstValue] = dischargeKeys;
+  const dischargeKeys = findKeysByValue(jsonData[searchKey], searchValue);
+  const [firstValue] = dischargeKeys;
 
-    return {
-        locationName: firstValue ? (jsonData.LocationName[firstValue] ?? "") : "",
-        permitNumber: firstValue ? (jsonData.PermitNumber[firstValue] ?? "") : "",
-        receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? "") : "",
-        discharges: dischargeKeys.map((key) => ({
-            start: new Date(jsonData.StartDateTime[key]!),
-            end: new Date(jsonData.StopDateTime[key]!)
-        }))
-    };
+  return {
+    locationName: firstValue ? (jsonData.LocationName[firstValue] ?? '') : '',
+    permitNumber: firstValue ? (jsonData.PermitNumber[firstValue] ?? '') : '',
+    receivingWaterCourse: firstValue ? (jsonData.ReceivingWaterCourse[firstValue] ?? '') : '',
+    discharges: dischargeKeys.map((key) => ({
+      start: new Date(jsonData.StartDateTime[key]!),
+      end: new Date(jsonData.StopDateTime[key]!),
+    })),
+  };
 }
 
 /**
@@ -191,10 +244,10 @@ export function getDischargeData(
  * @returns A structured object containing location name and associated discharge intervals.
  */
 export function getDischargeDataForLocation(
-    jsonData: DischargeHistoricalDataJSON,
-    locationName: string
+  jsonData: DischargeHistoricalDataJSON,
+  locationName: string,
 ): DischargeHistoricalData {
-    return getDischargeData(jsonData, "LocationName", locationName);
+  return getDischargeData(jsonData, 'LocationName', locationName);
 }
 
 /**
@@ -204,10 +257,10 @@ export function getDischargeDataForLocation(
  * @returns A structured object containing permit number and associated discharge intervals.
  */
 export function getDischargeDataForPermitNumber(
-    jsonData: DischargeHistoricalDataJSON,
-    permitNumber: string
+  jsonData: DischargeHistoricalDataJSON,
+  permitNumber: string,
 ): DischargeHistoricalData {
-    return getDischargeData(jsonData, "PermitNumber", permitNumber);
+  return getDischargeData(jsonData, 'PermitNumber', permitNumber);
 }
 
 /**
@@ -217,7 +270,7 @@ export function getDischargeDataForPermitNumber(
  * @returns A Date object representing the calculated date.
  */
 export function getDatenMonthsAgo(currentDate: Date, monthsAgo: number): Date {
-    return subMonths(currentDate, monthsAgo);
+  return subMonths(currentDate, monthsAgo);
 }
 
 /**
@@ -227,9 +280,9 @@ export function getDatenMonthsAgo(currentDate: Date, monthsAgo: number): Date {
  * @returns true if the date is within the last n months, false otherwise.
  */
 export function isDateWithinLastnMonths(date: Date, n: number) {
-    const today = new Date();
-    const monthsAgo = subMonths(today, n);
-    return isWithinInterval(date, { start: monthsAgo, end: today });
+  const today = new Date();
+  const monthsAgo = subMonths(today, n);
+  return isWithinInterval(date, { start: monthsAgo, end: today });
 }
 
 /**
@@ -240,10 +293,10 @@ export function isDateWithinLastnMonths(date: Date, n: number) {
  * @returns {boolean} Returns true if the date is within the specified year, false otherwise.
  */
 export function isDateWithinYear(date: Date, year: number) {
-    return isWithinInterval(date, {
-        start: startOfYear(new Date(year, 0)),
-        end: endOfYear(new Date(year, 0))
-    });
+  return isWithinInterval(date, {
+    start: startOfYear(new Date(year, 0)),
+    end: endOfYear(new Date(year, 0)),
+  });
 }
 
 /**
@@ -252,22 +305,22 @@ export function isDateWithinYear(date: Date, year: number) {
  * @returns The total length of discharge in milliseconds.
  */
 export function calculateTotalDischargeLength(
-    discharges: {
-        start: Date;
-        end: Date;
-    }[]
+  discharges: {
+    start: Date;
+    end: Date;
+  }[],
 ): number {
-    let totalLength = 0;
+  let totalLength = 0;
 
-    // Iterate through each discharge to calculate the time difference and accumulate the total length
-    for (const discharge of discharges) {
-        // Calculate the length of the discharge in milliseconds
-        const dischargeLength = discharge.end.getTime() - discharge.start.getTime();
+  // Iterate through each discharge to calculate the time difference and accumulate the total length
+  for (const discharge of discharges) {
+    // Calculate the length of the discharge in milliseconds
+    const dischargeLength = discharge.end.getTime() - discharge.start.getTime();
 
-        // Add the current discharge length to the total
-        totalLength += dischargeLength;
-    }
+    // Add the current discharge length to the total
+    totalLength += dischargeLength;
+  }
 
-    // Return the total length of discharge in milliseconds
-    return totalLength;
+  // Return the total length of discharge in milliseconds
+  return totalLength;
 }

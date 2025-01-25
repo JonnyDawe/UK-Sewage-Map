@@ -1,8 +1,8 @@
-import { ThemeProps } from "@radix-ui/themes";
+import { ThemeProps } from '@radix-ui/themes';
 
-export type ColorMode = "light" | "dark";
+export type ColorMode = 'light' | 'dark';
 
 export interface ThemeContextProps {
-    theme: Partial<ThemeProps>;
-    toggleColorMode: () => void;
+  theme: Partial<ThemeProps>;
+  toggleColorMode: () => void;
 }

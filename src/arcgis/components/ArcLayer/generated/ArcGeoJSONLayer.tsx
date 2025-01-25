@@ -1,8 +1,8 @@
-import GeoJSONLayer from "@arcgis/core/layers/GeoJSONLayer";
+import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
 
-import { createLayer } from "../../../util/createLayer";
+import { createLayer } from '../../../util/createLayer';
 export const ArcGeoJSONLayer = createLayer<
-    typeof GeoJSONLayer,
-    __esri.GeoJSONLayerProperties,
-    GeoJSONLayer
+  typeof GeoJSONLayer,
+  __esri.GeoJSONLayerProperties,
+  GeoJSONLayer
 >(GeoJSONLayer);

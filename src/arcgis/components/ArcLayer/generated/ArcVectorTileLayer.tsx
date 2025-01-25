@@ -1,8 +1,8 @@
-import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 
-import { createLayer } from "../../../util/createLayer";
+import { createLayer } from '../../../util/createLayer';
 export const ArcVectorTileLayer = createLayer<
-    typeof VectorTileLayer,
-    __esri.VectorTileLayerProperties,
-    VectorTileLayer
+  typeof VectorTileLayer,
+  __esri.VectorTileLayerProperties,
+  VectorTileLayer
 >(VectorTileLayer);

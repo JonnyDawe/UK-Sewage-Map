@@ -1,8 +1,8 @@
-import UnsupportedLayer from "@arcgis/core/layers/UnsupportedLayer";
+import UnsupportedLayer from '@arcgis/core/layers/UnsupportedLayer';
 
-import { createLayer } from "../../../util/createLayer";
+import { createLayer } from '../../../util/createLayer';
 export const ArcUnsupportedLayer = createLayer<
-    typeof UnsupportedLayer,
-    __esri.UnsupportedLayerProperties,
-    UnsupportedLayer
+  typeof UnsupportedLayer,
+  __esri.UnsupportedLayerProperties,
+  UnsupportedLayer
 >(UnsupportedLayer);

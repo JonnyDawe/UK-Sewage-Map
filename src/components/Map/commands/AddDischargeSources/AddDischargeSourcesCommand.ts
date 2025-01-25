@@ -1,111 +1,186 @@
-import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import EsriMap from "@arcgis/core/Map";
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import EsriMap from '@arcgis/core/Map';
 
-import { MapCommand, ViewCommand } from "@/arcgis/typings/commandtypes";
-import { validateDischargeAttributes } from "@/utils/discharge/schemas";
+import { MapCommand, ViewCommand } from '@/arcgis/typings/commandtypes';
+import {
+  validateThamesWaterDischargeAttributes,
+  validateWaterCompanyDischargeAttributes,
+} from '@/utils/discharge/schemas';
 
-import { dischargePopupTemplate } from "./config/dischargePopup";
-import { dischargeRenderer } from "./config/dischargeRenderer";
+import { streamApiUrls, thamesWaterApiUrl } from './config/constants';
+import { dischargePopupTemplate } from './config/dischargePopup';
+import {
+  otherWaterAlertStatusRenderer,
+  thamesWaterAlertStatusRenderer,
+} from './config/dischargeRenderer';
+import {
+  otherWaterAlertStatusSymbolArcade,
+  thamesWaterAlertStatusSymbolArcade,
+} from './config/dischargeSourceRendererArcade';
 
 export class AddDischargeSourcesCommand implements MapCommand {
-    private featureLayer: __esri.FeatureLayer = new FeatureLayer({
-        url: "https://services2.arcgis.com/g6o32ZDQ33GpCIu3/arcgis/rest/services/STEServiceProduction/FeatureServer",
-        outFields: ["*"],
-        renderer: dischargeRenderer,
+  private layers: __esri.FeatureLayer[] = [];
+
+  constructor(
+    private setPathname: (assetId: string, company: string) => void,
+    private initialCsoId?: string,
+    private initialCompany?: string,
+  ) {
+    this.initializeLayers();
+  }
+
+  private initializeLayers(): void {
+    // Add Thames Water layer
+    this.layers.push(
+      new FeatureLayer({
+        url: thamesWaterApiUrl,
+        title: 'Thames Water',
+        id: 'Thames Water',
+        outFields: ['*'],
+        renderer: thamesWaterAlertStatusRenderer,
         popupTemplate: dischargePopupTemplate,
         popupEnabled: true,
-        effect: "drop-shadow(0.3px 0.5px 0.7px #a0a0925c) drop-shadow(0.4px 0.8px 1px #a0a0925c) drop-shadow(1px 2px 2.5px #a0a0925c)"
-    });
+        orderBy: [
+          {
+            valueExpression: thamesWaterAlertStatusSymbolArcade,
+            order: 'descending',
+          },
+        ],
+      }),
+    );
 
-    constructor(
-        private setPathname: (assetId: string) => void,
-        private initialCsoId?: string
-    ) {}
-
-    async executeOnMap(map: EsriMap): Promise<ViewCommand> {
-        map.add(this.featureLayer);
-        return {
-            executeOnView: async (view: __esri.MapView) => {
-                const layerView = await view.whenLayerView(this.featureLayer);
-
-                this.setupPopupActionHandlers(view);
-                this.setupFeatureSelectionHandling(view, layerView);
-
-                if (this.initialCsoId) {
-                    await this.handleInitialCso(view, layerView);
-                }
-            }
-        };
-    }
-
-    private setupPopupActionHandlers(view: __esri.MapView): void {
-        reactiveUtils.when(
-            () => !!view.popup.viewModel,
-            () => {
-                if (!view.popup.viewModel.hasEventListener("trigger-action")) {
-                    view.popup.viewModel.addHandles([
-                        view.popup.viewModel.on("trigger-action", (event) => {
-                            if (event.action.id === "copy-link") {
-                                navigator.clipboard.writeText(window.location.href);
-                            }
-                        })
-                    ]);
-                }
+    // Add other water company layers
+    Object.entries(streamApiUrls).forEach(([title, url]) => {
+      this.layers.push(
+        new FeatureLayer({
+          title,
+          id: title,
+          url,
+          outFields: ['*'],
+          renderer: otherWaterAlertStatusRenderer,
+          popupTemplate: dischargePopupTemplate,
+          popupEnabled: true,
+          orderBy: [
+            {
+              valueExpression: otherWaterAlertStatusSymbolArcade,
+              order: 'descending',
             },
-            { once: true }
-        );
-    }
+          ],
+        }),
+      );
+    });
+  }
 
-    private setupFeatureSelectionHandling(
-        view: __esri.MapView,
-        layerView: __esri.FeatureLayerView
-    ): void {
-        reactiveUtils.watch(
-            () => view.popup.visible,
-            (visible) => {
-                if (!visible) {
-                    this.setPathname("");
-                }
-            }
-        );
+  async executeOnMap(map: EsriMap): Promise<ViewCommand> {
+    this.layers.forEach((layer) => map.add(layer));
 
-        reactiveUtils.watch(
-            () => view.popup.selectedFeature,
-            async (graphic) => {
-                if (!graphic) {
-                    this.setPathname("");
-                    return;
-                }
-                if (graphic?.layer === layerView.layer || graphic?.layer === null) {
-                    const attributes = validateDischargeAttributes(graphic.attributes);
-                    if (!attributes) return;
+    return {
+      executeOnView: async (view: __esri.MapView) => {
+        const layerViews = await Promise.all(this.layers.map((layer) => view.whenLayerView(layer)));
 
-                    this.setPathname(attributes.PermitNumber ?? "");
-                    await this.zoomToFeature(view, graphic);
-                }
-            }
-        );
-    }
-
-    private async zoomToFeature(view: __esri.MapView, graphic: __esri.Graphic): Promise<void> {
-        view.popup.location = graphic.geometry as __esri.Point;
-        await view.goTo({
-            target: view.popup.location,
-            zoom: 12
+        this.setupPopupActionHandlers(view);
+        layerViews.forEach((layerView) => {
+          this.setupFeatureSelectionHandling(view, layerView);
         });
-    }
 
-    private async handleInitialCso(
-        view: __esri.MapView,
-        layerView: __esri.FeatureLayerView
-    ): Promise<void> {
-        const query = layerView.layer.createQuery();
-        query.where = `PermitNumber = '${this.initialCsoId}'`;
-        query.returnGeometry = true;
+        if (this.initialCsoId) {
+          await this.handleInitialCso(view);
+        }
+      },
+    };
+  }
 
-        const { features } = await layerView.layer.queryFeatures(query);
+  private setupPopupActionHandlers(view: __esri.MapView): void {
+    reactiveUtils.when(
+      () => !!view.popup.viewModel,
+      () => {
+        if (!view.popup.viewModel.hasEventListener('trigger-action')) {
+          view.popup.viewModel.addHandles([
+            view.popup.viewModel.on('trigger-action', (event) => {
+              if (event.action.id === 'copy-link') {
+                navigator.clipboard.writeText(window.location.href);
+              }
+            }),
+          ]);
+        }
+      },
+      { once: true },
+    );
+  }
+
+  private setupFeatureSelectionHandling(
+    view: __esri.MapView,
+    layerView: __esri.FeatureLayerView,
+  ): void {
+    reactiveUtils.watch(
+      () => view.popup.visible,
+      (visible) => {
+        if (!visible) {
+          this.setPathname('', '');
+        }
+      },
+    );
+
+    reactiveUtils.watch(
+      () => view.popup.selectedFeature,
+      async (graphic) => {
+        if (!graphic) {
+          this.setPathname('', '');
+          return;
+        }
+        if (graphic?.layer === layerView.layer || graphic?.layer === null) {
+          const thamesAttributes = validateThamesWaterDischargeAttributes(graphic.attributes);
+          const otherAttributes = validateWaterCompanyDischargeAttributes(graphic.attributes);
+
+          if (!thamesAttributes && !otherAttributes) return;
+
+          const id = thamesAttributes?.PermitNumber ?? otherAttributes?.Id ?? '';
+          this.setPathname(id, layerView.layer.title);
+          await this.zoomToFeature(view, graphic);
+        }
+      },
+    );
+  }
+
+  private async zoomToFeature(view: __esri.MapView, graphic: __esri.Graphic): Promise<void> {
+    view.popup.location = graphic.geometry as __esri.Point;
+    await view.goTo({
+      target: view.popup.location,
+      zoom: 12,
+    });
+  }
+
+  private async handleInitialCso(view: __esri.MapView): Promise<void> {
+    const company = this.initialCompany;
+    const csoId = this.initialCsoId;
+
+    if (!company || !csoId) return;
+
+    // find the layer with the company
+    const layer = view.map.findLayerById(company) as __esri.FeatureLayer;
+    if (!layer) return;
+
+    if (layer.title === 'Thames Water') {
+      const query = layer.createQuery();
+      query.where = `PermitNumber = '${this.initialCsoId}'`;
+      query.returnGeometry = true;
+
+      const { features } = await layer.queryFeatures(query);
+      if (features.length > 0) {
         view.openPopup({ features });
         view.goTo({ target: features[0], zoom: 12 }, { animate: false });
+      }
+    } else {
+      const query = layer.createQuery();
+      query.where = `Id = '${this.initialCsoId}'`;
+      query.returnGeometry = true;
+
+      const { features } = await layer.queryFeatures(query);
+      if (features.length > 0) {
+        view.openPopup({ features });
+        view.goTo({ target: features[0], zoom: 12 }, { animate: false });
+      }
     }
+  }
 }

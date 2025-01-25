@@ -1,8 +1,8 @@
-import DimensionLayer from "@arcgis/core/layers/DimensionLayer";
+import DimensionLayer from '@arcgis/core/layers/DimensionLayer';
 
-import { createLayer } from "../../../util/createLayer";
+import { createLayer } from '../../../util/createLayer';
 export const ArcDimensionLayer = createLayer<
-    typeof DimensionLayer,
-    __esri.DimensionLayerProperties,
-    DimensionLayer
+  typeof DimensionLayer,
+  __esri.DimensionLayerProperties,
+  DimensionLayer
 >(DimensionLayer);

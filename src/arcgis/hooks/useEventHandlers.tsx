@@ -1,20 +1,20 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import { EsriEvented, EventHandlers } from "../typings/EsriTypes";
+import { EsriEvented, EventHandlers } from '../typings/EsriTypes';
 
 export const useEventHandlers = <View extends EsriEvented>(
-    accessor?: View,
-    eventHandlers?: EventHandlers<View>
+  accessor?: View,
+  eventHandlers?: EventHandlers<View>,
 ): void => {
-    useEffect(() => {
-        if (!accessor || !eventHandlers) return;
+  useEffect(() => {
+    if (!accessor || !eventHandlers) return;
 
-        const handles = Object.entries(eventHandlers).map(([event, handler]) =>
-            accessor.on(event, handler as __esri.EventHandler)
-        );
+    const handles = Object.entries(eventHandlers).map(([event, handler]) =>
+      accessor.on(event, handler as __esri.EventHandler),
+    );
 
-        return () => {
-            for (const handle of handles) handle.remove();
-        };
-    }, [eventHandlers, accessor]);
+    return () => {
+      for (const handle of handles) handle.remove();
+    };
+  }, [eventHandlers, accessor]);
 };

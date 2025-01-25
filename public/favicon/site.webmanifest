@@ -1,0 +1,41 @@
+{
+  "name": "Sewage Map",
+  "short_name": "Sewage Map",
+  "description": "Real-Time Sewage Discharge Monitoring | Sewage Map - Stay Updated on Sewage Pollution",
+  "icons": [
+    {
+      "src": "/favicon/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#7ab3ff",
+  "background_color": "#000000",
+  "display": "fullscreen",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "en-GB",
+  "orientation": "any",
+  "categories": ["utilities", "maps"],
+  "screenshots": [
+    {
+      "src": "/og.png",
+      "type": "image/png",
+      "sizes": "1200x630",
+      "form_factor": "wide"
+    }
+  ]
+}
