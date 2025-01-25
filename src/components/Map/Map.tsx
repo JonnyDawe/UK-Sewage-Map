@@ -22,10 +22,10 @@ const initialMapProps = {
     minZoom: 6,
   },
   extent: new Extent({
-    xmin: -316027,
-    ymin: 6602768,
-    xmax: 133422,
-    ymax: 6847978,
+    xmin: -767095,
+    ymin: 6482731,
+    xmax: 451004,
+    ymax: 7386522,
     spatialReference: SpatialReference.WebMercator,
   }),
   highlightOptions: {
@@ -69,7 +69,10 @@ const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewPro
   return (
     <ArcMapView
       map={map}
-      onarcgisViewReadyChange={(ev) => handleViewReady(ev.target.view)}
+      onarcgisViewReadyChange={(ev) => {
+        console.log('view ready', ev.target.view);
+        handleViewReady(ev.target.view);
+      }}
       {...initialMapProps}
       padding={padding}
     >

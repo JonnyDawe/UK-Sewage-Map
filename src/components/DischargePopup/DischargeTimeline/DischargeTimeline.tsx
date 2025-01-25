@@ -7,12 +7,11 @@ import useSWR from 'swr';
 import {
   calculateTotalDischargeLength,
   formatDate,
+  formatTime,
   getDatenMonthsAgo,
   getDischargeDataForLocation,
   getDischargeDateObject,
   getFormattedTimeInterval,
-  isDateWithinLastnMonths,
-  isDateWithinYear,
 } from '../../../utils/discharge/discharge.utils';
 import {
   DischargeHistoricalData,
@@ -53,45 +52,27 @@ function getFilteredDischarges(
   dischargeData: DischargeHistoricalData,
   period: DischargeHistoryPeriod,
 ) {
-  switch (period) {
-    case DischargeHistoryPeriod.Last12Months:
-    case DischargeHistoryPeriod.Last6Months:
-    case DischargeHistoryPeriod.Last3Months: {
-      const months =
-        period === DischargeHistoryPeriod.Last12Months
-          ? 12
-          : period === DischargeHistoryPeriod.Last6Months
-            ? 6
-            : 3;
-      return dischargeData.discharges
-        .map((discharge) => {
-          if (
-            !isDateWithinLastnMonths(discharge.start, months) &&
-            isDateWithinLastnMonths(discharge.end, months)
-          ) {
-            const newStart = new Date();
-            newStart.setMonth(newStart.getMonth() - months);
-            return { ...discharge, start: newStart };
-          }
-          return discharge;
-        })
-        .filter((discharge) => isDateWithinLastnMonths(discharge.end, months));
-    }
-    case DischargeHistoryPeriod.StartOf2023:
-    case DischargeHistoryPeriod.StartOf2024: {
-      const year = period === DischargeHistoryPeriod.StartOf2023 ? 2023 : 2024;
-      return dischargeData.discharges
-        .map((discharge) => {
-          if (!isDateWithinYear(discharge.start, year) && isDateWithinYear(discharge.end, year)) {
-            return { ...discharge, start: new Date(year, 0, 1) };
-          }
-          return discharge;
-        })
-        .filter((discharge) => isDateWithinYear(discharge.end, year));
-    }
-    default:
-      return [];
-  }
+  const startDate = getStartDateOfInterest(period);
+  const endDate = getEndDateOfInterest(period);
+  if (!startDate || !endDate) return [];
+
+  return dischargeData.discharges
+    .map((discharge) => {
+      // If discharge spans the period boundaries, adjust it
+      if (discharge.start < startDate && discharge.end > startDate) {
+        return { ...discharge, start: startDate };
+      }
+      if (discharge.start < endDate && discharge.end > endDate) {
+        return { ...discharge, end: endDate };
+      }
+      return discharge;
+    })
+    .filter(
+      (discharge) =>
+        discharge.start <= discharge.end &&
+        discharge.start <= endDate &&
+        discharge.end >= startDate,
+    );
 }
 
 function getStartDateOfInterest(period: DischargeHistoryPeriod) {
@@ -106,8 +87,23 @@ function getStartDateOfInterest(period: DischargeHistoryPeriod) {
       return new Date(2023, 0, 1);
     case DischargeHistoryPeriod.StartOf2024:
       return new Date(2024, 0, 1);
+    case DischargeHistoryPeriod.StartOf2025:
+      return new Date(2025, 0, 1);
     default:
       return undefined;
+  }
+}
+
+function getEndDateOfInterest(period: DischargeHistoryPeriod) {
+  switch (period) {
+    case DischargeHistoryPeriod.StartOf2023:
+      return new Date(2023, 11, 31, 23, 59, 59);
+    case DischargeHistoryPeriod.StartOf2024:
+      return new Date(2024, 11, 31, 23, 59, 59);
+    case DischargeHistoryPeriod.StartOf2025:
+      return new Date();
+    default:
+      return new Date();
   }
 }
 
@@ -258,7 +254,8 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
             { value: DischargeHistoryPeriod.Last6Months, label: 'Last 6 months' },
             { value: DischargeHistoryPeriod.Last12Months, label: 'Last 12 months' },
             { value: DischargeHistoryPeriod.StartOf2023, label: 'Entirety of 2023' },
-            { value: DischargeHistoryPeriod.StartOf2024, label: 'Start of the Year' },
+            { value: DischargeHistoryPeriod.StartOf2024, label: 'Entirety of 2024' },
+            { value: DischargeHistoryPeriod.StartOf2025, label: 'Start of the Year' },
           ]}
           value={selectedPeriod}
           onChange={(selectedPeriod) => {
@@ -287,7 +284,7 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
             },
             hAxis: {
               minValue: getStartDateOfInterest(selectedPeriod),
-              maxValue: new Date(),
+              maxValue: getEndDateOfInterest(selectedPeriod),
             },
             tooltip: { html: true },
             avoidOverlappingGridLines: false,
@@ -300,6 +297,7 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
         style={{
           containerType: 'inline-size',
         }}
+        mt={'-4'}
       >
         {lastUpdatedDate && (
           <SubText>
@@ -307,7 +305,7 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
           </SubText>
         )}
         <SubText>
-          Total Duration <b>{formatDate(locationData.totalDischarge, 'timeOnly')}</b>
+          Total Duration <b>{formatTime(locationData.totalDischarge, false)}</b>
         </SubText>
       </Flex>
     </TimeLineWrapper>
