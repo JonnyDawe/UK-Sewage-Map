@@ -27,7 +27,7 @@ const Theme = styled(ThemePrimitive)`
   min-height: 0% !important;
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: transparent !important;
 
   --default-font-family: var(--font-roboto) !important;
   --heading-font-family: var(--font-roboto) !important;

@@ -1,33 +1,16 @@
 'use client';
 
 import '@arcgis/map-components/dist/components/arcgis-map';
-import '@arcgis/map-components/dist/components/arcgis-legend';
-import '@arcgis/map-components/dist/components/arcgis-locate';
-import '@arcgis/map-components/dist/components/arcgis-placement';
-import '@arcgis/map-components/dist/components/arcgis-scale-bar';
-import '@arcgis/map-components/dist/components/arcgis-search';
-import '@arcgis/map-components/dist/components/arcgis-zoom';
 
 import Extent from '@arcgis/core/geometry/Extent.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
-import styled from '@emotion/styled';
 import React from 'react';
 
 import { ArcMapView } from '@/arcgis/components/ArcView/ArcMapView';
+import useIsMobile from '@/hooks/useIsMobile';
 
 import { useMapInitialization } from './hooks/useMapInitialisation';
 import { MapUI } from './widgets/MapUI';
-import { SearchWidget } from './widgets/SearchWidget/SearchWidget';
-
-const ManualPositionWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-`;
-
-function ManualPositioned({ children }: { children: React.ReactNode }) {
-  return <ManualPositionWrapper className="map-overlay">{children}</ManualPositionWrapper>;
-}
 
 type MapViewProps = {
   initialCSOId: string | undefined;
@@ -36,7 +19,7 @@ type MapViewProps = {
 
 const initialMapProps = {
   constraints: {
-    minZoom: 7,
+    minZoom: 6,
   },
   extent: new Extent({
     xmin: -316027,
@@ -67,6 +50,14 @@ const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewPro
     initialCompany: initialCompany,
   });
 
+  const isMobile = useIsMobile();
+  const padding: __esri.ViewPadding = React.useMemo(
+    () => ({
+      bottom: isMobile ? window.innerWidth / 2 : 0,
+    }),
+    [isMobile],
+  );
+
   if (error) {
     return <div>Error: {error.message}</div>;
   }
@@ -80,25 +71,9 @@ const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewPro
       map={map}
       onarcgisViewReadyChange={(ev) => handleViewReady(ev.target.view)}
       {...initialMapProps}
+      padding={padding}
     >
-      <arcgis-placement position="top-left">
-        <arcgis-zoom />
-      </arcgis-placement>
-      <arcgis-placement position="top-left">
-        <arcgis-locate />
-      </arcgis-placement>
-
-      <arcgis-placement position="manual">
-        <ManualPositioned>
-          <SearchWidget />
-        </ManualPositioned>
-      </arcgis-placement>
-
-      <arcgis-placement position="manual">
-        <ManualPositioned>
-          <MapUI />
-        </ManualPositioned>
-      </arcgis-placement>
+      <MapUI />
     </ArcMapView>
   );
 });

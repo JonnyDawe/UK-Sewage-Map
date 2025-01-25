@@ -24,7 +24,7 @@ import { InLineSelect } from '../../common/Select/InlineSelect';
 const CustomChart = styled(Chart)`
   svg {
     // Background Color
-    g:nth-of-type(2) {
+    g:nth-child(2) {
       rect {
         fill: var(--gray-a2);
       }
@@ -34,14 +34,14 @@ const CustomChart = styled(Chart)`
     }
 
     // Text
-    g:nth-of-type(3) {
+    g:nth-child(3) {
       text {
         fill: var(--gray-12);
       }
     }
 
     // Fill
-    g:nth-of-type(5) {
+    g:nth-child(5) {
       rect {
         fill: var(--brown-10);
       }

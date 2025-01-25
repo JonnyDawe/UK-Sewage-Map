@@ -47,6 +47,5 @@ export function useThemeRef() {
       themeRef.current = currentTheme;
     }
   }, [currentTheme]);
-
   return themeRef;
 }

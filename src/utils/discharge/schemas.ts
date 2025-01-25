@@ -17,7 +17,6 @@ export const validateThamesWaterDischargeAttributes = (
 ): ThamesWaterDischargeAttributes | null => {
   const result = thamesWaterDischargeAttributesSchema.safeParse(attributes);
   if (!result.success) {
-    console.error('Invalid discharge attributes:', result.error);
     return null;
   }
   return result.data;
@@ -43,7 +42,6 @@ export const validateWaterCompanyDischargeAttributes = (
 ): WaterCompanyDischargeAttributes | null => {
   const result = waterCompanyDischargeAttributesSchema.safeParse(attributes);
   if (!result.success) {
-    console.error('Invalid discharge attributes:', result.error);
     return null;
   }
   return result.data;

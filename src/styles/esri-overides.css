@@ -5,6 +5,9 @@
     pointer-events: none;
 }
 
+.esri-ui {
+    inset: 0 !important;
+  }
 
 .esri-popup__main-container {
     max-height: 400px;
