@@ -1,25 +1,25 @@
-declare module "sewage-discharge-map" {
-    type DischargeSourceFeature = {
-        attributes: {
-            AlertPast48Hours: "true" | "false";
-            PermitNumber: string;
-            LocationName: string;
-            ReceivingWaterCourse: string;
-            MostRecentDischargeAlertStart: number;
-            MostRecentDischargeAlertStop: number;
-        };
-        geometry: { x: number; y: number };
+declare module 'sewage-discharge-map' {
+  type DischargeSourceFeature = {
+    attributes: {
+      AlertPast48Hours: 'true' | 'false';
+      PermitNumber: string;
+      LocationName: string;
+      ReceivingWaterCourse: string;
+      MostRecentDischargeAlertStart: number;
+      MostRecentDischargeAlertStop: number;
     };
+    geometry: { x: number; y: number };
+  };
 
-    type DischargeSourceFeatureSet = {
-        features: DischargeSourceFeature[];
-        fields: unknown;
-    };
+  type DischargeSourceFeatureSet = {
+    features: DischargeSourceFeature[];
+    fields: unknown;
+  };
 
-    export { DischargeSourceFeature, DischargeSourceFeatureSet };
+  export { DischargeSourceFeature, DischargeSourceFeatureSet };
 }
 declare global {
-    interface HTMLLinkElement {
-        disabled?: boolean;
-    }
+  interface HTMLLinkElement {
+    disabled?: boolean;
+  }
 }

@@ -1,71 +1,36 @@
 {
   "compilerOptions": {
-    /* Enables support for experimental decorators. */
-    "experimentalDecorators": true,
-    /* Specify the target ECMAScript version for the generated code. */
-    "target": "ESNext",
-    /* Use 'define' for class field declarations. */
-    "useDefineForClassFields": true,
-    /* List of library files to include. */
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
-    /* Specify module code generation. */
+    "target": "ES2020",
+    "useDefineForClassFields": false,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    /* Skip type checking of declaration files. */
     "skipLibCheck": true,
-    /* Bundler Mode */
-    /* Specify module resolution strategy for bundlers. */
-    "moduleResolution": "Bundler",
-    /* Enable importing of JSON files as modules. */
+    "allowJs": true,
+    "experimentalDecorators": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    /* Ensure each file is treated as a separate module. */
     "isolatedModules": true,
-    /* Do not emit any output files. */
     "noEmit": true,
-    /* Specify JSX code generation. */
-    "jsx": "preserve",
+    "jsx": "react-jsx",
+
     /* Linting */
-    /* Enable all strict type-checking options. */
     "strict": true,
-    /* Disallow inconsistently-cased references to the same file. */
-    "forceConsistentCasingInFileNames": true,
-    /* Do not report errors on unused parameters. */
-    "noUnusedParameters": false,
-    /* Report errors for fallthrough cases in switch statement. */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    /* Disallow JavaScript files to be mixed with TypeScript files. */
-    "allowJs": false,
-    /* Allow default imports from modules with no default export. */
-    "allowSyntheticDefaultImports": true,
+    
+    "types": ["vitest/globals"],
+
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "esModuleInterop": true,
-    "types": [
-      "./src/types/index.d.ts"
-    ],
-    "incremental": true
+
+    "jsxImportSource": "@emotion/react"
   },
-  /* Specify files to include in compilation. */
-  "include": [
-    "src",
-    "src/app/api",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src","__mocks__", "public/app"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
