@@ -323,15 +323,13 @@ function HistoricDischarges({ company, locationName }: { company: string; locati
 
   const message =
     company === 'Southern Water'
-      ? `${company} provides live historical sewage spill data on their website but does not make it available for 3rd party applications via an API 🙄🔒`
-      : `${company} has chosen not to share live historical sewage spill data with the public 🙄`;
+      ? `${company} provides live historical sewage spill data on their <a href="https://www.southernwater.co.uk/our-region/clean-rivers-and-seas-task-force/rivers-and-seas-watch/" target="_blank" rel="noopener noreferrer">website</a> but does not make it available via an API for third-party applications. 🔒`
+      : `${company} has chosen not to share live historical sewage spill data with the public. 🙄`;
 
   return (
     <>
       <Blockquote mb={'2'} size={'2'}>
-        <Link href="https://www.southernwater.co.uk/our-region/clean-rivers-and-seas-task-force/rivers-and-seas-watch/">
-          {message}
-        </Link>
+        <span dangerouslySetInnerHTML={{ __html: message }} />
         <br />
         Find information from last year at:{' '}
         <Link href="https://top-of-the-poops.org">top-of-the-poops.org</Link>
