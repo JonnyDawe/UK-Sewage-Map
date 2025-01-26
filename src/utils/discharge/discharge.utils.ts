@@ -11,7 +11,9 @@ import {
 } from 'date-fns';
 
 import {
+  SouthWestWaterDischargeAttributes,
   ThamesWaterDischargeAttributes,
+  validateSouthWestWaterDischargeAttributes,
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
   WaterCompanyDischargeAttributes,
@@ -31,12 +33,19 @@ import {
  */
 export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeData {
   const validatedThamesWaterAttributes = validateThamesWaterDischargeAttributes(graphic.attributes);
+  const validatedSouthWestWaterAttributes = validateSouthWestWaterDischargeAttributes(
+    graphic.attributes,
+  );
   const validatedWaterCompanyAttributes = validateWaterCompanyDischargeAttributes(
     graphic.attributes,
   );
 
   if (validatedThamesWaterAttributes) {
     return getRenderPropsFromThamesWaterAttributes(validatedThamesWaterAttributes);
+  }
+
+  if (validatedSouthWestWaterAttributes) {
+    return getRenderPropsFromSouthWestWaterAttributes(validatedSouthWestWaterAttributes);
   }
 
   if (validatedWaterCompanyAttributes) {
@@ -62,6 +71,35 @@ function getRenderPropsFromThamesWaterAttributes(
     },
     feeds: attributes.ReceivingWaterCourse?.toLowerCase() ?? '',
     location: attributes.LocationName,
+  };
+}
+
+function getRenderPropsFromSouthWestWaterAttributes(
+  attributes: SouthWestWaterDischargeAttributes,
+): DischargeData {
+  const isDischarging = attributes.status === 1;
+  const isOffline = attributes.status === -1;
+  const isRecentDischarge =
+    attributes.status === 0 &&
+    attributes.latestEventEnd &&
+    differenceInHours(new Date(), attributes.latestEventEnd) <= 48;
+
+  return {
+    id: attributes.ID,
+    company: attributes.company,
+    alertStatus: isDischarging
+      ? 'Discharging'
+      : isOffline
+        ? 'Offline'
+        : isRecentDischarge
+          ? 'Recent Discharge'
+          : 'Not Discharging',
+    dischargeInterval: {
+      start: attributes.latestEventStart,
+      end: attributes.latestEventEnd,
+    },
+    feeds: attributes.receivingWaterCourse?.toLowerCase() ?? '',
+    location: '',
   };
 }
 

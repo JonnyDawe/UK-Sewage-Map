@@ -46,3 +46,30 @@ export const validateWaterCompanyDischargeAttributes = (
   }
   return result.data;
 };
+
+export const southWestWaterDischargeAttributesSchema = z.object({
+  ID: z.string().max(256).nullable(),
+  company: z.string().max(256).nullable(),
+  status: z.number().nullable(), // -1: Offline, 0: Stop, 1: Start
+  statusStart: z.number().nullable(), // esriFieldTypeDate
+  latestEventStart: z.number().nullable(), // esriFieldTypeDate
+  latestEventEnd: z.number().nullable(), // esriFieldTypeDate
+  latitude: z.number().nullable(),
+  longitude: z.number().nullable(),
+  receivingWaterCourse: z.string().max(256).nullable(),
+  lastUpdated: z.number().nullable(), // esriFieldTypeDate
+});
+
+export type SouthWestWaterDischargeAttributes = z.infer<
+  typeof southWestWaterDischargeAttributesSchema
+>;
+
+export const validateSouthWestWaterDischargeAttributes = (
+  attributes: unknown,
+): SouthWestWaterDischargeAttributes | null => {
+  const result = southWestWaterDischargeAttributesSchema.safeParse(attributes);
+  if (!result.success) {
+    return null;
+  }
+  return result.data;
+};
