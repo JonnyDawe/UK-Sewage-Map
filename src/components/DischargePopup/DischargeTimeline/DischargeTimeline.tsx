@@ -107,19 +107,6 @@ function getEndDateOfInterest(period: DischargeHistoryPeriod) {
   }
 }
 
-function getEndDateOfInterest(period: DischargeHistoryPeriod) {
-    switch (period) {
-        case DischargeHistoryPeriod.StartOf2023:
-            return new Date(2023, 11, 31, 23, 59, 59);
-        case DischargeHistoryPeriod.StartOf2024:
-            return new Date(2024, 11, 31, 23, 59, 59);
-        case DischargeHistoryPeriod.StartOf2025:
-            return new Date();
-        default:
-            return new Date();
-    }
-}
-
 function processDataForLocation(
   jsonData: DischargeHistoricalDataJSON,
   locationName: string,
