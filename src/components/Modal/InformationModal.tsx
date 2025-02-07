@@ -83,15 +83,16 @@ const InformationModal = () => {
                       About the Data
                     </Heading>
                     <Text>
-                      The data is collected through{' '}
+                      The data is collected through Event Duration Monitoring by individual water
+                      companies, providing near-real time data on storm overflows. The data is
+                      accessed from the{' '}
                       <Link href="https://www.streamwaterdata.co.uk/pages/storm-overflows-data">
-                        Event Duration Monitoring
+                        Storm Overflow Hub
                       </Link>{' '}
-                      by individual water companies, providing near-real time data on storm
-                      overflows. Such overflows release untreated, diluted sewage into the
-                      environment. Currently, only Thames Water provide an API to historical sewage
-                      spill data. We wrote an article about why water companies need to be more
-                      transparent with environmental models and data in{' '}
+                      maintained by Water UK. Storm overflows release untreated, diluted sewage into
+                      the environment. Currently, only Thames Water provide an API to historical
+                      sewage spill data. We wrote an article about why water companies need to be
+                      more transparent with environmental models and data in{' '}
                       <Link href="https://theconversation.com/water-companies-now-have-to-release-live-sewage-spill-data-heres-why-more-transparency-is-the-key-to-cleaner-rivers-239444">
                         The Conversation.
                       </Link>
