@@ -1,3 +1,5 @@
+import '@arcgis/map-components/dist/components/arcgis-search';
+
 import LocatorSearchSource from '@arcgis/core/widgets/Search/LocatorSearchSource';
 import styled from '@emotion/styled';
 import React from 'react';
