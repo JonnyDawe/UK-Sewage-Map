@@ -1,5 +1,6 @@
 import '@arcgis/map-components/dist/components/arcgis-search';
 
+import Collection from '@arcgis/core/core/Collection.js';
 import LocatorSearchSource from '@arcgis/core/widgets/Search/LocatorSearchSource';
 import styled from '@emotion/styled';
 import React from 'react';
@@ -52,7 +53,7 @@ const SearchWrapper = styled.div`
 
 export const SearchWidget = React.memo(function SearchWidget() {
   const searchSource = React.useMemo(() => {
-    return [
+    return new Collection([
       new LocatorSearchSource({
         placeholder: 'Find address or place',
         url: 'https://utility.arcgis.com/usrsvcs/servers/4b613e3cb0ca4e7fb3ce8e99e5cd7a41/rest/services/World/GeocodeServer',
@@ -61,7 +62,7 @@ export const SearchWidget = React.memo(function SearchWidget() {
         minSuggestCharacters: 2,
         maxSuggestions: 4,
       }),
-    ];
+    ]);
   }, []);
   return (
     <SearchPositionWrapper>

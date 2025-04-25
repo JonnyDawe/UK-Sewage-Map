@@ -6,7 +6,9 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
+import { dirname } from 'path';
 import { configs as tsConfigs } from 'typescript-eslint';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -63,8 +65,8 @@ const eslintConfig = [
   },
 
   // typescript
+  ...tsConfigs.recommended,
   {
-    extends: [...tsConfigs.recommended],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',

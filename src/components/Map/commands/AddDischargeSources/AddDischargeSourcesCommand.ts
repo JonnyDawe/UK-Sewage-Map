@@ -2,7 +2,7 @@ import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import EsriMap from '@arcgis/core/Map';
 
-import { MapCommand, ViewCommand } from '@/arcgis/typings/commandtypes';
+import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 import {
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
@@ -93,11 +93,11 @@ export class AddDischargeSourcesCommand implements MapCommand {
 
   private setupPopupActionHandlers(view: __esri.MapView): void {
     reactiveUtils.when(
-      () => !!view.popup.viewModel,
+      () => !!view.popup?.viewModel,
       () => {
-        if (!view.popup.viewModel.hasEventListener('trigger-action')) {
-          view.popup.viewModel.addHandles([
-            view.popup.viewModel.on('trigger-action', (event) => {
+        if (!view.popup?.viewModel?.hasEventListener('trigger-action')) {
+          view.popup?.viewModel?.addHandles([
+            view.popup?.viewModel?.on('trigger-action', (event) => {
               if (event.action.id === 'copy-link') {
                 navigator.clipboard.writeText(window.location.href);
               }
@@ -114,7 +114,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
     layerView: __esri.FeatureLayerView,
   ): void {
     reactiveUtils.watch(
-      () => view.popup.visible,
+      () => view.popup?.visible,
       (visible) => {
         if (!visible) {
           this.setPathname('', '');
@@ -123,7 +123,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
     );
 
     reactiveUtils.watch(
-      () => view.popup.selectedFeature,
+      () => view.popup?.selectedFeature,
       async (graphic) => {
         if (!graphic) {
           this.setPathname('', '');
@@ -136,7 +136,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
           if (!thamesAttributes && !otherAttributes) return;
 
           const id = thamesAttributes?.PermitNumber ?? otherAttributes?.Id ?? '';
-          this.setPathname(id, layerView.layer.title);
+          this.setPathname(id, layerView.layer.title ?? '');
           await this.zoomToFeature(view, graphic);
         }
       },
@@ -144,9 +144,10 @@ export class AddDischargeSourcesCommand implements MapCommand {
   }
 
   private async zoomToFeature(view: __esri.MapView, graphic: __esri.Graphic): Promise<void> {
+    if (!view.popup?.location) return;
     view.popup.location = graphic.geometry as __esri.Point;
     await view.goTo({
-      target: view.popup.location,
+      target: view.popup?.location,
       zoom: 12,
     });
   }

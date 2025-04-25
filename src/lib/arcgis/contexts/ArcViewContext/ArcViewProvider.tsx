@@ -22,6 +22,10 @@ export const ArcViewProvider = ({ children }: React.PropsWithChildren) => {
     setViews((currViews) => {
       if (currViews[id]) {
         const nextViews = { ...currViews };
+        const oldView = nextViews[id];
+        if (oldView) {
+          oldView.destroy();
+        }
         nextViews[id] = undefined;
         return nextViews;
       }

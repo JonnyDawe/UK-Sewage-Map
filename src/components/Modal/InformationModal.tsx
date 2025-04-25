@@ -4,8 +4,8 @@ import { Box, Button, Flex, Heading, Separator, Text } from '@radix-ui/themes';
 import React from 'react';
 import Wave from 'react-wavify';
 
-import { useOnFirstVisit } from '../../hooks/useOnUserFirstVisit';
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { useOnFirstVisit } from '../../lib/hooks/useOnUserFirstVisit';
+import { usePrefersReducedMotion } from '../../lib/hooks/usePrefersReducedMotion';
 import MapButton from '../common/Buttons/MapButton';
 import Dialog from '../common/Dialog/Dialog';
 import { ModalHeader } from '../common/Dialog/DialogTitle';

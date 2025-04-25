@@ -6,8 +6,8 @@ import Extent from '@arcgis/core/geometry/Extent.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
 import React from 'react';
 
-import { ArcMapView } from '@/arcgis/components/ArcView/ArcMapView';
-import useIsMobile from '@/hooks/useIsMobile';
+import { ArcMapView } from '@/lib/arcgis/components/ArcView/ArcMapView';
+import useIsMobile from '@/lib/hooks/useIsMobile';
 
 import { useMapInitialization } from './hooks/useMapInitialisation';
 import { MapUI } from './widgets/MapUI';
@@ -20,7 +20,7 @@ type MapViewProps = {
 const initialMapProps = {
   constraints: {
     minZoom: 6,
-  },
+  } as __esri.View2DConstraints,
   extent: new Extent({
     xmin: -767095,
     ymin: 6482731,
@@ -31,7 +31,7 @@ const initialMapProps = {
   highlightOptions: {
     fillOpacity: 0,
     haloOpacity: 1,
-  },
+  } as __esri.HighlightOptions,
   popup: {
     defaultPopupTemplateEnabled: false,
     visibleElements: {
@@ -41,7 +41,7 @@ const initialMapProps = {
       buttonEnabled: false,
     },
     highlightEnabled: true,
-  },
+  } as __esri.Popup,
 };
 
 const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewProps) {
@@ -67,17 +67,19 @@ const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewPro
   }
 
   return (
-    <ArcMapView
-      map={map}
-      onarcgisViewReadyChange={(ev) => {
-        console.log('view ready', ev.target.view);
-        handleViewReady(ev.target.view);
-      }}
-      {...initialMapProps}
-      padding={padding}
-    >
-      <MapUI />
-    </ArcMapView>
+    map && (
+      <ArcMapView
+        map={map}
+        onarcgisViewReadyChange={(ev) => {
+          console.log('view ready', ev.target.view);
+          handleViewReady(ev.target.view);
+        }}
+        {...initialMapProps}
+        padding={padding}
+      >
+        <MapUI />
+      </ArcMapView>
+    )
   );
 });
 

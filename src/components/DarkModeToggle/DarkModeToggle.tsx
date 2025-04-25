@@ -1,7 +1,7 @@
 import Basemap from '@arcgis/core/Basemap';
 
-import { useCurrentMapView } from '@/arcgis/hooks';
-import { useCallbackRef } from '@/hooks/useCallbackRef';
+import { useCurrentMapView } from '@/lib/arcgis/hooks';
+import { useCallbackRef } from '@/lib/hooks/useCallbackRef';
 
 import MapButton from '../common/Buttons/MapButton';
 import { MoonIcon, SunIcon } from '../common/Icons';
@@ -30,7 +30,7 @@ export function DarkModeToggle() {
       onClick={() => {
         toggleTheme();
         updateBasemap();
-        if (mapView.popup.visible) {
+        if (mapView.popup?.visible) {
           const currentFeatures = [...mapView.popup.features];
           mapView.popup.close();
           mapView.popup.open({ features: currentFeatures });

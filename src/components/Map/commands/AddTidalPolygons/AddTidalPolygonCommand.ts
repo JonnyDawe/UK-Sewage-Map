@@ -3,7 +3,7 @@ import EsriMap from '@arcgis/core/Map';
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 
-import { MapCommand } from '@/arcgis/typings/commandtypes';
+import { MapCommand } from '@/lib/arcgis/typings/commandtypes';
 
 export class AddTidalPolygonCommand implements MapCommand {
   private tidalHatchSymbol = new CIMSymbol({

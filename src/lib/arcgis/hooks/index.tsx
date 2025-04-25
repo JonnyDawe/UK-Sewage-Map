@@ -1,3 +1,4 @@
+export { useCollectionWatch } from './useCollectionWatch';
 export {
   useCurrentMapView,
   useCurrentSceneView,

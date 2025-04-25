@@ -1,7 +1,7 @@
 import EsriMap from '@arcgis/core/Map';
 import { useCallback, useState } from 'react';
 
-import { MapCommand, ViewCommand } from '@/arcgis/typings/commandtypes';
+import { MapCommand, ViewCommand } from '../typings/commandtypes';
 
 export function useMapCommandExecuter() {
   const [map, setMap] = useState<EsriMap | null>(null);
