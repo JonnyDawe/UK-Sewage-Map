@@ -23,6 +23,7 @@
     "@arcgis/map-components": "^4.32.14",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource-variable/roboto": "^5.2.5",
     "@internationalized/date": "^3.8.0",
     "@mantine/hooks": "^7.17.5",
     "@radix-ui/react-dialog": "^1.1.11",

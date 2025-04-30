@@ -25,29 +25,23 @@ const SearchPositionWrapper = styled.div`
 
 const SearchWrapper = styled.div`
   pointer-events: auto;
-  --search-border-radius: 3px;
+
   --search-input-max-width: 85vw;
   --search-input-width: 480px;
+  --calcite-autocomplete-input-corner-radius: var(--radius-1);
+  --calcite-progress-fill-color: var(--river-blue, blue);
+  --calcite-autocomplete-input-loading-fill-color: var(--river-blue, blue);
+  --calcite-progress-background-color: var(--gray-4);
+  --calcite-corner-radius: var(--radius-1);
+  --calcite-color-border-input: var(--river-blue, blue);
+  --calcite-color-focus: var(--focus-8);
+  --calcite-color-foreground-1: var(--color-panel-solid);
+  --calcite-color-foreground-2: var(--gray-4);
+
   .esri-search.esri-widget {
     max-width: var(--search-input-max-width, 85vw);
     width: var(--search-input-width, 480px);
-    border-radius: var(--search-border-radius);
-    border-color: var(--river-blue, blue);
-    border-width: 1px;
-    border-style: solid;
-  }
-  .esri-search__container {
-    border-radius: var(--search-border-radius);
-  }
-  .esri-search__input-container {
-    overflow: hidden;
-    // rounded left corner
-    border-top-left-radius: var(--search-border-radius);
-    border-bottom-left-radius: var(--search-border-radius);
-  }
-  .esri-search__submit-button {
-    border-top-right-radius: var(--search-border-radius);
-    border-bottom-right-radius: var(--search-border-radius);
+    background-color: transparent;
   }
 `;
 
