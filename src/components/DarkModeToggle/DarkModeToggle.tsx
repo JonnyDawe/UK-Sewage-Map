@@ -4,7 +4,7 @@ import { useCurrentMapView } from '@/lib/arcgis/hooks';
 import { useCallbackRef } from '@/lib/hooks/useCallbackRef';
 
 import MapButton from '../common/Buttons/MapButton';
-import { MoonIcon, SunIcon } from '../common/Icons';
+import SvgIcon from '../common/SvgIcon';
 import { useTheme } from '../Theme/hooks/useTheme';
 
 export function DarkModeToggle() {
@@ -27,6 +27,7 @@ export function DarkModeToggle() {
 
   return (
     <MapButton
+      aria-label={`switch to ${currentTheme === 'light' ? 'dark' : 'light'} mode`}
       onClick={() => {
         toggleTheme();
         updateBasemap();
@@ -37,7 +38,7 @@ export function DarkModeToggle() {
         }
       }}
     >
-      {currentTheme === 'light' ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
+      <SvgIcon name={currentTheme === 'light' ? 'icon-moon' : 'icon-sun'} size={16}></SvgIcon>
     </MapButton>
   );
 }

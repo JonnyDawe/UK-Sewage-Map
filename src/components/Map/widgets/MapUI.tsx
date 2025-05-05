@@ -1,7 +1,6 @@
 'use client';
 import '@arcgis/map-components/dist/components/arcgis-locate';
 import '@arcgis/map-components/dist/components/arcgis-placement';
-import '@arcgis/map-components/dist/components/arcgis-zoom';
 
 import styled from '@emotion/styled';
 
@@ -9,7 +8,9 @@ import { DarkModeToggle } from '../../DarkModeToggle/DarkModeToggle';
 import Footer from '../../Footer/Footer';
 import InformationModal from '../../Modal/InformationModal';
 import RainRadarPopover from '../../RainRadar/RainRadarPopover';
+import LocateControl from './LocateControl/LocateControl';
 import { SearchWidget } from './SearchWidget/SearchWidget';
+import ZoomControl from './ZoomControl/ZoomControl';
 
 const ButtonsGroup = styled.div`
   pointer-events: all;
@@ -35,10 +36,10 @@ export function MapUI() {
   return (
     <>
       <arcgis-placement position="top-left">
-        <arcgis-zoom />
+        <ZoomControl />
       </arcgis-placement>
       <arcgis-placement position="top-left">
-        <arcgis-locate />
+        <LocateControl />
       </arcgis-placement>
       <arcgis-placement position="manual">
         <ManualPositioned>

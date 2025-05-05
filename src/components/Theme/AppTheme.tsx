@@ -28,6 +28,7 @@ const Theme = styled(ThemePrimitive)`
   height: 100%;
   width: 100%;
   background-color: transparent !important;
+  --cursor-button: pointer;
 
   --default-font-family: var(--font-roboto) !important;
   --heading-font-family: var(--font-roboto) !important;

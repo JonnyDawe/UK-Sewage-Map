@@ -3,12 +3,11 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { useCurrentMapView } from '@/lib/arcgis/hooks';
 
 import MapButton from '../common/Buttons/MapButton';
-import { CloseIcon, RainIcon } from '../common/Icons';
 import Popover from '../common/Popover/Popover';
+import SvgIcon from '../common/SvgIcon/SvgIcon';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import { AppTheme } from '../Theme/AppTheme';
 import RainRadar from './RainRadar';
-
 const RainRadarPopover = () => {
   const view = useCurrentMapView();
 
@@ -16,8 +15,8 @@ const RainRadarPopover = () => {
     <ErrorBoundary>
       <Popover.Root>
         <Popover.Trigger asChild>
-          <MapButton>
-            <RainIcon></RainIcon>
+          <MapButton aria-label="Rainfall data" tooltipPosition="left">
+            <SvgIcon name="icon-rain" size={24}></SvgIcon>
           </MapButton>
         </Popover.Trigger>
         <Popover.Portal>
@@ -45,7 +44,7 @@ const RainRadarPopover = () => {
                 ></RainRadar>
               </Flex>
               <Popover.CloseCornerButton aria-label="Close">
-                <CloseIcon></CloseIcon>
+                <SvgIcon name="icon-x" size={24}></SvgIcon>
               </Popover.CloseCornerButton>
               <Popover.Arrow className="PopoverArrow" />
             </Popover.Content>

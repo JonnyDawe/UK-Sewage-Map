@@ -9,13 +9,7 @@ import { usePrefersReducedMotion } from '../../lib/hooks/usePrefersReducedMotion
 import MapButton from '../common/Buttons/MapButton';
 import Dialog from '../common/Dialog/Dialog';
 import { ModalHeader } from '../common/Dialog/DialogTitle';
-import {
-  CloseIcon,
-  HydrologyModelIcon,
-  InfoIcon,
-  WasteWaterIcon,
-  WaterInfoIcon,
-} from '../common/Icons';
+import SvgIcon from '../common/SvgIcon/SvgIcon';
 import { Em, Link } from '../common/Text';
 import TextInfoList from '../TextInfoList/TextInfoList';
 import { AppTheme } from '../Theme/AppTheme';
@@ -40,8 +34,8 @@ const InformationModal = () => {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <MapButton>
-          <InfoIcon></InfoIcon>
+        <MapButton aria-label="Information" tooltipPosition="left">
+          <SvgIcon name="icon-info" size={24}></SvgIcon>
         </MapButton>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -78,7 +72,7 @@ const InformationModal = () => {
                     This map shows, in real-time, which river sections are downstream of sewage
                     discharges from storm overflows.
                   </Text>
-                  <TextInfoList icon={<WaterInfoIcon></WaterInfoIcon>}>
+                  <TextInfoList icon={<SvgIcon name="icon-water-info" size={48}></SvgIcon>}>
                     <Heading as={'h3'} size={'4'}>
                       About the Data
                     </Heading>
@@ -98,7 +92,7 @@ const InformationModal = () => {
                       </Link>
                     </Text>
                   </TextInfoList>
-                  <TextInfoList icon={<HydrologyModelIcon></HydrologyModelIcon>}>
+                  <TextInfoList icon={<SvgIcon name="icon-hydrology-model" size={48}></SvgIcon>}>
                     <Heading as={'h3'} size={'4'}>
                       Hydrology Model{' '}
                     </Heading>
@@ -121,7 +115,7 @@ const InformationModal = () => {
                       instance in lakes or where rivers are tidal very far in-land.
                     </Text>
                   </TextInfoList>
-                  <TextInfoList icon={<WasteWaterIcon></WasteWaterIcon>}>
+                  <TextInfoList icon={<SvgIcon name="icon-waste-water" size={48}></SvgIcon>}>
                     <Heading as={'h3'} size={'4'}>
                       Waste Water
                     </Heading>
@@ -186,7 +180,7 @@ const InformationModal = () => {
             </Box>
 
             <Dialog.CloseCornerButton aria-label="Close">
-              <CloseIcon></CloseIcon>
+              <SvgIcon name="icon-x" size={24}></SvgIcon>
             </Dialog.CloseCornerButton>
           </Dialog.Content>
         </AppTheme>

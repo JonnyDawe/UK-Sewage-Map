@@ -4,13 +4,15 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "prepare": "husky",
+    "prepare": "husky && npm run generate-sprites",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --fix",
     "preview": "vite preview",
     "new-component": "new-component",
-    "check-types": "tsc --noemit -p tsconfig.json"
+    "check-types": "tsc --noemit -p tsconfig.json",
+    "extract-sprites": "tsx scripts/extract-sprites.ts",
+    "generate-sprites": "tsx scripts/generate-sprites.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -54,6 +56,7 @@
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "@vitejs/plugin-react-swc": "^3.9.0",
+    "cheerio": "^1.0.0",
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
@@ -67,6 +70,7 @@
     "jsdom": "^26.1.0",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
+     "svgo": "^3.3.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0",
     "vite": "^6.3.3",
