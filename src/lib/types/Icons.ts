@@ -3,6 +3,7 @@ export type IconName =
   | 'icon-current-location'
   | 'icon-hydrology-model'
   | 'icon-info'
+  | 'icon-logo'
   | 'icon-minus'
   | 'icon-moon'
   | 'icon-plus'

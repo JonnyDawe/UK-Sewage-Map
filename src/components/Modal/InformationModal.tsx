@@ -55,7 +55,7 @@ const InformationModal = () => {
 
             <Box position={'relative'} p={'5'} style={{ overflow: 'hidden' }}>
               <BackgroundWave
-                fill="var(--blue-4)"
+                fill="var(--wave-blue)"
                 paused={prefersReducedMotion}
                 options={{
                   height: 25,

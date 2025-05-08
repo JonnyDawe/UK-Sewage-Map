@@ -6,6 +6,7 @@ import Extent from '@arcgis/core/geometry/Extent.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
 import React from 'react';
 
+import ApplicationLoader from '@/components/common/Loaders/ApplicationLoader';
 import { ArcMapView } from '@/lib/arcgis/components/ArcView/ArcMapView';
 import useIsMobile from '@/lib/hooks/useIsMobile';
 
@@ -62,24 +63,23 @@ const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewPro
     return <div>Error: {error.message}</div>;
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    map && (
-      <ArcMapView
-        map={map}
-        onarcgisViewReadyChange={(ev) => {
-          console.log('view ready', ev.target.view);
-          handleViewReady(ev.target.view);
-        }}
-        {...initialMapProps}
-        padding={padding}
-      >
-        <MapUI />
-      </ArcMapView>
-    )
+    <>
+      <ApplicationLoader isLoading={isLoading} />
+      {map && (
+        <ArcMapView
+          map={map}
+          onarcgisViewReadyChange={(ev) => {
+            console.log('view ready', ev.target.view);
+            handleViewReady(ev.target.view);
+          }}
+          {...initialMapProps}
+          padding={padding}
+        >
+          <MapUI />
+        </ArcMapView>
+      )}
+    </>
   );
 });
 
