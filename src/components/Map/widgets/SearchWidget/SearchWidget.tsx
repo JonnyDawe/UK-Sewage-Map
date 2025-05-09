@@ -19,7 +19,7 @@ const SearchPositionWrapper = styled.div`
     bottom: 0;
     top: unset;
     padding-top: 0px;
-    padding-bottom: 54px;
+    padding-bottom: 60px;
   }
 `;
 
