@@ -5,9 +5,9 @@ import '@arcgis/map-components/dist/components/arcgis-placement';
 import styled from '@emotion/styled';
 
 import { DarkModeToggle } from '../../DarkModeToggle/DarkModeToggle';
-import Footer from '../../Footer/Footer';
 import InformationModal from '../../Modal/InformationModal';
 import RainRadarPopover from '../../RainRadar/RainRadarPopover';
+import Footer from './Footer/Footer';
 import LocateControl from './LocateControl/LocateControl';
 import { SearchWidget } from './SearchWidget/SearchWidget';
 import ZoomControl from './ZoomControl/ZoomControl';

@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import { useMediaQuery } from '@mantine/hooks';
 import { Theme as ThemePrimitive } from '@radix-ui/themes';
 import React from 'react';
 
@@ -197,8 +198,13 @@ export function AppTheme({
   appearanceOverride,
 }: React.PropsWithChildren<{ className?: string; appearanceOverride?: 'light' | 'dark' }>) {
   const { theme } = useAppTheme();
+  const matches = useMediaQuery('(min-width: 640px)');
 
-  const appliedTheme = { ...theme, appearance: appearanceOverride };
+  const appliedTheme = {
+    ...theme,
+    appearance: appearanceOverride,
+    scaling: (matches ? '100%' : '90%') as '100%' | '90%',
+  };
 
   return (
     <Theme className={className ?? ''} {...appliedTheme}>
