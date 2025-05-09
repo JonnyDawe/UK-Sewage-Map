@@ -25,7 +25,7 @@ const SearchPositionWrapper = styled.div`
 
 const SearchWrapper = styled.div`
   pointer-events: auto;
-
+  --calcite-font-size--1: 16px;
   --search-input-max-width: 85vw;
   --search-input-width: 480px;
   --calcite-autocomplete-input-corner-radius: var(--radius-1);
