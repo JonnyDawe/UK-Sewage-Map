@@ -1,6 +1,7 @@
 import { Box, Flex, Separator, Text } from '@radix-ui/themes';
 
-import { useUTCTime } from '../../../hooks/useUTCTime';
+import useUTCTime from '@/lib/hooks/useUTCTime';
+
 import { formatDate, getFormattedTimeInterval } from '../../../utils/discharge/discharge.utils';
 import { AlertStatus, DischargeInterval } from '../../../utils/discharge/types';
 import PulsatingBadge from '../../ActiveBadge/ActiveBadge';
@@ -64,7 +65,7 @@ type DischargeInfoType = {
   dischargeInterval: DischargeInterval;
 };
 export function DischargeInfo({ alertStatus, dischargeInterval }: DischargeInfoType) {
-  const [currentUTCTime] = useUTCTime();
+  const currentUTCTime = useUTCTime();
 
   return (
     <Flex direction={'column'} justify={'center'} gap={'1'} flexGrow={'1'} pr="2">
@@ -83,7 +84,11 @@ export function DischargeInfo({ alertStatus, dischargeInterval }: DischargeInfoT
             Duration:{' '}
             {dischargeInterval.end
               ? getFormattedTimeInterval(dischargeInterval.start, dischargeInterval.end)
-              : getFormattedTimeInterval(dischargeInterval.start, currentUTCTime, true)}
+              : getFormattedTimeInterval(
+                  dischargeInterval.start,
+                  currentUTCTime.toDate().getTime(),
+                  true,
+                )}
           </Text>
         </>
       )}

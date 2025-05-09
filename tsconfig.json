@@ -31,6 +31,6 @@
 
     "jsxImportSource": "@emotion/react"
   },
-  "include": ["src","__mocks__", "public/app"],
+  "include": ["src","__mocks__", "public/app", "scripts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

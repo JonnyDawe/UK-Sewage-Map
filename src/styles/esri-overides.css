@@ -15,3 +15,7 @@
         max-height: 360px;
     }
 }
+
+.esri-widget {
+    font-family: var(--font-roboto) !important;
+}

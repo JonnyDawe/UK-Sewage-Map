@@ -1,4 +1,6 @@
 import './styles/index.css';
+// Supports weights 100-900
+import '@fontsource-variable/roboto';
 
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { Analytics } from '@vercel/analytics/react';

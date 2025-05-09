@@ -1,10 +1,10 @@
 import Basemap from '@arcgis/core/Basemap';
 
-import { useCurrentMapView } from '@/arcgis/hooks';
-import { useCallbackRef } from '@/hooks/useCallbackRef';
+import { useCurrentMapView } from '@/lib/arcgis/hooks';
+import { useCallbackRef } from '@/lib/hooks/useCallbackRef';
 
 import MapButton from '../common/Buttons/MapButton';
-import { MoonIcon, SunIcon } from '../common/Icons';
+import SvgIcon from '../common/SvgIcon';
 import { useTheme } from '../Theme/hooks/useTheme';
 
 export function DarkModeToggle() {
@@ -27,17 +27,18 @@ export function DarkModeToggle() {
 
   return (
     <MapButton
+      aria-label={`switch to ${currentTheme === 'light' ? 'dark' : 'light'} mode`}
       onClick={() => {
         toggleTheme();
         updateBasemap();
-        if (mapView.popup.visible) {
+        if (mapView.popup?.visible) {
           const currentFeatures = [...mapView.popup.features];
           mapView.popup.close();
           mapView.popup.open({ features: currentFeatures });
         }
       }}
     >
-      {currentTheme === 'light' ? <MoonIcon></MoonIcon> : <SunIcon></SunIcon>}
+      <SvgIcon name={currentTheme === 'light' ? 'icon-moon' : 'icon-sun'} size={16}></SvgIcon>
     </MapButton>
   );
 }

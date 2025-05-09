@@ -1,8 +1,8 @@
 import Basemap from '@arcgis/core/Basemap';
 import EsriMap from '@arcgis/core/Map';
 
-import { MapCommand } from '@/arcgis/typings/commandtypes';
 import { ColorMode } from '@/components/Theme/types';
+import { MapCommand } from '@/lib/arcgis/typings/commandtypes';
 
 export class SetBasemapCommand implements MapCommand {
   constructor(private theme: ColorMode) {}

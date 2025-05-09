@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Box } from '@radix-ui/themes';
 import Wave from 'react-wavify';
 
-import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion';
+import { usePrefersReducedMotion } from '../../../lib/hooks/usePrefersReducedMotion';
 import { AlertStatus, DischargeInterval } from '../../../utils/discharge/types';
 import Tabs from '../../common/Tabs/Tabs';
 import { DischargeInfoCard } from '../DischargeInfoCard/DischargeInfoCard';
@@ -30,7 +30,8 @@ const BackgroundWave = styled(Wave)`
 
 const DataCardWrapper = styled.div`
   --shadow-color: var(--river-blue);
-  --shadow-elevation-medium: 0.2px 0.3px 0.4px hsl(var(--shadow-color) / 0.1),
+  --shadow-elevation-medium:
+    0.2px 0.3px 0.4px hsl(var(--shadow-color) / 0.1),
     0.5px 1px 1.2px -0.8px hsl(var(--shadow-color) / 0.09),
     1.2px 2.5px 3.1px -1.7px hsl(var(--shadow-color) / 0.09),
     3px 6px 7.5px -2.5px hsl(var(--shadow-color) / 0.09);

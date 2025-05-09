@@ -6,18 +6,27 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
-import { config, configs as tsConfigs } from 'typescript-eslint';
+import { dirname } from 'path';
+import { configs as tsConfigs } from 'typescript-eslint';
+import { fileURLToPath } from 'url';
 
-const compat = new FlatCompat();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-export default config(
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
   // ignore
   {
     name: 'ignores',
     ignores: ['**/dist/**', '**/node_modules/**', 'node_modules', 'dist'],
   },
+
   // react
   {
+    name: 'react',
     ...pluginReact.configs.flat['jsx-runtime'],
     rules: {
       'react/react-in-jsx-scope': 'off',
@@ -31,12 +40,11 @@ export default config(
   },
 
   // react hooks
-  {
-    extends: [...compat.config(reactHooks.configs.recommended)],
-  },
+  ...compat.config(reactHooks.configs.recommended),
 
-  // react compiler:
+  // react compiler
   {
+    name: 'react-compiler',
     plugins: {
       'react-compiler': reactCompiler,
     },
@@ -47,6 +55,7 @@ export default config(
 
   // react refresh
   {
+    name: 'react-refresh',
     plugins: {
       'react-refresh': reactRefresh,
     },
@@ -56,8 +65,8 @@ export default config(
   },
 
   // typescript
+  ...tsConfigs.recommended,
   {
-    extends: [...tsConfigs.recommended],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
@@ -72,8 +81,10 @@ export default config(
       },
     },
   },
+
   // simple import sort
   {
+    name: 'simple-import-sort',
     plugins: {
       'simple-import-sort': simpleImportSort,
     },
@@ -85,4 +96,6 @@ export default config(
 
   // eslint-plugin-prettier -- all prettier rules before this are ignored
   eslintPluginPrettierRecommended,
-);
+];
+
+export default eslintConfig;

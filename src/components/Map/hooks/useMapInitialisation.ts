@@ -2,12 +2,12 @@ import EsriMap from '@arcgis/core/Map';
 import { useRouter } from '@tanstack/react-router';
 import { useEffect, useRef } from 'react';
 
-import { MapCommand, ViewCommand } from '@/arcgis/typings/commandtypes';
 import { SetBasemapCommand } from '@/components/Map/commands/SetBasemapCommand';
 import { useThemeRef } from '@/components/Theme/hooks/useTheme';
-import { useCallbackRef } from '@/hooks/useCallbackRef';
+import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
+import { useCallbackRef } from '@/lib/hooks/useCallbackRef';
 
-import { useMapCommandExecuter } from '../../../arcgis/hooks/useMapCommandExecuter';
+import { useMapCommandExecuter } from '../../../lib/arcgis/hooks/useMapCommandExecuter';
 import { AddDischargeSourcesCommand } from '../commands/AddDischargeSources/AddDischargeSourcesCommand';
 import { AddRiverDischargeCommand } from '../commands/AddRiverDischarge/AddRiverDischargeCommand';
 import { AddTidalPolygonCommand } from '../commands/AddTidalPolygons/AddTidalPolygonCommand';

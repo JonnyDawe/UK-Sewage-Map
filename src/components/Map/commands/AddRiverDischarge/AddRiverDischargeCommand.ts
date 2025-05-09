@@ -4,7 +4,7 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 import LineSymbol from '@arcgis/core/symbols/LineSymbol';
 
-import { MapCommand, ViewCommand } from '@/arcgis/typings/commandtypes';
+import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 
 import { downStreamImpactUrls } from './config/constants';
 
