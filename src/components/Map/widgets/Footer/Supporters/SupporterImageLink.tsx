@@ -12,13 +12,13 @@ const Wrapper = styled(Flex)`
 
 const Image = styled.img`
   height: 40px;
-  min-width: fit-content;
+  width: auto;
+  object-fit: contain;
+  margin-left: 4px;
   @media (max-width: 640px) {
     height: 32px;
     margin-left: 0px;
   }
-  width: auto;
-  margin-left: 4px;
 `;
 
 const Link = styled.a`
