@@ -16,7 +16,7 @@ const TimeStampWrapper = styled(Flex)`
     flex-grow: 1;
     align-self: stretch;
     height: 100%;
-    @container timestamp (max-width: 340px) {
+    @container timestamp (max-width: 300px) {
       & span {
         display: block;
       }
@@ -36,7 +36,7 @@ function TimeStamp() {
   return (
     <TimeStampWrapper align={'center'} justify={'end'}>
       {!isLoading && data && (
-        <Text size="2" weight={'medium'} wrap={'pretty'} align={'left'}>
+        <Text size="1" weight={'medium'} wrap={'pretty'} align={'left'}>
           Downstream predictions last updated: <span>{formatDate(data, 'full')}</span>
         </Text>
       )}
