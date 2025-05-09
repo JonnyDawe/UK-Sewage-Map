@@ -97,14 +97,9 @@ const InformationModal = () => {
                       Hydrology Model{' '}
                     </Heading>
                     <Text>
-                      To identify river stretches downstream of an overflow, we combine the
-                      real-time EDM data with a basic hydrological model. Using the Center for
-                      Ecology and Hydrology’s{' '}
-                      <Link href="https://www.ceh.ac.uk/data/integrated-hydrological-digital-terrain-model">
-                        Integrated Hydrological Digital Terrain Model
-                      </Link>
-                      , we track sewage discharges downstream along <Em>non-tidal</Em> river
-                      networks. We highlight areas downstream of active and recent discharges in
+                      To identify river stretches downstream of an overflow, we track sewage discharges 
+                      downstream along <Em>non-tidal</Em> river
+                      networks using topographic datasets. We highlight areas downstream of active and recent discharges in
                       brown. This simple approach does not consider dilution, river flow, or
                       dispersion effects on pollutant concentration. Since water companies do not
                       provide real-time data on discharge volume or pollutant concentrations,
