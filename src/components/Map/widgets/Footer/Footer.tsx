@@ -23,7 +23,7 @@ const TimeStampWrapper = styled(Flex)`
     }
   }
   background-color: var(--river-blue);
-  padding: 2px 4px;
+
   color: white;
 `;
 
@@ -34,7 +34,7 @@ function TimeStamp() {
   );
 
   return (
-    <TimeStampWrapper align={'center'} justify={'end'}>
+    <TimeStampWrapper align={'center'} justify={'start'} px={'4'}>
       {!isLoading && data && (
         <Text size="1" weight={'medium'} wrap={'pretty'} align={'left'}>
           Downstream predictions last updated: <span>{formatDate(data, 'full')}</span>

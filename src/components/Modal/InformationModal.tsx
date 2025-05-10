@@ -97,12 +97,12 @@ const InformationModal = () => {
                       Hydrology Model{' '}
                     </Heading>
                     <Text>
-                      To identify river stretches downstream of an overflow, we track sewage discharges 
-                      downstream along <Em>non-tidal</Em> river
-                      networks using topographic datasets. We highlight areas downstream of active and recent discharges in
-                      brown. This simple approach does not consider dilution, river flow, or
-                      dispersion effects on pollutant concentration. Since water companies do not
-                      provide real-time data on discharge volume or pollutant concentrations,
+                      To identify river stretches downstream of an overflow, we track sewage
+                      discharges downstream along <Em>non-tidal</Em> river networks using
+                      topographic datasets. We highlight areas downstream of active and recent
+                      discharges in brown. This simple approach does not consider dilution, river
+                      flow, or dispersion effects on pollutant concentration. Since water companies
+                      do not provide real-time data on discharge volume or pollutant concentrations,
                       accurately modelling these effects is very difficult. Consequently, on its
                       own, <Em>this map should not be used to assess pollution or health risks</Em>{' '}
                       at a specific location, for example, for bathing water quality. Note that, the
@@ -137,16 +137,17 @@ const InformationModal = () => {
                     </Text>
                   </TextInfoList>
                   <Text mt={'2'}>
-                    <strong>
-                      This site was created by{' '}
-                      <Link href="https://alexlipp.github.io/">Alex Lipp (UCL)</Link> &{' '}
-                      <Link href="https://bsky.app/profile/did:plc:yxxm76jvxcsuzg6ahfjiek3y">
-                        Jonny Dawe.
-                      </Link>{' '}
-                      For more information and to see the full source code, visit the GitHub
-                      repositories:
-                    </strong>{' '}
-                    <br></br>
+                    This site was created by{' '}
+                    <Link href="https://alexlipp.github.io/">Alex Lipp (UCL)</Link> &{' '}
+                    <Link href="https://bsky.app/profile/did:plc:yxxm76jvxcsuzg6ahfjiek3y">
+                      Jonny Dawe.
+                    </Link>{' '}
+                    Hosting costs are kindly supported by{' '}
+                    <Link href={'https://riveractionuk.com/'}>RiverAction</Link>.
+                  </Text>
+                  <Text weight={'bold'}>
+                    For more information and to see the full source code, visit the GitHub
+                    repositories:
                   </Text>
                   <Flex gap={'2'} justify={'start'}>
                     <Link href="https://github.com/AlexLipp/sewage-map ">backend</Link>
