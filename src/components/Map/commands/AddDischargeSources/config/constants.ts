@@ -1,21 +1,12 @@
-export const streamApiUrls = {
-  'Anglian Water':
-    'https://services3.arcgis.com/VCOY1atHWVcDlvlJ/arcgis/rest/services/stream_service_outfall_locations_view/FeatureServer',
-  'Northumbrian Water':
-    'https://services-eu1.arcgis.com/MSNNjkZ51iVh8yBj/arcgis/rest/services/Northumbrian_Water_Storm_Overflow_Activity_2_view/FeatureServer',
-  'Severn Trent Water':
-    'https://services1.arcgis.com/NO7lTIlnxRMMG9Gw/arcgis/rest/services/Severn_Trent_Water_Storm_Overflow_Activity/FeatureServer',
-  'Southern Water':
-    'https://services-eu1.arcgis.com/XxS6FebPX29TRGDJ/arcgis/rest/services/Southern_Water_Storm_Overflow_Activity/FeatureServer',
-  'South West Water':
-    'https://services-eu1.arcgis.com/OMdMOtfhATJPcHe3/arcgis/rest/services/NEH_outlets_PROD/FeatureServer',
-  'United Utilities':
-    'https://services5.arcgis.com/5eoLvR0f8HKb7HWP/arcgis/rest/services/United_Utilities_Storm_Overflow_Activity/FeatureServer',
-  'Wessex Water':
-    'https://services.arcgis.com/3SZ6e0uCvPROr4mS/arcgis/rest/services/Wessex_Water_Storm_Overflow_Activity/FeatureServer',
-  'Yorkshire Water':
-    'https://services-eu1.arcgis.com/1WqkK5cDKUbF0CkH/arcgis/rest/services/Yorkshire_Water_Storm_Overflow_Activity/FeatureServer',
+export const streamApiLayerIds = {
+  'Anglian Water': '333c5c0600f94757b134b276ac4ad8b0',
+  'Northumbrian Water': '2d91e4a41b884c9a9dd58dec4ee49b75',
+  'Severn Trent Water': '9c5edb37e19044738373137ac76feea2',
+  'Southern Water': 'e45af5111aa943638d6988ba33eb444e',
+  'South West Water': 'cabfce76b72a4a278a33d737c0708d42',
+  'United Utilities': '8225548a267f4a408c36a91b6e0f5a1c',
+  'Wessex Water': '632885799ff946cd86200f07b7f175fb',
+  'Yorkshire Water': '7f575862a2254a4aaba62573e1012731',
 } as const;
 
-export const thamesWaterApiUrl =
-  'https://services2.arcgis.com/g6o32ZDQ33GpCIu3/arcgis/rest/services/STEServiceProduction/FeatureServer';
+export const thamesWaterApiLayerId = 'ea3da7aab68d44a98581306d4b2ba1e1';

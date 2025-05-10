@@ -3,7 +3,8 @@
 - [x] Fix the zoom buttons to match the design. 
 - [x] Add River Action branding and support. 
 - [x] Add a nicer loading state to the application.
-- [ ] Update feature service references. 
+- [x] Update feature service references. 
+- [ ] Add Filter tool for providers.
 - [ ] Update Timeline component to visjs
 - [x] Refactor the svg icon logic to use a sprite sheet with integrated generation logic.
 - [ ] Update Fetch Logic. 

@@ -8,7 +8,7 @@ import {
   validateWaterCompanyDischargeAttributes,
 } from '@/utils/discharge/schemas';
 
-import { streamApiUrls, thamesWaterApiUrl } from './config/constants';
+import { streamApiLayerIds, thamesWaterApiLayerId } from './config/constants';
 import { dischargePopupTemplate } from './config/dischargePopup';
 import {
   otherWaterAlertStatusRenderer,
@@ -34,7 +34,9 @@ export class AddDischargeSourcesCommand implements MapCommand {
     // Add Thames Water layer
     this.layers.push(
       new FeatureLayer({
-        url: thamesWaterApiUrl,
+        portalItem: {
+          id: thamesWaterApiLayerId,
+        },
         title: 'Thames Water',
         id: 'Thames Water',
         outFields: ['*'],
@@ -51,12 +53,14 @@ export class AddDischargeSourcesCommand implements MapCommand {
     );
 
     // Add other water company layers
-    Object.entries(streamApiUrls).forEach(([title, url]) => {
+    Object.entries(streamApiLayerIds).forEach(([title, id]) => {
       this.layers.push(
         new FeatureLayer({
           title,
           id: title,
-          url,
+          portalItem: {
+            id,
+          },
           outFields: ['*'],
           renderer: otherWaterAlertStatusRenderer,
           popupTemplate: dischargePopupTemplate,
