@@ -141,18 +141,17 @@ export class AddDischargeSourcesCommand implements MapCommand {
 
           const id = thamesAttributes?.PermitNumber ?? otherAttributes?.Id ?? '';
           this.setPathname(id, layerView.layer.title ?? '');
-          await this.zoomToFeature(view, graphic);
+          await this.goToFeature(view, graphic);
         }
       },
     );
   }
 
-  private async zoomToFeature(view: __esri.MapView, graphic: __esri.Graphic): Promise<void> {
+  private async goToFeature(view: __esri.MapView, graphic: __esri.Graphic): Promise<void> {
     if (!view.popup?.location) return;
     view.popup.location = graphic.geometry as __esri.Point;
     await view.goTo({
       target: view.popup?.location,
-      zoom: 12,
     });
   }
 
