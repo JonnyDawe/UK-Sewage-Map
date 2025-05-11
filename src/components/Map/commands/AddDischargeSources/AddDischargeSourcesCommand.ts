@@ -12,7 +12,9 @@ import { streamApiLayerIds, thamesWaterApiLayerId } from './config/constants';
 import { dischargePopupTemplate } from './config/dischargePopup';
 import {
   otherWaterAlertStatusRenderer,
+  otherWaterDisplayFilterInfo,
   thamesWaterAlertStatusRenderer,
+  thamesWaterDisplayFilterInfo,
 } from './config/dischargeRenderer';
 import {
   otherWaterAlertStatusSymbolArcade,
@@ -49,6 +51,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
             order: 'descending',
           },
         ],
+        displayFilterInfo: thamesWaterDisplayFilterInfo,
       }),
     );
 
@@ -71,6 +74,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
               order: 'descending',
             },
           ],
+          displayFilterInfo: otherWaterDisplayFilterInfo,
         }),
       );
     });
