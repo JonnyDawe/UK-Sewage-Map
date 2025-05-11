@@ -4,6 +4,7 @@
 - [x] Add River Action branding and support. 
 - [x] Add a nicer loading state to the application.
 - [x] Update feature service references. 
+- [ ] Add a legend to the map. 
 - [ ] Add Filter tool for providers.
 - [ ] Update Timeline component to visjs
 - [x] Refactor the svg icon logic to use a sprite sheet with integrated generation logic.
