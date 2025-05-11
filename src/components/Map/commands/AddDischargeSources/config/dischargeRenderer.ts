@@ -49,14 +49,16 @@ const uniqueValueGroups = [
 
 /**
  * Creates a smooth scaled symbol size based on the current map scale.
- * Uses a cubic ease-out function to create a natural-feeling transition between zoom levels.
+ * Uses a quadratic ease-out function to create a more gradual transition between zoom levels,
+ * with more size changes happening in the middle zoom ranges rather than at the extremes.
  * The scale is normalized between baseScale and zoomedScale, then mapped to symbol sizes.
+ * Symbols get larger as the scale decreases (zooming in).
  *
  * @param {number} scale - The current map scale
  * @param {number} [minScale=32] - The minimum symbol size
  * @param {number} [maxScale=10] - The maximum symbol size
- * @param {number} [baseScale=100000000] - The scale at which symbols are largest
- * @param {number} [zoomedScale=10000] - The scale at which symbols are smallest
+ * @param {number} [baseScale=100000000] - The scale at which symbols are smallest (zoomed out)
+ * @param {number} [zoomedScale=10000] - The scale at which symbols are largest (zoomed in)
  * @returns {number} The calculated symbol size
  */
 export function createSmoothScaledSymbolSize(
@@ -73,11 +75,12 @@ export function createSmoothScaledSymbolSize(
   const baseZoomLevel = Math.log(baseScale) / Math.log(4);
   const zoomedZoomLevel = Math.log(zoomedScale) / Math.log(4);
 
-  // Normalize the zoom level between 0 and 1
-  const normalizedZoom = (zoomLevel - baseZoomLevel) / (zoomedZoomLevel - baseZoomLevel);
+  // Normalize the zoom level between 0 and 1, inverted so 0 is zoomed out and 1 is zoomed in
+  const normalizedZoom = 1 - (zoomLevel - baseZoomLevel) / (zoomedZoomLevel - baseZoomLevel);
 
-  // Apply smooth easing function (cubic ease-out)
-  const easedZoom = 1 - Math.pow(1 - normalizedZoom, 3);
+  // Apply quadratic ease-out function for more gradual transition
+  // This will distribute size changes more evenly across the zoom range
+  const easedZoom = 1 - Math.pow(1 - normalizedZoom, 2);
 
   // Interpolate between min and max sizes
   const calculatedSize = minScale + (maxScale - minScale) * easedZoom;
@@ -86,12 +89,15 @@ export function createSmoothScaledSymbolSize(
   return Math.max(maxScale, Math.min(minScale, calculatedSize));
 }
 
-const MIN_SYMBOL_SIZE = 6;
-const MAX_SYMBOL_SIZE = 32;
-// Scale steps follow a 4x progression for consistent zoom level changes
-const SCALE_STEPS = [6000, 24000, 96000, 384000, 1536000, 6144000];
+const MIN_SYMBOL_SIZE = 10;
+const MAX_SYMBOL_SIZE = 42;
+// Scale steps follow a 2x progression for more gradual zoom level changes
+// Adjusted to focus on the main zoom range between 5,000 and 5,000,000
+const SCALE_STEPS = [
+  5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000, 1280000, 2560000, 5000000,
+];
 export const STEPS = SCALE_STEPS.map((scale) => ({
-  size: createSmoothScaledSymbolSize(scale, MAX_SYMBOL_SIZE, MIN_SYMBOL_SIZE, 5000000, 6000),
+  size: createSmoothScaledSymbolSize(scale, MAX_SYMBOL_SIZE, MIN_SYMBOL_SIZE, 5000000, 5000),
   value: scale,
 }));
 
