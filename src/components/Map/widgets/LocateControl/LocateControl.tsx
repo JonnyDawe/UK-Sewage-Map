@@ -31,6 +31,7 @@ function LocateControl() {
         radius="small"
         disabled={state === 'disabled'}
         loading={state === 'locating'}
+        tooltipPosition="right"
       >
         <SvgIcon name="icon-current-location" size={24}></SvgIcon>
       </MapButton>

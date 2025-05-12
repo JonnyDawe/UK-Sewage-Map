@@ -4,6 +4,7 @@ import React from 'react';
 
 const IconButton = styled(PrimitiveIconButton)`
   box-shadow: var(--shadow-2);
+  pointer-events: all;
 `;
 
 const MapButton = React.forwardRef<

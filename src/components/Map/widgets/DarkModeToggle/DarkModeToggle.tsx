@@ -3,9 +3,9 @@ import Basemap from '@arcgis/core/Basemap';
 import { useCurrentMapView } from '@/lib/arcgis/hooks';
 import { useCallbackRef } from '@/lib/hooks/useCallbackRef';
 
-import MapButton from '../common/Buttons/MapButton';
-import SvgIcon from '../common/SvgIcon';
-import { useTheme } from '../Theme/hooks/useTheme';
+import MapButton from '../../../common/Buttons/MapButton';
+import SvgIcon from '../../../common/SvgIcon';
+import { useTheme } from '../../../Theme/hooks/useTheme';
 
 export function DarkModeToggle() {
   const mapView = useCurrentMapView();
@@ -37,6 +37,7 @@ export function DarkModeToggle() {
           mapView.popup.open({ features: currentFeatures });
         }
       }}
+      tooltipPosition="left"
     >
       <SvgIcon name={currentTheme === 'light' ? 'icon-moon' : 'icon-sun'} size={16}></SvgIcon>
     </MapButton>
