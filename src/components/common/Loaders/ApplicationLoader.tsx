@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useTimeout } from '@mantine/hooks';
+import { Portal } from '@radix-ui/themes';
 import React from 'react';
 
 import PingLoader from './PingLoader';
@@ -45,9 +46,11 @@ const ApplicationLoader = ({ isLoading }: ApplicationLoaderProps) => {
   }, [isLoading, allowHideLoader]);
 
   return (
-    <LoaderContainer aria-hidden={!showLoader} visible={showLoader}>
-      <PingLoader />
-    </LoaderContainer>
+    <Portal>
+      <LoaderContainer aria-hidden={!showLoader} visible={showLoader}>
+        <PingLoader />
+      </LoaderContainer>
+    </Portal>
   );
 };
 

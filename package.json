@@ -41,6 +41,7 @@
     "@vercel/analytics": "^1.5.0",
     "date-fns": "^4.1.0",
     "gsap": "^3.13.0",
+    "jotai": "^2.12.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-google-charts": "^5.2.1",
