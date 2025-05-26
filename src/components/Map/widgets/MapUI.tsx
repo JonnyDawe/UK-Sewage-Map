@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import InformationModal from '../../Modal/InformationModal';
 import { DarkModeToggle } from './DarkModeToggle/DarkModeToggle';
 import Footer from './Footer/Footer';
+import LayerFilterPopover from './LayerFilter/LayerFilter';
 import LegendPopover from './Legend/LegendPopover';
 import LocateControl from './LocateControl/LocateControl';
 import RainRadarPopover from './RainRadar/RainRadarPopover';
@@ -47,6 +48,7 @@ export function MapUI() {
           <InformationModal></InformationModal>
           <RainRadarPopover></RainRadarPopover>
           <DarkModeToggle></DarkModeToggle>
+          <LayerFilterPopover />
         </ButtonsGroup>
       </arcgis-placement>
       <arcgis-placement position="manual">

@@ -11,6 +11,8 @@ import { useMapCommandExecuter } from '../../../lib/arcgis/hooks/useMapCommandEx
 import { AddDischargeSourcesCommand } from '../commands/AddDischargeSources/AddDischargeSourcesCommand';
 import { AddRiverDischargeCommand } from '../commands/AddRiverDischarge/AddRiverDischargeCommand';
 import { AddTidalPolygonCommand } from '../commands/AddTidalPolygons/AddTidalPolygonCommand';
+import { SetupLayerManagerControlCommand } from '../commands/SetupLayerManagerControlCommand';
+import { LayerManagerContext } from '../layermanagement/LayerManagerProvider';
 
 interface UseMapInitializationProps {
   initialAssetId?: string;
@@ -29,6 +31,7 @@ export function useMapInitialization({
   initialCompany,
 }: UseMapInitializationProps): UseMapInitializationResult {
   const { map, setMap, error, isExecuting, executeCommands } = useMapCommandExecuter();
+  const layerManagerActor = LayerManagerContext.useActorRef();
   const postInitCommandsRef = useRef<ViewCommand[]>([]);
   const theme = useThemeRef();
   const router = useRouter();
@@ -41,20 +44,38 @@ export function useMapInitialization({
 
   useEffect(() => {
     if (!map) {
+      layerManagerActor.send({ type: 'RESET' });
       const mapInstance = new EsriMap();
       setMap(mapInstance);
       const commands: MapCommand[] = [];
-
+      commands.push(new SetupLayerManagerControlCommand(layerManagerActor));
       commands.push(new SetBasemapCommand(theme.current ?? 'light'));
       commands.push(new AddTidalPolygonCommand());
-      commands.push(new AddRiverDischargeCommand());
-      commands.push(new AddDischargeSourcesCommand(setPathname, initialAssetId, initialCompany));
+      commands.push(new AddRiverDischargeCommand(layerManagerActor));
+      commands.push(
+        new AddDischargeSourcesCommand(
+          setPathname,
+          layerManagerActor,
+          initialAssetId,
+          initialCompany,
+        ),
+      );
+
       executeCommands(mapInstance, commands).then((results) => {
         const postInitCommands = results.filter((result): result is ViewCommand => result != null);
         postInitCommandsRef.current = postInitCommands;
       });
     }
-  }, [map, theme, executeCommands, setMap, initialAssetId, initialCompany, setPathname]);
+  }, [
+    map,
+    theme,
+    executeCommands,
+    setMap,
+    initialAssetId,
+    initialCompany,
+    setPathname,
+    layerManagerActor,
+  ]);
 
   const handleViewReady = useCallbackRef(async (view: __esri.MapView) => {
     // Execute any pending post-init commands

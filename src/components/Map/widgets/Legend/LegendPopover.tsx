@@ -55,7 +55,7 @@ const LegendPopover = () => {
             className="PopoverContent"
             sideOffset={5}
             collisionPadding={{ top: 16 }}
-            side={'left'}
+            side={'right'}
             onInteractOutside={(ev) => {
               ev.preventDefault();
             }}

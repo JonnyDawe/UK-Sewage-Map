@@ -2,13 +2,14 @@ import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import EsriMap from '@arcgis/core/Map';
 
+import { waterCompanyConfig } from '@/constants/sewagemapdata';
 import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 import {
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
 } from '@/utils/discharge/schemas';
 
-import { streamApiLayerIds, thamesWaterApiLayerId } from './config/constants';
+import { SewageMapLayerManagerActor } from '../../layermanagement/types';
 import { dischargePopupTemplate } from './config/dischargePopup';
 import {
   otherWaterAlertStatusRenderer,
@@ -24,6 +25,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
 
   constructor(
     private setPathname: (assetId: string, company: string) => void,
+    private layerManagerActor: SewageMapLayerManagerActor,
     private initialCsoId?: string,
     private initialCompany?: string,
   ) {
@@ -31,11 +33,13 @@ export class AddDischargeSourcesCommand implements MapCommand {
   }
 
   private initializeLayers(): void {
+    const thamesWaterConfig = waterCompanyConfig['Thames Water'];
+
     // Add Thames Water layer
     this.layers.push(
       new FeatureLayer({
         portalItem: {
-          id: thamesWaterApiLayerId,
+          id: thamesWaterConfig.apiLayerId,
         },
         title: 'Thames Water',
         id: 'Thames Water',
@@ -52,14 +56,18 @@ export class AddDischargeSourcesCommand implements MapCommand {
       }),
     );
 
+    const otherWaterCompanyConfigs = Object.entries(waterCompanyConfig).filter(
+      ([, config]) => config.apiType === 'stream',
+    );
+
     // Add other water company layers
-    Object.entries(streamApiLayerIds).forEach(([title, id]) => {
+    otherWaterCompanyConfigs.forEach(([title, config]) => {
       this.layers.push(
         new FeatureLayer({
           title,
           id: title,
           portalItem: {
-            id,
+            id: config.apiLayerId,
           },
           outFields: ['*'],
           renderer: otherWaterAlertStatusRenderer,
@@ -77,7 +85,22 @@ export class AddDischargeSourcesCommand implements MapCommand {
   }
 
   async executeOnMap(map: EsriMap): Promise<ViewCommand> {
-    this.layers.forEach((layer) => map.add(layer));
+    this.layers.forEach((layer) => {
+      map.add(layer);
+      this.layerManagerActor.send({
+        type: 'LAYER.ADD',
+        params: {
+          layerConfig: {
+            layerType: 'layer',
+            layerId: layer.id,
+            layerName: layer.title ?? layer.id,
+            parentId: layer.title ?? layer.id,
+            layerData: null,
+          },
+          visible: true,
+        },
+      });
+    });
 
     return {
       executeOnView: async (view: __esri.MapView) => {

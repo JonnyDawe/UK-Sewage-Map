@@ -39,14 +39,18 @@
     "@tanstack/react-router": "^1.117.1",
     "@tanstack/zod-adapter": "^1.117.1",
     "@vercel/analytics": "^1.5.0",
+    "@xstate/react": "^5.0.4",
     "date-fns": "^4.1.0",
     "gsap": "^3.13.0",
     "jotai": "^2.12.4",
     "react": "19.1.0",
+    "react-aria-components": "^1.9.0",
     "react-dom": "19.1.0",
     "react-google-charts": "^5.2.1",
+    "react-stately": "^3.38.0",
     "react-wavify": "^1.11.1",
     "swr": "^2.3.3",
+    "xstate": "^5.19.3",
     "zod": "^3.24.3"
   },
   "devDependencies": {
