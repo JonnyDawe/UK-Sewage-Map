@@ -4,6 +4,7 @@ import '@arcgis/map-components/dist/components/arcgis-map';
 
 import Extent from '@arcgis/core/geometry/Extent.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
+import Popup from '@arcgis/core/widgets/Popup.js';
 import React from 'react';
 
 import ApplicationLoader from '@/components/common/Loaders/ApplicationLoader';
@@ -34,7 +35,7 @@ const initialMapProps = {
     fillOpacity: 0,
     haloOpacity: 1,
   } as __esri.HighlightOptions,
-  popup: {
+  popup: new Popup({
     defaultPopupTemplateEnabled: false,
     visibleElements: {
       collapseButton: false,
@@ -43,7 +44,7 @@ const initialMapProps = {
       buttonEnabled: false,
     },
     highlightEnabled: true,
-  } as __esri.Popup,
+  }),
 };
 
 const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewProps) {

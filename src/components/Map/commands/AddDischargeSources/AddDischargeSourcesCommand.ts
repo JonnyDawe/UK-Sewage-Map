@@ -36,10 +36,6 @@ export class AddDischargeSourcesCommand implements MapCommand {
     return `discharge-sources-${company}`;
   }
 
-  private generateLayerName(company: string): string {
-    return `Discharge Sources - ${company}`;
-  }
-
   private initializeLayers(): void {
     const thamesWaterConfig = waterCompanyConfig['Thames Water'];
 
@@ -49,7 +45,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
         portalItem: {
           id: thamesWaterConfig.apiLayerId,
         },
-        title: this.generateLayerName('Thames Water'),
+        title: 'Thames Water',
         id: this.generateLayerId('Thames Water'),
         outFields: ['*'],
         renderer: thamesWaterAlertStatusRenderer,
@@ -73,7 +69,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
     otherWaterCompanyConfigs.forEach(([companyName, config]) => {
       this.layers.push({
         layer: new FeatureLayer({
-          title: this.generateLayerName(companyName),
+          title: companyName,
           id: this.generateLayerId(companyName),
           portalItem: {
             id: config.apiLayerId,
@@ -131,21 +127,17 @@ export class AddDischargeSourcesCommand implements MapCommand {
   }
 
   private setupPopupActionHandlers(view: __esri.MapView): void {
-    reactiveUtils.when(
-      () => !!view.popup?.viewModel,
-      () => {
-        if (!view.popup?.viewModel?.hasEventListener('trigger-action')) {
-          view.popup?.viewModel?.addHandles([
-            view.popup?.viewModel?.on('trigger-action', (event) => {
-              if (event.action.id === 'copy-link') {
-                navigator.clipboard.writeText(window.location.href);
-              }
-            }),
-          ]);
-        }
-      },
-      { once: true },
-    );
+    reactiveUtils
+      .whenOnce(() => !!view.popup?.visible)
+      .then(() => {
+        view.popup?.viewModel?.addHandles([
+          view.popup?.viewModel?.on('trigger-action', (event) => {
+            if (event.action.id === 'copy-link') {
+              navigator.clipboard.writeText(window.location.href);
+            }
+          }),
+        ]);
+      });
   }
 
   private setupFeatureSelectionHandling(
@@ -197,7 +189,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
     if (!company || !csoId) return;
 
     // find the layer with the company
-    const layer = view.map.findLayerById(company) as __esri.FeatureLayer;
+    const layer = view.map.findLayerById(this.generateLayerId(company)) as __esri.FeatureLayer;
     if (!layer) return;
 
     if (layer.title === 'Thames Water') {
@@ -217,8 +209,9 @@ export class AddDischargeSourcesCommand implements MapCommand {
 
       const { features } = await layer.queryFeatures(query);
       if (features.length > 0) {
-        view.openPopup({ features });
-        view.goTo({ target: features[0], zoom: 12 }, { animate: false });
+        view.openPopup({ features }).then(() => {
+          view.goTo({ target: features[0], zoom: 12 }, { animate: false });
+        });
       }
     }
   }
