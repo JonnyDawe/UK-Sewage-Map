@@ -21,7 +21,7 @@ import {
 } from './config/dischargeSourceRendererArcade';
 
 export class AddDischargeSourcesCommand implements MapCommand {
-  private layers: __esri.FeatureLayer[] = [];
+  private layers: Array<{ layer: __esri.FeatureLayer; companyName: string }> = [];
 
   constructor(
     private setPathname: (assetId: string, company: string) => void,
@@ -32,17 +32,25 @@ export class AddDischargeSourcesCommand implements MapCommand {
     this.initializeLayers();
   }
 
+  private generateLayerId(company: string): string {
+    return `discharge-sources-${company}`;
+  }
+
+  private generateLayerName(company: string): string {
+    return `Discharge Sources - ${company}`;
+  }
+
   private initializeLayers(): void {
     const thamesWaterConfig = waterCompanyConfig['Thames Water'];
 
     // Add Thames Water layer
-    this.layers.push(
-      new FeatureLayer({
+    this.layers.push({
+      layer: new FeatureLayer({
         portalItem: {
           id: thamesWaterConfig.apiLayerId,
         },
-        title: 'Thames Water',
-        id: 'Thames Water',
+        title: this.generateLayerName('Thames Water'),
+        id: this.generateLayerId('Thames Water'),
         outFields: ['*'],
         renderer: thamesWaterAlertStatusRenderer,
         popupTemplate: dischargePopupTemplate,
@@ -54,18 +62,19 @@ export class AddDischargeSourcesCommand implements MapCommand {
           },
         ],
       }),
-    );
+      companyName: 'Thames Water',
+    });
 
     const otherWaterCompanyConfigs = Object.entries(waterCompanyConfig).filter(
       ([, config]) => config.apiType === 'stream',
     );
 
     // Add other water company layers
-    otherWaterCompanyConfigs.forEach(([title, config]) => {
-      this.layers.push(
-        new FeatureLayer({
-          title,
-          id: title,
+    otherWaterCompanyConfigs.forEach(([companyName, config]) => {
+      this.layers.push({
+        layer: new FeatureLayer({
+          title: this.generateLayerName(companyName),
+          id: this.generateLayerId(companyName),
           portalItem: {
             id: config.apiLayerId,
           },
@@ -80,12 +89,13 @@ export class AddDischargeSourcesCommand implements MapCommand {
             },
           ],
         }),
-      );
+        companyName,
+      });
     });
   }
 
   async executeOnMap(map: EsriMap): Promise<ViewCommand> {
-    this.layers.forEach((layer) => {
+    this.layers.forEach(({ layer, companyName }) => {
       map.add(layer);
       this.layerManagerActor.send({
         type: 'LAYER.ADD',
@@ -94,17 +104,19 @@ export class AddDischargeSourcesCommand implements MapCommand {
             layerType: 'layer',
             layerId: layer.id,
             layerName: layer.title ?? layer.id,
-            parentId: layer.title ?? layer.id,
+            parentId: companyName,
             layerData: null,
           },
-          visible: true,
+          visible: 'inherit',
         },
       });
     });
 
     return {
       executeOnView: async (view: __esri.MapView) => {
-        const layerViews = await Promise.all(this.layers.map((layer) => view.whenLayerView(layer)));
+        const layerViews = await Promise.all(
+          this.layers.map(({ layer }) => view.whenLayerView(layer)),
+        );
 
         this.setupPopupActionHandlers(view);
         layerViews.forEach((layerView) => {

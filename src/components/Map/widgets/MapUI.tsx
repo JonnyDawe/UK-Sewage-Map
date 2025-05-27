@@ -45,9 +45,9 @@ export function MapUI() {
 
       <arcgis-placement position="top-right">
         <ButtonsGroup>
-          <InformationModal></InformationModal>
-          <RainRadarPopover></RainRadarPopover>
-          <DarkModeToggle></DarkModeToggle>
+          <InformationModal />
+          <DarkModeToggle />
+          <RainRadarPopover />
           <LayerFilterPopover />
         </ButtonsGroup>
       </arcgis-placement>

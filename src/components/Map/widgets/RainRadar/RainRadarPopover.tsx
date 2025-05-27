@@ -1,6 +1,8 @@
 import { Flex, Heading } from '@radix-ui/themes';
+import { useAtom } from 'jotai';
 
 import { useCurrentMapView } from '@/lib/arcgis/hooks';
+import { currentMapTool } from '@/lib/atoms';
 
 import MapButton from '../../../common/Buttons/MapButton';
 import Popover from '../../../common/Popover/Popover';
@@ -10,10 +12,20 @@ import { AppTheme } from '../../../Theme/AppTheme';
 import RainRadar from './RainRadar';
 const RainRadarPopover = () => {
   const view = useCurrentMapView();
+  const [activeMapTool, setActiveMapTool] = useAtom(currentMapTool);
 
   return (
     <ErrorBoundary>
-      <Popover.Root>
+      <Popover.Root
+        open={activeMapTool === 'rain-radar'}
+        onOpenChange={(open) => {
+          if (open) {
+            setActiveMapTool('rain-radar');
+          } else {
+            setActiveMapTool(undefined);
+          }
+        }}
+      >
         <Popover.Trigger asChild>
           <MapButton aria-label="Rainfall data" tooltipPosition="left">
             <SvgIcon name="icon-rain" size={24}></SvgIcon>

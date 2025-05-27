@@ -81,7 +81,7 @@ export interface LayerGroupContext<T> extends LayerContextBase<T> {
 
 export interface AddLayerParams<T> {
   layerConfig: LayerConfig<T> | LayerGroupConfig<T>;
-  visible?: boolean;
+  visible?: boolean | 'inherit';
   index?: number;
   position?: 'top' | 'bottom';
 }

@@ -1,14 +1,28 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { useAtom } from 'jotai';
+
+import { currentMapTool } from '@/lib/atoms';
 
 import MapButton from '../../../common/Buttons/MapButton';
 import Popover from '../../../common/Popover/Popover';
 import SvgIcon from '../../../common/SvgIcon/SvgIcon';
 import { AppTheme } from '../../../Theme/AppTheme';
-import { LayerListFilter } from './LayerListFilterV2';
+import { LayerListFilter } from './LayerListFilter';
 
 const LayerFilterPopover = () => {
+  const [activeMapTool, setActiveMapTool] = useAtom(currentMapTool);
+
   return (
-    <Popover.Root>
+    <Popover.Root
+      open={activeMapTool === 'layer-filter'}
+      onOpenChange={(open) => {
+        if (open) {
+          setActiveMapTool('layer-filter');
+        } else {
+          setActiveMapTool(undefined);
+        }
+      }}
+    >
       <Popover.Trigger asChild>
         <MapButton aria-label="Layer Filter" tooltipPosition="right">
           <SvgIcon name="icon-layer-filter" size={20}></SvgIcon>
@@ -25,10 +39,13 @@ const LayerFilterPopover = () => {
               ev.preventDefault();
             }}
           >
-            <Flex direction={'column'} gap={'4'} width={'240px'}>
-              <Heading as="h3" size={'4'}>
-                Layer Filter
-              </Heading>
+            <Flex direction={'column'} gap={'4'} width={'260px'}>
+              <Box>
+                <Heading as="h3" size={'4'} mb={'2'}>
+                  Layer Filter
+                </Heading>
+                <Text size={'3'}>Select the layers you want to see on the map.</Text>
+              </Box>
               <LayerListFilter />
             </Flex>
             <Popover.CloseCornerButton aria-label="Close">

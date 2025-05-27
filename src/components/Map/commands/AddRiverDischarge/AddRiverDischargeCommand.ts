@@ -19,6 +19,13 @@ export class AddRiverDischargeCommand implements MapCommand {
     this.initializeLayers();
   }
 
+  private generateLayerId(company: string): string {
+    return `downstream-discharge-${company}`;
+  }
+
+  private generateLayerName(company: string): string {
+    return `Downstream Discharge - ${company}`;
+  }
   private initializeLayers(): void {
     this.mapLayers = Object.entries(waterCompanyConfig).map(([companyName, config]) => ({
       layer: new GeoJSONLayer({
@@ -30,8 +37,8 @@ export class AddRiverDischargeCommand implements MapCommand {
             width: '6px',
           }),
         }),
-        id: `${companyName}-discharge`,
-        title: `${companyName} Discharge`,
+        id: this.generateLayerId(companyName),
+        title: this.generateLayerName(companyName),
       }),
       companyName,
     }));
@@ -117,7 +124,7 @@ export class AddRiverDischargeCommand implements MapCommand {
             parentId: companyName,
             layerData: null,
           },
-          visible: true,
+          visible: 'inherit',
         },
       });
     });

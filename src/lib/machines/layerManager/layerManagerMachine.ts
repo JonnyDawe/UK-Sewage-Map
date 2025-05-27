@@ -23,6 +23,7 @@ import {
   getFlatLayerOrder,
   getUpdatedLayerStructure,
   getUpdatedLayerStructureAfterRemoval,
+  isLayerVisible,
   isValidLayerConfig,
   isValidParentRef,
 } from './utils';
@@ -74,7 +75,8 @@ export function createLayerManagerMachine<T>() {
        */
       'Add new layer': enqueueActions(
         ({ enqueue, check, context, self }, params: AddLayerParams<T>) => {
-          const { layerConfig, index, visible = true, position } = params;
+          const { layerConfig, index, position, visible } = params;
+          let computedVisible = false;
 
           // @ts-expect-error - https://github.com/statelyai/xstate/issues/4820
           if (!check({ type: 'validate new layer configuration', params })) {
@@ -116,8 +118,15 @@ export function createLayerManagerMachine<T>() {
               };
             }
 
+            if (visible === 'inherit') {
+              if (parentRef) {
+                const parentVisible = isLayerVisible(parentRef);
+                computedVisible = parentVisible;
+              }
+            }
             if (visible) {
               newManagedLayer.layerActor.send({ type: 'LAYER.ENABLED' });
+              computedVisible = true;
             }
 
             return getUpdatedLayerStructure(context, newManagedLayer, parentRef, index, position);
@@ -126,7 +135,7 @@ export function createLayerManagerMachine<T>() {
           enqueue.emit(({ context }) => ({
             type: 'LAYER.ADDED',
             layerId: layerConfig.layerId,
-            visible,
+            visible: computedVisible,
             layerActor: findLayerById(context.layers, layerConfig.layerId)!.layerActor,
           }));
         },
