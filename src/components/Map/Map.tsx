@@ -21,6 +21,7 @@ type MapViewProps = {
 const initialMapProps = {
   constraints: {
     minZoom: 6,
+    rotationEnabled: false,
   } as __esri.View2DConstraints,
   extent: new Extent({
     xmin: -767095,
