@@ -3,6 +3,7 @@ import { Flex, Heading, Text } from '@radix-ui/themes';
 import { useAtom } from 'jotai';
 import React from 'react';
 
+import { ERRORICON, GREENTICKICON, POOICON, UNKNOWNICON } from '@/constants/hostedImages';
 import useIsMobile from '@/lib/hooks/useIsMobile';
 
 import { legendOpen } from '../../../../lib/atoms';
@@ -65,10 +66,10 @@ const LegendPopover = () => {
                 Legend
               </Heading>
               <Flex direction={'column'} gap={'2'}>
-                <LegendItem icon={'images/poo.png'} label="Discharging" />
-                <LegendItem icon={'images/error-warning-fill.png'} label="Recent Discharge" />
-                <LegendItem icon={'images/shield-check-fill.png'} label="Not Discharging" />
-                <LegendItem icon={'images/unknown-source.png'} label="Offline" />
+                <LegendItem icon={POOICON} label="Discharging" />
+                <LegendItem icon={ERRORICON} label="Recent Discharge" />
+                <LegendItem icon={GREENTICKICON} label="Not Discharging" />
+                <LegendItem icon={UNKNOWNICON} label="Offline" />
               </Flex>
             </Flex>
             <Popover.CloseCornerButton aria-label="Close">

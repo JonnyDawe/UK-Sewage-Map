@@ -5,7 +5,7 @@ import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SizeVariable from '@arcgis/core/renderers/visualVariables/SizeVariable';
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 
-import { ERRORICON, GREENTICKICON, POOICON, UNKNOWNICON } from '@/constants/hostedImages';
+import { ERRORICON, GREENTICKICONSMALL, POOICON, UNKNOWNICON } from '@/constants/hostedImages';
 
 import {
   otherWaterAlertStatusSymbolArcade,
@@ -30,7 +30,7 @@ const uniqueValueGroups = [
       }),
       new UniqueValueClass({
         label: 'Not Discharging',
-        symbol: new PictureMarkerSymbol({ url: GREENTICKICON, width: '20', height: '20' }),
+        symbol: new PictureMarkerSymbol({ url: GREENTICKICONSMALL, width: '20', height: '20' }),
         values: 0,
       }),
       new UniqueValueClass({
@@ -93,9 +93,7 @@ const MIN_SYMBOL_SIZE = 10;
 const MAX_SYMBOL_SIZE = 42;
 // Scale steps follow a 2x progression for more gradual zoom level changes
 // Adjusted to focus on the main zoom range between 5,000 and 5,000,000
-const SCALE_STEPS = [
-  5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000, 1280000, 2560000, 5000000,
-];
+const SCALE_STEPS = [5000, 10000, 20000, 50000, 100000, 250000, 1000000, 5000000];
 export const STEPS = SCALE_STEPS.map((scale) => ({
   size: createSmoothScaledSymbolSize(scale, MAX_SYMBOL_SIZE, MIN_SYMBOL_SIZE, 5000000, 5000),
   value: scale,
