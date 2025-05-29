@@ -1,21 +1,20 @@
 'use client';
 import '@arcgis/map-components/dist/components/arcgis-locate';
 import '@arcgis/map-components/dist/components/arcgis-placement';
-import '@arcgis/map-components/dist/components/arcgis-zoom';
 
 import styled from '@emotion/styled';
 
-import { DarkModeToggle } from '../../DarkModeToggle/DarkModeToggle';
-import Footer from '../../Footer/Footer';
 import InformationModal from '../../Modal/InformationModal';
-import RainRadarPopover from '../../RainRadar/RainRadarPopover';
+import { DarkModeToggle } from './DarkModeToggle/DarkModeToggle';
+import Footer from './Footer/Footer';
+import LayerFilterPopover from './LayerFilter/LayerFilter';
+import LegendPopover from './Legend/LegendPopover';
+import LocateControl from './LocateControl/LocateControl';
+import RainRadarPopover from './RainRadar/RainRadarPopover';
 import { SearchWidget } from './SearchWidget/SearchWidget';
+import ZoomControl from './ZoomControl/ZoomControl';
 
 const ButtonsGroup = styled.div`
-  pointer-events: all;
-  position: absolute;
-  top: 16px;
-  right: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -35,23 +34,26 @@ export function MapUI() {
   return (
     <>
       <arcgis-placement position="top-left">
-        <arcgis-zoom />
+        <ZoomControl />
       </arcgis-placement>
       <arcgis-placement position="top-left">
-        <arcgis-locate />
+        <ButtonsGroup>
+          <LocateControl />
+          <LegendPopover />
+        </ButtonsGroup>
+      </arcgis-placement>
+
+      <arcgis-placement position="top-right">
+        <ButtonsGroup>
+          <InformationModal />
+          <DarkModeToggle />
+          <RainRadarPopover />
+          <LayerFilterPopover />
+        </ButtonsGroup>
       </arcgis-placement>
       <arcgis-placement position="manual">
         <ManualPositioned>
           <SearchWidget />
-        </ManualPositioned>
-      </arcgis-placement>
-      <arcgis-placement position="manual">
-        <ManualPositioned>
-          <ButtonsGroup>
-            <InformationModal></InformationModal>
-            <RainRadarPopover></RainRadarPopover>
-            <DarkModeToggle></DarkModeToggle>
-          </ButtonsGroup>
           <Footer></Footer>
         </ManualPositioned>
       </arcgis-placement>

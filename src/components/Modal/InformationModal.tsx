@@ -4,18 +4,12 @@ import { Box, Button, Flex, Heading, Separator, Text } from '@radix-ui/themes';
 import React from 'react';
 import Wave from 'react-wavify';
 
-import { useOnFirstVisit } from '../../hooks/useOnUserFirstVisit';
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { useOnFirstVisit } from '../../lib/hooks/useOnUserFirstVisit';
+import { usePrefersReducedMotion } from '../../lib/hooks/usePrefersReducedMotion';
 import MapButton from '../common/Buttons/MapButton';
 import Dialog from '../common/Dialog/Dialog';
 import { ModalHeader } from '../common/Dialog/DialogTitle';
-import {
-  CloseIcon,
-  HydrologyModelIcon,
-  InfoIcon,
-  WasteWaterIcon,
-  WaterInfoIcon,
-} from '../common/Icons';
+import SvgIcon from '../common/SvgIcon/SvgIcon';
 import { Em, Link } from '../common/Text';
 import TextInfoList from '../TextInfoList/TextInfoList';
 import { AppTheme } from '../Theme/AppTheme';
@@ -40,8 +34,8 @@ const InformationModal = () => {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <MapButton>
-          <InfoIcon></InfoIcon>
+        <MapButton aria-label="Information" tooltipPosition="left">
+          <SvgIcon name="icon-info" size={24}></SvgIcon>
         </MapButton>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -61,7 +55,7 @@ const InformationModal = () => {
 
             <Box position={'relative'} p={'5'} style={{ overflow: 'hidden' }}>
               <BackgroundWave
-                fill="var(--blue-4)"
+                fill="var(--wave-blue)"
                 paused={prefersReducedMotion}
                 options={{
                   height: 25,
@@ -78,7 +72,7 @@ const InformationModal = () => {
                     This map shows, in real-time, which river sections are downstream of sewage
                     discharges from storm overflows.
                   </Text>
-                  <TextInfoList icon={<WaterInfoIcon></WaterInfoIcon>}>
+                  <TextInfoList icon={<SvgIcon name="icon-water-info" size={48}></SvgIcon>}>
                     <Heading as={'h3'} size={'4'}>
                       About the Data
                     </Heading>
@@ -98,17 +92,17 @@ const InformationModal = () => {
                       </Link>
                     </Text>
                   </TextInfoList>
-                  <TextInfoList icon={<HydrologyModelIcon></HydrologyModelIcon>}>
+                  <TextInfoList icon={<SvgIcon name="icon-hydrology-model" size={48}></SvgIcon>}>
                     <Heading as={'h3'} size={'4'}>
                       Hydrology Model{' '}
                     </Heading>
                     <Text>
-                      To identify river stretches downstream of an overflow, we track sewage discharges 
-                      downstream along <Em>non-tidal</Em> river
-                      networks using topographic datasets. We highlight areas downstream of active and recent discharges in
-                      brown. This simple approach does not consider dilution, river flow, or
-                      dispersion effects on pollutant concentration. Since water companies do not
-                      provide real-time data on discharge volume or pollutant concentrations,
+                      To identify river stretches downstream of an overflow, we track sewage
+                      discharges downstream along <Em>non-tidal</Em> river networks using
+                      topographic datasets. We highlight areas downstream of active and recent
+                      discharges in brown. This simple approach does not consider dilution, river
+                      flow, or dispersion effects on pollutant concentration. Since water companies
+                      do not provide real-time data on discharge volume or pollutant concentrations,
                       accurately modelling these effects is very difficult. Consequently, on its
                       own, <Em>this map should not be used to assess pollution or health risks</Em>{' '}
                       at a specific location, for example, for bathing water quality. Note that, the
@@ -116,7 +110,7 @@ const InformationModal = () => {
                       instance in lakes or where rivers are tidal very far in-land.
                     </Text>
                   </TextInfoList>
-                  <TextInfoList icon={<WasteWaterIcon></WasteWaterIcon>}>
+                  <TextInfoList icon={<SvgIcon name="icon-waste-water" size={48}></SvgIcon>}>
                     <Heading as={'h3'} size={'4'}>
                       Waste Water
                     </Heading>
@@ -143,16 +137,17 @@ const InformationModal = () => {
                     </Text>
                   </TextInfoList>
                   <Text mt={'2'}>
-                    <strong>
-                      This site was created by{' '}
-                      <Link href="https://alexlipp.github.io/">Alex Lipp (UCL)</Link> &{' '}
-                      <Link href="https://bsky.app/profile/did:plc:yxxm76jvxcsuzg6ahfjiek3y">
-                        Jonny Dawe.
-                      </Link>{' '}
-                      For more information and to see the full source code, visit the GitHub
-                      repositories:
-                    </strong>{' '}
-                    <br></br>
+                    This site was created by{' '}
+                    <Link href="https://alexlipp.github.io/">Alex Lipp (UCL)</Link> &{' '}
+                    <Link href="https://bsky.app/profile/did:plc:yxxm76jvxcsuzg6ahfjiek3y">
+                      Jonny Dawe.
+                    </Link>{' '}
+                    Hosting costs are kindly supported by{' '}
+                    <Link href={'https://riveractionuk.com/'}>RiverAction</Link>.
+                  </Text>
+                  <Text weight={'bold'}>
+                    For more information and to see the full source code, visit the GitHub
+                    repositories:
                   </Text>
                   <Flex gap={'2'} justify={'start'}>
                     <Link href="https://github.com/AlexLipp/sewage-map ">backend</Link>
@@ -181,7 +176,7 @@ const InformationModal = () => {
             </Box>
 
             <Dialog.CloseCornerButton aria-label="Close">
-              <CloseIcon></CloseIcon>
+              <SvgIcon name="icon-x" size={24}></SvgIcon>
             </Dialog.CloseCornerButton>
           </Dialog.Content>
         </AppTheme>

@@ -5,10 +5,6 @@
 // unknown = 999
 
 export const thamesWaterAlertStatusSymbolArcade = ` 
-var statuses = ["Not Discharging", "Recent Discharge", "Discharging", "Offline"];
-
-var index = 3;
-
 if (
     Boolean($feature.AlertPast48Hours) == true &&
     Lower(Trim($feature.AlertStatus)) != "discharging" &&

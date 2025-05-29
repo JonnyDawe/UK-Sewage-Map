@@ -2,9 +2,8 @@ import styled from '@emotion/styled';
 import * as PrimitivePopover from '@radix-ui/react-popover';
 
 const Content = styled(PrimitivePopover.Content)`
-  border-radius: 4px;
-  padding: 20px;
-  width: 260px;
+  border-radius: var(--radius-2);
+  padding: 10px 20px;
   background-color: var(--color-panel-solid);
   box-shadow:
     hsl(206 22% 7% / 35%) 0px 10px 38px -10px,

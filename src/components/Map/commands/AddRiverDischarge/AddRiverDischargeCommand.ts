@@ -4,37 +4,50 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 import LineSymbol from '@arcgis/core/symbols/LineSymbol';
 
-import { MapCommand, ViewCommand } from '@/arcgis/typings/commandtypes';
+import { waterCompanyConfig } from '@/constants/sewagemapdata';
+import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 
-import { downStreamImpactUrls } from './config/constants';
+import { SewageMapLayerManagerActor } from '../../layermanagement/types';
 
 export class AddRiverDischargeCommand implements MapCommand {
-  private mapLayers: __esri.GeoJSONLayer[] = [];
+  private mapLayers: Array<{ layer: __esri.GeoJSONLayer; companyName: string }> = [];
   private lastTimestamp: number | undefined;
   private stepDuration = 100;
   private offset = 0;
 
-  constructor() {
+  constructor(private layerManagerActor: SewageMapLayerManagerActor) {
     this.initializeLayers();
   }
 
-  private initializeLayers(): void {
-    this.mapLayers = downStreamImpactUrls.map(
-      (url) =>
-        new GeoJSONLayer({
-          url,
-          copyright: 'Sewage Map',
-          renderer: new SimpleRenderer({
-            symbol: new LineSymbol({
-              color: '#733f2e',
-              width: '6px',
-            }),
-          }),
-        }),
-    );
+  private generateLayerId(company: string): string {
+    return `downstream-discharge-${company}`;
   }
 
-  private animateDischargeRenderer(layers: GeoJSONLayer[], timestamp: number) {
+  private generateLayerName(company: string): string {
+    return `Downstream Discharge - ${company}`;
+  }
+  private initializeLayers(): void {
+    this.mapLayers = Object.entries(waterCompanyConfig).map(([companyName, config]) => ({
+      layer: new GeoJSONLayer({
+        url: config.dischargeUrl,
+        copyright: 'Sewage Map',
+        renderer: new SimpleRenderer({
+          symbol: new LineSymbol({
+            color: '#733f2e',
+            width: '6px',
+          }),
+        }),
+        id: this.generateLayerId(companyName),
+        title: this.generateLayerName(companyName),
+      }),
+      companyName,
+    }));
+  }
+
+  private animateDischargeRenderer(
+    layers: Array<{ layer: __esri.GeoJSONLayer; companyName: string }>,
+    timestamp: number,
+  ) {
     if (!this.lastTimestamp) {
       this.lastTimestamp = timestamp;
     }
@@ -91,7 +104,7 @@ export class AddRiverDischargeCommand implements MapCommand {
       }),
     });
 
-    layers.forEach((layer) => {
+    layers.forEach(({ layer }) => {
       layer.renderer = renderer;
     });
 
@@ -99,7 +112,22 @@ export class AddRiverDischargeCommand implements MapCommand {
   }
 
   async executeOnMap(map: EsriMap): Promise<ViewCommand> {
-    this.mapLayers.forEach((layer) => map.add(layer));
+    this.mapLayers.forEach(({ layer, companyName }) => {
+      map.add(layer);
+      this.layerManagerActor.send({
+        type: 'LAYER.ADD',
+        params: {
+          layerConfig: {
+            layerType: 'layer',
+            layerId: layer.id,
+            layerName: layer.title ?? layer.id,
+            parentId: companyName,
+            layerData: null,
+          },
+          visible: 'inherit',
+        },
+      });
+    });
 
     return {
       executeOnView: async () => {

@@ -4,10 +4,12 @@ import '@arcgis/map-components/dist/components/arcgis-map';
 
 import Extent from '@arcgis/core/geometry/Extent.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
+import Popup from '@arcgis/core/widgets/Popup.js';
 import React from 'react';
 
-import { ArcMapView } from '@/arcgis/components/ArcView/ArcMapView';
-import useIsMobile from '@/hooks/useIsMobile';
+import ApplicationLoader from '@/components/common/Loaders/ApplicationLoader';
+import { ArcMapView } from '@/lib/arcgis/components/ArcView/ArcMapView';
+import useIsMobile from '@/lib/hooks/useIsMobile';
 
 import { useMapInitialization } from './hooks/useMapInitialisation';
 import { MapUI } from './widgets/MapUI';
@@ -20,7 +22,8 @@ type MapViewProps = {
 const initialMapProps = {
   constraints: {
     minZoom: 6,
-  },
+    rotationEnabled: false,
+  } as __esri.View2DConstraints,
   extent: new Extent({
     xmin: -767095,
     ymin: 6482731,
@@ -31,8 +34,8 @@ const initialMapProps = {
   highlightOptions: {
     fillOpacity: 0,
     haloOpacity: 1,
-  },
-  popup: {
+  } as __esri.HighlightOptions,
+  popup: new Popup({
     defaultPopupTemplateEnabled: false,
     visibleElements: {
       collapseButton: false,
@@ -41,7 +44,7 @@ const initialMapProps = {
       buttonEnabled: false,
     },
     highlightEnabled: true,
-  },
+  }),
 };
 
 const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewProps) {
@@ -62,22 +65,23 @@ const Map = React.memo(function Map({ initialCSOId, initialCompany }: MapViewPro
     return <div>Error: {error.message}</div>;
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <ArcMapView
-      map={map}
-      onarcgisViewReadyChange={(ev) => {
-        console.log('view ready', ev.target.view);
-        handleViewReady(ev.target.view);
-      }}
-      {...initialMapProps}
-      padding={padding}
-    >
-      <MapUI />
-    </ArcMapView>
+    <>
+      <ApplicationLoader isLoading={isLoading} />
+      {map && (
+        <ArcMapView
+          map={map}
+          onarcgisViewReadyChange={(ev) => {
+            console.log('view ready', ev.target.view);
+            handleViewReady(ev.target.view);
+          }}
+          {...initialMapProps}
+          padding={padding}
+        >
+          <MapUI />
+        </ArcMapView>
+      )}
+    </>
   );
 });
 

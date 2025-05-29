@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
+import { LayerManagerProvider } from '@/components/Map/layermanagement/LayerManagerProvider';
 import { AppTheme } from '@/components/Theme/AppTheme';
 
 import { AppThemeProvider } from '../components/Theme/ThemeProvider';
@@ -13,18 +14,20 @@ const assetIDSchema = z.object({
 
 export const Route = createRootRoute({
   component: () => (
-    <AppThemeProvider
-      theme={{
-        accentColor: 'blue',
-        grayColor: 'gray',
-        panelBackground: 'solid',
-      }}
-      isChild={false}
-    >
-      <AppTheme>
-        <Outlet />
-      </AppTheme>
-    </AppThemeProvider>
+    <LayerManagerProvider>
+      <AppThemeProvider
+        theme={{
+          accentColor: 'blue',
+          grayColor: 'gray',
+          panelBackground: 'solid',
+        }}
+        isChild={false}
+      >
+        <AppTheme>
+          <Outlet />
+        </AppTheme>
+      </AppThemeProvider>
+    </LayerManagerProvider>
   ),
   validateSearch: zodValidator(assetIDSchema),
 });
