@@ -18,7 +18,7 @@ const ZoomButtonContainer = styled(Flex)`
   border-radius: var(--radius-1);
 
   // first child
-  & > *:first-child {
+  & > *:first-of-type {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
