@@ -1,21 +1,25 @@
 ﻿.esri-ui-manual-container > .esri-component:has(.map-overlay) {
-    position: unset !important;
-    width: 100%;
-    height:100%;
-    pointer-events: none;
+  position: unset !important;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .esri-ui {
-    inset: 0 !important;
-  }
+  inset: 0 !important;
+}
+
+.esri-ui .esri-popup {
+  z-index: 10 !important;
+}
 
 .esri-popup__main-container {
-    max-height: 400px;
-    .esri-view-height-less-than-medium & {
-        max-height: 360px;
-    }
+  max-height: 400px;
+  .esri-view-height-less-than-medium & {
+    max-height: 360px;
+  }
 }
 
 .esri-widget {
-    font-family: var(--font-roboto) !important;
+  font-family: var(--font-roboto) !important;
 }
