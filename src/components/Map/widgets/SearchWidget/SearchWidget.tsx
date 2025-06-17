@@ -15,6 +15,7 @@ const SearchPositionWrapper = styled.div`
   padding-bottom: 0px;
   top: 0;
   bottom: unset;
+  z-index: 1;
   @media (max-width: 640px) {
     bottom: 0;
     top: unset;
