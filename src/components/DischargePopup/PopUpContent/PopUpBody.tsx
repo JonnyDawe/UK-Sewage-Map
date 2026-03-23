@@ -6,7 +6,9 @@ import { usePrefersReducedMotion } from '../../../lib/hooks/usePrefersReducedMot
 import { AlertStatus, DischargeInterval } from '../../../utils/discharge/types';
 import Tabs from '../../common/Tabs/Tabs';
 import { DischargeInfoCard } from '../DischargeInfoCard/DischargeInfoCard';
-import HistoricDischarges from '../DischargeTimeline/DischargeTimeline';
+import HistoricDischarges, {
+  HistoricOfflinePeriods,
+} from '../DischargeTimeline/DischargeTimeline';
 
 const ContentWrapper = styled(Box)`
   width: 100%;
@@ -98,7 +100,8 @@ export function PopUpBody({
         <Tabs.Root defaultValue="latest" aria-label="Choose which information to see:">
           <Tabs.List>
             <Tabs.Trigger value="latest">Latest</Tabs.Trigger>
-            <Tabs.Trigger value="history">History</Tabs.Trigger>
+            <Tabs.Trigger value="history">Discharge History</Tabs.Trigger>
+            <Tabs.Trigger value="offline">Offline History</Tabs.Trigger>
           </Tabs.List>
           <Box pt={'3'}>
             <Tabs.Content value="latest">
@@ -114,6 +117,11 @@ export function PopUpBody({
             <Tabs.Content value="history">
               <DataCardWrapper>
                 <HistoricDischarges company={company} locationName={locationName} />
+              </DataCardWrapper>
+            </Tabs.Content>
+            <Tabs.Content value="offline">
+              <DataCardWrapper>
+                <HistoricOfflinePeriods company={company} locationName={locationName} />
               </DataCardWrapper>
             </Tabs.Content>
           </Box>

@@ -48,6 +48,34 @@ const CustomChart = styled(Chart)`
   }
 `;
 
+const CustomOfflineChart = styled(Chart)`
+  svg {
+    // Background Color
+    g:nth-child(2) {
+      rect {
+        fill: var(--gray-a2);
+      }
+      path {
+        stroke: var(--gray-4);
+      }
+    }
+
+    // Text
+    g:nth-child(3) {
+      text {
+        fill: var(--gray-12);
+      }
+    }
+
+    // Fill
+    g:nth-child(5) {
+      rect {
+        fill: var(--gray-8);
+      }
+    }
+  }
+`;
+
 function getFilteredDischarges(
   dischargeData: DischargeHistoricalData,
   period: DischargeHistoryPeriod,
@@ -317,6 +345,109 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
   );
 }
 
+function OfflineTimeline({ locationName }: { locationName: string }) {
+  const [selectedPeriod, setSelectedPeriod] = React.useState<DischargeHistoryPeriod>(
+    DischargeHistoryPeriod.Last6Months,
+  );
+
+  const {
+    data: historicOfflineDataJSON,
+    isLoading,
+    error,
+  } = useSWR(
+    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now_offline.json',
+    fetchHistoricDischargeData,
+  );
+
+  const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useSWR(
+    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/timestamp.txt',
+    fetchTimeStamp,
+  );
+
+  if (isLoading || lastUpdatedLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Failed to load offline monitor data.</p>;
+  }
+
+  const locationData = processDataForLocation(historicOfflineDataJSON, locationName, selectedPeriod);
+  const { dischargeChartData, totalDischarge: totalOfflineDuration } = locationData;
+
+  const offlineStartDate = getDischargeDateObject(
+    getStartDateOfInterest(selectedPeriod) ?? new Date(),
+  );
+
+  return (
+    <TimeLineWrapper>
+      <Text size={'2'}>
+        Offline periods from the:{' '}
+        <InLineSelect
+          options={[
+            { value: DischargeHistoryPeriod.Last3Months, label: 'Last 3 months' },
+            { value: DischargeHistoryPeriod.Last6Months, label: 'Last 6 months' },
+            { value: DischargeHistoryPeriod.Last12Months, label: 'Last 12 months' },
+            { value: DischargeHistoryPeriod.StartOf2023, label: 'Entirety of 2023' },
+            { value: DischargeHistoryPeriod.StartOf2024, label: 'Entirety of 2024' },
+            { value: DischargeHistoryPeriod.StartOf2025, label: 'Entirety of 2025' },
+            { value: DischargeHistoryPeriod.StartOfCurrentYear, label: `Start of ${new Date().getFullYear()}` },
+          ]}
+          value={selectedPeriod}
+          onChange={(selectedPeriod) => {
+            setSelectedPeriod(selectedPeriod as DischargeHistoryPeriod);
+          }}
+        />
+      </Text>
+      {dischargeChartData.length === 1 ? (
+        <Text size={'2'}>
+          No Recorded Offline Periods since {offlineStartDate.day} {offlineStartDate.month}{' '}
+          {offlineStartDate.year}
+        </Text>
+      ) : (
+        <CustomOfflineChart
+          chartType="Timeline"
+          data={dischargeChartData}
+          width="100%"
+          height="120px"
+          options={{
+            timeline: {
+              showRowLabels: false,
+              singleColor: '#808080',
+              barLabelStyle: {
+                fontSize: 20,
+              },
+            },
+            hAxis: {
+              minValue: getStartDateOfInterest(selectedPeriod),
+              maxValue: getEndDateOfInterest(selectedPeriod),
+            },
+            tooltip: { html: true },
+            avoidOverlappingGridLines: false,
+          }}
+        ></CustomOfflineChart>
+      )}
+      <Flex
+        direction={'row'}
+        justify={'between'}
+        style={{
+          containerType: 'inline-size',
+        }}
+        mt={'-4'}
+      >
+        {lastUpdatedDate && (
+          <SubText>
+            Last Updated <b>{formatDate(lastUpdatedDate, 'full')}</b>
+          </SubText>
+        )}
+        <SubText>
+          Total Duration <b>{formatTime(totalOfflineDuration, false)}</b>
+        </SubText>
+      </Flex>
+    </TimeLineWrapper>
+  );
+}
+
 const BulletPoint = styled.li`
   font-size: 14px;
 `;
@@ -341,6 +472,53 @@ function HistoricDischarges({ company, locationName }: { company: string; locati
       </Blockquote>
 
       <Text size={'2'} mb={'2'}></Text>
+      <Heading as="h4" size="2">
+        Want to help? You can:
+      </Heading>
+      <ul>
+        <BulletPoint>
+          <Text size={'2'}>Contact {company} to request data transparency</Text>
+        </BulletPoint>
+        <BulletPoint>
+          <Link href="https://writetothem.com" size={'2'}>
+            Tell your local MP why this data matters to you
+          </Link>
+        </BulletPoint>
+        <BulletPoint>
+          <Link href="https://theconversation.com/water-companies-now-have-to-release-live-sewage-spill-data-heres-why-more-transparency-is-the-key-to-cleaner-rivers-239444">
+            Learn more about the importance of open environmental data
+          </Link>
+        </BulletPoint>
+      </ul>
+    </>
+  );
+}
+
+export function HistoricOfflinePeriods({
+  company,
+  locationName,
+}: {
+  company: string;
+  locationName: string;
+}) {
+  if (company === 'Thames Water') {
+    return <OfflineTimeline locationName={locationName} />;
+  }
+
+  const message =
+    company === 'Southern Water'
+      ? `${company} provides live historical sewage spill data on their <a href="https://www.southernwater.co.uk/our-region/clean-rivers-and-seas-task-force/rivers-and-seas-watch/" target="_blank" rel="noopener noreferrer">website</a> but does not make it available via an API for third-party applications. 🔒`
+      : `${company} has chosen not to share live historical sewage spill data with the public. 🙄`;
+
+  return (
+    <>
+      <Blockquote mb={'2'} size={'2'}>
+        <span dangerouslySetInnerHTML={{ __html: message }} />
+        <br />
+        Find information from last year at:{' '}
+        <Link href="https://top-of-the-poops.org">top-of-the-poops.org</Link>
+      </Blockquote>
+
       <Heading as="h4" size="2">
         Want to help? You can:
       </Heading>
