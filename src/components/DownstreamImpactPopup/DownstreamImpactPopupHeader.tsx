@@ -24,7 +24,7 @@ export function DownstreamImpactPopupHeader({
         </Heading>
         <Text size={'2'}>
           <Em>
-            Downstream Impact at ({lat}, {lon})
+            Downstream impact at ({lat}, {lon})
           </Em>
         </Text>
       </div>

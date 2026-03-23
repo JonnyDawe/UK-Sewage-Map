@@ -130,8 +130,8 @@ export function DownstreamImpactPopupBody({
                   )}
                 </ScrollArea>
                 <Text size="1" color="gray" mt="2" as="p">
-                  These are the names/permits of CSOs upstream of this point that have spilled in
-                  the last 48 hours.
+                  These are the names/IDs of CSOs upstream of this point that have spilled in the
+                  last 48 hours.
                 </Text>
               </DataCardWrapper>
             </Tabs.Content>
