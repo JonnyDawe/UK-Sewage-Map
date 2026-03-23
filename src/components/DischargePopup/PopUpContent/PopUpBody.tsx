@@ -100,7 +100,7 @@ export function PopUpBody({
         <Tabs.Root defaultValue="latest" aria-label="Choose which information to see:">
           <Tabs.List>
             <Tabs.Trigger value="latest">Latest</Tabs.Trigger>
-            <Tabs.Trigger value="history">History</Tabs.Trigger>
+            <Tabs.Trigger value="history">Discharge History</Tabs.Trigger>
             <Tabs.Trigger value="offline">Offline History</Tabs.Trigger>
           </Tabs.List>
           <Box pt={'3'}>

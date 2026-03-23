@@ -41,4 +41,5 @@ export enum DischargeHistoryPeriod {
   StartOf2023,
   StartOf2024,
   StartOf2025,
+  StartOfCurrentYear,
 }
