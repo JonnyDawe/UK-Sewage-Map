@@ -10,7 +10,6 @@ import { DownstreamImpactProperties } from './types';
 const BodyWrapper = styled.div`
   position: relative;
   overflow: hidden;
-  max-width: 280px;
 `;
 
 const BackgroundWave = styled(Wave)`
@@ -56,16 +55,6 @@ const StatRow = styled.div`
   gap: 8px;
 `;
 
-const CsoList = styled.ul`
-  margin: 4px 0 0;
-  padding-left: 16px;
-  list-style-type: disc;
-`;
-
-const CsoListItem = styled.li`
-  font-size: var(--font-size-2);
-`;
-
 type DownstreamImpactPopupBodyProps = DownstreamImpactProperties;
 
 export function DownstreamImpactPopupBody({
@@ -77,6 +66,16 @@ export function DownstreamImpactPopupBody({
 
   return (
     <BodyWrapper>
+      <BackgroundWave
+        fill="var(--wave-brown)"
+        paused={prefersReducedMotion}
+        options={{
+          height: 30,
+          amplitude: 20,
+          speed: 0.1,
+          points: 6,
+        }}
+      />
       <BackgroundWave
         fill="var(--wave-blue)"
         paused={prefersReducedMotion}
@@ -91,7 +90,7 @@ export function DownstreamImpactPopupBody({
         <Tabs.Root defaultValue="summary" aria-label="Choose which information to see:">
           <Tabs.List>
             <Tabs.Trigger value="summary">Summary</Tabs.Trigger>
-            <Tabs.Trigger value="sources">Upstream Sources</Tabs.Trigger>
+            <Tabs.Trigger value="spills">Upstream Spills</Tabs.Trigger>
           </Tabs.List>
           <Box pt={'3'}>
             <Tabs.Content value="summary">
@@ -117,21 +116,23 @@ export function DownstreamImpactPopupBody({
                 </Text>
               </DataCardWrapper>
             </Tabs.Content>
-            <Tabs.Content value="sources">
+            <Tabs.Content value="spills">
               <DataCardWrapper>
                 <ScrollArea type="auto" scrollbars="vertical" style={{ maxHeight: 160 }}>
                   {CSOs.length > 0 ? (
-                    <CsoList>
-                      {CSOs.map((name, index) => (
-                        <CsoListItem key={`${index}-${name}`}>{name}</CsoListItem>
-                      ))}
-                    </CsoList>
+                    <Text size="2" as="p">
+                      {CSOs.join(', ')}
+                    </Text>
                   ) : (
-                    <Text size="2" color="gray">
-                      No upstream sources recorded.
+                    <Text size="2" color="gray" as="p">
+                      No upstream spills recorded.
                     </Text>
                   )}
                 </ScrollArea>
+                <Text size="1" color="gray" mt="2" as="p">
+                  These are the names/permits of CSOs upstream of this point that have spilled in
+                  the last 48 hours.
+                </Text>
               </DataCardWrapper>
             </Tabs.Content>
           </Box>

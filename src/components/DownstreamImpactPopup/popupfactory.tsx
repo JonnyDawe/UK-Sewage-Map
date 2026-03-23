@@ -19,11 +19,28 @@ function getPropertiesFromGraphic(graphic: __esri.Graphic): DownstreamImpactProp
   const rawCSOs = attrs['CSOs'];
   if (Array.isArray(rawCSOs)) {
     CSOs = rawCSOs as string[];
-  } else if (typeof rawCSOs === 'string') {
+  } else if (typeof rawCSOs === 'string' && rawCSOs.trim().length > 0) {
     try {
-      CSOs = JSON.parse(rawCSOs) as string[];
+      const parsed = JSON.parse(rawCSOs) as unknown;
+      if (Array.isArray(parsed)) {
+        CSOs = parsed as string[];
+      }
     } catch {
-      CSOs = [];
+      // ArcGIS may serialise Python-style lists with single quotes; normalise and retry
+      try {
+        const normalised = rawCSOs.replace(/'/g, '"');
+        const parsed = JSON.parse(normalised) as unknown;
+        if (Array.isArray(parsed)) {
+          CSOs = parsed as string[];
+        }
+      } catch {
+        // Fall back to treating the whole string as a comma-separated list
+        CSOs = rawCSOs
+          .replace(/^\[|\]$/g, '')
+          .split(',')
+          .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
+          .filter(Boolean);
+      }
     }
   }
 
