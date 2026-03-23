@@ -1,4 +1,5 @@
 import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
+import Field from '@arcgis/core/layers/support/Field';
 import EsriMap from '@arcgis/core/Map';
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
@@ -19,6 +20,17 @@ const transparentPointRenderer = new SimpleRenderer({
     },
   }),
 });
+
+// Explicitly declare fields so ArcGIS includes the array-type CSOs property.
+// Without this, GeoJSONLayer's schema inference silently drops array-valued fields.
+// ArcGIS feature-layer fields do not support array types, so CSOs is declared as
+// 'string' — ArcGIS will serialize the JSON array to a string on ingest, and
+// getPropertiesFromGraphic() in popupfactory.tsx deserializes it back via JSON.parse().
+const downstreamImpactFields = [
+  new Field({ name: 'CSOs', alias: 'CSOs', type: 'string' }),
+  new Field({ name: 'number_upstream_CSOs', alias: 'number_upstream_CSOs', type: 'double' }),
+  new Field({ name: 'number_CSOs_per_km2', alias: 'number_CSOs_per_km2', type: 'double' }),
+];
 
 export class AddDownstreamImpactCommand implements MapCommand {
   private mapLayers: Array<{ layer: __esri.GeoJSONLayer; companyName: string }> = [];
@@ -45,6 +57,7 @@ export class AddDownstreamImpactCommand implements MapCommand {
         title: this.generateLayerName(companyName),
         popupTemplate: createDownstreamImpactPopupTemplate(companyName),
         popupEnabled: true,
+        fields: downstreamImpactFields,
         outFields: ['*'],
       }),
       companyName,
