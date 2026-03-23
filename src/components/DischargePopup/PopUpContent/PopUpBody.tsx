@@ -6,9 +6,7 @@ import { usePrefersReducedMotion } from '../../../lib/hooks/usePrefersReducedMot
 import { AlertStatus, DischargeInterval } from '../../../utils/discharge/types';
 import Tabs from '../../common/Tabs/Tabs';
 import { DischargeInfoCard } from '../DischargeInfoCard/DischargeInfoCard';
-import HistoricDischarges, {
-  HistoricOfflinePeriods,
-} from '../DischargeTimeline/DischargeTimeline';
+import HistoricDischarges, { HistoricOfflinePeriods } from '../DischargeTimeline/DischargeTimeline';
 
 const ContentWrapper = styled(Box)`
   width: 100%;

@@ -1,0 +1,62 @@
+import {
+  aj as m,
+  A as a,
+  B as y,
+  R as d,
+  en as f,
+  ep as g,
+  eo as v,
+  P as j,
+  ih as w,
+  a8 as S,
+  e4 as $,
+} from './index.lazy-BHTpPf8X.js';
+import { d as h } from './Association-C7QT_jUz.js';
+import './index-DqxZnyqH.js';
+let n = class extends m {
+  constructor(t) {
+    super(t), (this.associations = []);
+  }
+};
+a([y({ type: [h], json: { write: !0 } })], n.prototype, 'associations', void 0),
+  (n = a([d('esri.rest.networks.support.QueryAssociationsResult')], n));
+const A = n;
+function I(s) {
+  const { returnDeletes: t, elements: r, gdbVersion: o, moment: i } = s.toJSON();
+  return {
+    returnDeletes: t,
+    elements: JSON.stringify(
+      r.map((e) => ({
+        globalId: e.globalId,
+        networkSourceId: e.networkSourceId,
+        terminalId: e.terminalId,
+      })),
+    ),
+    types: JSON.stringify(s.types.map((e) => $.toJSON(e))).replaceAll(
+      '"connectivity"',
+      '"junctionJunctionConnectivity"',
+    ),
+    gdbVersion: o,
+    moment: i,
+  };
+}
+async function P(s, t, r) {
+  const o = f(s),
+    i = { ...I(t), f: 'json' },
+    e = g({ ...o.query, ...i }),
+    c = v(e, { ...r, method: 'post' }),
+    p = `${o.path}/associations/query`,
+    { data: u } = await j(p, c),
+    l = A.fromJSON(u);
+  return (
+    t.types.includes('connectivity') &&
+      w(S.getLogger('esri/rest/networks/support/QueryAssociationsParameters'), 'types', {
+        replacement: "Please use 'junction-junction-connectivity' instead of 'connectivity'.",
+        see: 'https://developers.arcgis.com/javascript/latest/api-reference/esri-rest-networks-support-QueryAssociationsParameters.html#types',
+        version: '4.29',
+        warnOnce: !0,
+      }),
+    l
+  );
+}
+export { P as queryAssociations };

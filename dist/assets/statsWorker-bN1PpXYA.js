@@ -1,0 +1,157 @@
+import { b as u, x as c, w as v } from './utils-Ca511slb.js';
+import {
+  E as z,
+  P as T,
+  U as y,
+  f as I,
+  p as x,
+  C as V,
+  k as w,
+  $ as F,
+  d as P,
+} from './utils-qS_J3TRF.js';
+import './index.lazy-BHTpPf8X.js';
+import './index-DqxZnyqH.js';
+import './quantizationUtils-DsF8tesB.js';
+import './ClassBreaksDefinition-yFyTg9cf.js';
+async function h(l) {
+  const { attribute: i, features: s } = l,
+    {
+      normalizationType: a,
+      normalizationField: e,
+      minValue: t,
+      maxValue: o,
+      fieldType: n,
+      outStatisticTypes: r,
+    } = i,
+    m = await u(
+      {
+        field: i.field,
+        valueExpression: i.valueExpression,
+        normalizationType: a,
+        normalizationField: e,
+        normalizationTotal: i.normalizationTotal,
+        viewInfoParams: i.viewInfoParams,
+        timeZone: i.timeZone,
+        fieldInfos: i.fieldInfos,
+      },
+      s,
+    ),
+    f = P({ normalizationType: a, normalizationField: e, minValue: t, maxValue: o }),
+    d = { value: 0.5, fieldType: n },
+    p =
+      n === 'esriFieldTypeString'
+        ? I({ values: m, supportsNullCount: f, percentileParams: d, outStatisticTypes: r })
+        : x({
+            values: m,
+            minValue: t,
+            maxValue: o,
+            useSampleStdDev: !a,
+            supportsNullCount: f,
+            percentileParams: d,
+            outStatisticTypes: r,
+          });
+  return V(p, r, n === 'esriFieldTypeDate');
+}
+async function $(l) {
+  const { attribute: i, features: s } = l,
+    a = await u(
+      {
+        field: i.field,
+        field2: i.field2,
+        field3: i.field3,
+        fieldDelimiter: i.fieldDelimiter,
+        valueExpression: i.valueExpression,
+        viewInfoParams: i.viewInfoParams,
+        timeZone: i.timeZone,
+        fieldInfos: i.fieldInfos,
+      },
+      s,
+      !1,
+    ),
+    e = w(a);
+  return F(e, i.domains, i.returnAllCodedValues, i.fieldDelimiter);
+}
+async function M(l) {
+  const { attribute: i, features: s } = l,
+    {
+      field: a,
+      normalizationType: e,
+      normalizationField: t,
+      normalizationTotal: o,
+      classificationMethod: n,
+    } = i,
+    r = await u(
+      {
+        field: a,
+        valueExpression: i.valueExpression,
+        normalizationType: e,
+        normalizationField: t,
+        normalizationTotal: o,
+        viewInfoParams: i.viewInfoParams,
+        timeZone: i.timeZone,
+        fieldInfos: i.fieldInfos,
+      },
+      s,
+    ),
+    m = z(r, {
+      field: a,
+      normalizationType: e,
+      normalizationField: t,
+      normalizationTotal: o,
+      classificationMethod: n,
+      standardDeviationInterval: i.standardDeviationInterval,
+      numClasses: i.numClasses,
+      minValue: i.minValue,
+      maxValue: i.maxValue,
+    });
+  return T(m, n);
+}
+async function B(l) {
+  const { attribute: i, features: s } = l,
+    {
+      field: a,
+      normalizationType: e,
+      normalizationField: t,
+      normalizationTotal: o,
+      classificationMethod: n,
+    } = i,
+    r = await u(
+      {
+        field: a,
+        valueExpression: i.valueExpression,
+        normalizationType: e,
+        normalizationField: t,
+        normalizationTotal: o,
+        viewInfoParams: i.viewInfoParams,
+        timeZone: i.timeZone,
+        fieldInfos: i.fieldInfos,
+      },
+      s,
+    );
+  return y(r, {
+    field: a,
+    normalizationType: e,
+    normalizationField: t,
+    normalizationTotal: o,
+    classificationMethod: n,
+    standardDeviationInterval: i.standardDeviationInterval,
+    numBins: i.numBins,
+    minValue: i.minValue,
+    maxValue: i.maxValue,
+  });
+}
+async function g(l) {
+  const { attribute: i, features: s } = l,
+    { field: a, radius: e, transform: t, spatialReference: o } = i,
+    n = i.size ?? [0, 0],
+    r = c(s ?? [], t, o, n);
+  return v(r, e ?? void 0, a, n[0], n[1]);
+}
+export {
+  M as classBreaks,
+  g as heatmapStatistics,
+  B as histogram,
+  h as summaryStatistics,
+  $ as uniqueValues,
+};

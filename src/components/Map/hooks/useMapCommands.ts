@@ -7,6 +7,7 @@ import { MapCommand } from '@/lib/arcgis/typings/commandtypes';
 import { useCallbackRef } from '@/lib/hooks/useCallbackRef';
 
 import { AddDischargeSourcesCommand } from '../commands/AddDischargeSources/AddDischargeSourcesCommand';
+import { AddDownstreamImpactCommand } from '../commands/AddDownstreamImpact/AddDownstreamImpactCommand';
 import { AddRiverDischargeCommand } from '../commands/AddRiverDischarge/AddRiverDischargeCommand';
 import { AddTidalPolygonCommand } from '../commands/AddTidalPolygons/AddTidalPolygonCommand';
 import { SetupLayerManagerControlCommand } from '../commands/SetupLayerManagerControlCommand';
@@ -38,6 +39,7 @@ export function useMapCommands({
       new SetBasemapCommand(theme.current ?? 'light'),
       new AddTidalPolygonCommand(),
       new AddRiverDischargeCommand(layerManagerActor),
+      new AddDownstreamImpactCommand(layerManagerActor),
       new AddDischargeSourcesCommand(
         setPathname,
         layerManagerActor,
