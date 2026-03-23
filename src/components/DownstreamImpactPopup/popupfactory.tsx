@@ -1,5 +1,6 @@
 import '@radix-ui/themes/styles.css';
 
+import Point from '@arcgis/core/geometry/Point';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
 import React from 'react';
 import { flushSync } from 'react-dom';
@@ -30,6 +31,17 @@ function getPropertiesFromGraphic(graphic: __esri.Graphic): DownstreamImpactProp
     CSOs,
     number_upstream_CSOs: Number(attrs['number_upstream_CSOs'] ?? 0),
     number_CSOs_per_km2: Number(attrs['number_CSOs_per_km2'] ?? 0),
+  };
+}
+
+function getCoordinatesFromGraphic(graphic: __esri.Graphic): {
+  longitude: number;
+  latitude: number;
+} {
+  const point = graphic.geometry as Point | null;
+  return {
+    longitude: point?.longitude ?? 0,
+    latitude: point?.latitude ?? 0,
   };
 }
 
@@ -64,9 +76,10 @@ function createHTMLContentFn() {
 }
 
 function createTitleFn(companyName: string) {
-  return function () {
+  return function ({ graphic }: { graphic: __esri.Graphic }) {
     const container = document.createElement('div');
     const root = createRoot(container);
+    const { longitude, latitude } = getCoordinatesFromGraphic(graphic);
 
     flushSync(() => {
       root.render(
@@ -80,7 +93,11 @@ function createTitleFn(companyName: string) {
             isChild={true}
           >
             <AppTheme>
-              <DownstreamImpactPopupHeader company={companyName} />
+              <DownstreamImpactPopupHeader
+                company={companyName}
+                longitude={longitude}
+                latitude={latitude}
+              />
             </AppTheme>
           </AppThemeProvider>
         </React.StrictMode>,

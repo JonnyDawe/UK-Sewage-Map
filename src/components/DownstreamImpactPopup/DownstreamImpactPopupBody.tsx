@@ -1,14 +1,16 @@
 import styled from '@emotion/styled';
-import { Box, Heading, ScrollArea, Text } from '@radix-ui/themes';
+import { Box, ScrollArea, Text } from '@radix-ui/themes';
 import Wave from 'react-wavify';
 
 import { usePrefersReducedMotion } from '../../lib/hooks/usePrefersReducedMotion';
+import Tabs from '../common/Tabs/Tabs';
 import { Em } from '../common/Text';
 import { DownstreamImpactProperties } from './types';
 
 const BodyWrapper = styled.div`
   position: relative;
   overflow: hidden;
+  max-width: 280px;
 `;
 
 const BackgroundWave = styled(Wave)`
@@ -51,6 +53,7 @@ const StatRow = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 2px 0;
+  gap: 8px;
 `;
 
 const CsoList = styled.ul`
@@ -85,38 +88,54 @@ export function DownstreamImpactPopupBody({
         }}
       />
       <ContentWrapper>
-        <DataCardWrapper>
-          <StatRow>
-            <Text size="2">
-              <Em>Upstream CSOs:</Em>
-            </Text>
-            <Text size="3" weight="bold">
-              {number_upstream_CSOs}
-            </Text>
-          </StatRow>
-          <StatRow>
-            <Text size="2">
-              <Em>CSOs per km²:</Em>
-            </Text>
-            <Text size="3" weight="bold">
-              {parseFloat(number_CSOs_per_km2.toPrecision(3)).toString()}
-            </Text>
-          </StatRow>
-        </DataCardWrapper>
-        {CSOs.length > 0 && (
-          <DataCardWrapper>
-            <Heading size="2" mb="1">
-              Upstream CSO sources
-            </Heading>
-            <ScrollArea type="auto" scrollbars="vertical" style={{ maxHeight: 160 }}>
-              <CsoList>
-                {CSOs.map((name, index) => (
-                  <CsoListItem key={`${index}-${name}`}>{name}</CsoListItem>
-                ))}
-              </CsoList>
-            </ScrollArea>
-          </DataCardWrapper>
-        )}
+        <Tabs.Root defaultValue="summary" aria-label="Choose which information to see:">
+          <Tabs.List>
+            <Tabs.Trigger value="summary">Summary</Tabs.Trigger>
+            <Tabs.Trigger value="sources">Upstream Sources</Tabs.Trigger>
+          </Tabs.List>
+          <Box pt={'3'}>
+            <Tabs.Content value="summary">
+              <DataCardWrapper>
+                <StatRow>
+                  <Text size="2">
+                    <Em>Number of upstream spills:</Em>
+                  </Text>
+                  <Text size="3" weight="bold">
+                    {number_upstream_CSOs}
+                  </Text>
+                </StatRow>
+                <StatRow>
+                  <Text size="2">
+                    <Em>Number of upstream spills per km²:</Em>
+                  </Text>
+                  <Text size="3" weight="bold">
+                    {parseFloat(number_CSOs_per_km2.toPrecision(3)).toString()}
+                  </Text>
+                </StatRow>
+                <Text size="1" color="gray" mt="2" as="p">
+                  Values include all spills that have occurred in the previous 48 hours
+                </Text>
+              </DataCardWrapper>
+            </Tabs.Content>
+            <Tabs.Content value="sources">
+              <DataCardWrapper>
+                <ScrollArea type="auto" scrollbars="vertical" style={{ maxHeight: 160 }}>
+                  {CSOs.length > 0 ? (
+                    <CsoList>
+                      {CSOs.map((name, index) => (
+                        <CsoListItem key={`${index}-${name}`}>{name}</CsoListItem>
+                      ))}
+                    </CsoList>
+                  ) : (
+                    <Text size="2" color="gray">
+                      No upstream sources recorded.
+                    </Text>
+                  )}
+                </ScrollArea>
+              </DataCardWrapper>
+            </Tabs.Content>
+          </Box>
+        </Tabs.Root>
       </ContentWrapper>
     </BodyWrapper>
   );
