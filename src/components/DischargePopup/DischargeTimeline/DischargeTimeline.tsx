@@ -89,6 +89,8 @@ function getStartDateOfInterest(period: DischargeHistoryPeriod) {
       return new Date(2024, 0, 1);
     case DischargeHistoryPeriod.StartOf2025:
       return new Date(2025, 0, 1);
+    case DischargeHistoryPeriod.StartOfCurrentYear:
+      return new Date(new Date().getFullYear(), 0, 1);
     default:
       return undefined;
   }
@@ -101,6 +103,8 @@ function getEndDateOfInterest(period: DischargeHistoryPeriod) {
     case DischargeHistoryPeriod.StartOf2024:
       return new Date(2024, 11, 31, 23, 59, 59);
     case DischargeHistoryPeriod.StartOf2025:
+      return new Date(2025, 11, 31, 23, 59, 59);
+    case DischargeHistoryPeriod.StartOfCurrentYear:
       return new Date();
     default:
       return new Date();
@@ -255,7 +259,8 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
             { value: DischargeHistoryPeriod.Last12Months, label: 'Last 12 months' },
             { value: DischargeHistoryPeriod.StartOf2023, label: 'Entirety of 2023' },
             { value: DischargeHistoryPeriod.StartOf2024, label: 'Entirety of 2024' },
-            { value: DischargeHistoryPeriod.StartOf2025, label: 'Start of the Year' },
+            { value: DischargeHistoryPeriod.StartOf2025, label: 'Entirety of 2025' },
+            { value: DischargeHistoryPeriod.StartOfCurrentYear, label: `Start of ${new Date().getFullYear()}` },
           ]}
           value={selectedPeriod}
           onChange={(selectedPeriod) => {
