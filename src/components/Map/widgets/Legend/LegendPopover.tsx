@@ -19,9 +19,11 @@ const LegendIcon = styled.img`
 
 const DashedLine = styled.div`
   width: 24px;
-  height: 4px;
-  border-top: 4px dashed #733f2e;
+  height: 6px;
+  background-color: #aa5d44;
+  border-top: 2px dashed #733f2e;
   flex-shrink: 0;
+  border-radius: 2px;
 `;
 
 function LegendItem({ icon, label }: { icon: string; label: string }) {
