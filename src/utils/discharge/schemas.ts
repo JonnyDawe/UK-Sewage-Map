@@ -47,6 +47,56 @@ export const validateWaterCompanyDischargeAttributes = (
   return result.data;
 };
 
+// Scottish Water OVERFLOW_STATUS_ID values:
+// 13 - Overflowing, 14 - Recent Overflow, 15 - No Overflows, 16 - No Data Available
+
+export const scottishWaterApiResultSchema = z.object({
+  ASSET_ID: z.string().max(256).nullable(),
+  ASSET_NAME: z.string().max(256).nullable(),
+  OVERFLOW_STATUS_ID: z.number().nullable(),
+  RECEIVING_WATER: z.string().max(256).nullable(),
+  OVERFLOW_START_DATETIME: z.string().nullable(),
+  OVERFLOW_END_DATETIME: z.string().nullable(),
+  DISCHARGE_OVERFLOW_LOCATION_LATITUDE: z.number(),
+  DISCHARGE_OVERFLOW_LOCATION_LONGITUDE: z.number(),
+});
+
+export type ScottishWaterApiResult = z.infer<typeof scottishWaterApiResultSchema>;
+
+export const scottishWaterApiResponseSchema = z.object({
+  results: z.array(scottishWaterApiResultSchema),
+});
+
+export type ScottishWaterApiResponse = z.infer<typeof scottishWaterApiResponseSchema>;
+
+export const validateScottishWaterApiResponse = (
+  data: unknown,
+): ScottishWaterApiResponse | null => {
+  const result = scottishWaterApiResponseSchema.safeParse(data);
+  return result.success ? result.data : null;
+};
+
+// Schema for attributes stored on the in-memory FeatureLayer (dates converted to ms timestamps)
+export const scottishWaterDischargeAttributesSchema = z.object({
+  ASSET_ID: z.string().max(256).nullable(),
+  ASSET_NAME: z.string().max(256).nullable(),
+  OVERFLOW_STATUS_ID: z.number().nullable(),
+  RECEIVING_WATER: z.string().max(256).nullable(),
+  OVERFLOW_START_DATETIME: z.number().nullable(), // ms timestamp
+  OVERFLOW_END_DATETIME: z.number().nullable(), // ms timestamp
+});
+
+export type ScottishWaterDischargeAttributes = z.infer<
+  typeof scottishWaterDischargeAttributesSchema
+>;
+
+export const validateScottishWaterDischargeAttributes = (
+  attributes: unknown,
+): ScottishWaterDischargeAttributes | null => {
+  const result = scottishWaterDischargeAttributesSchema.safeParse(attributes);
+  return result.success ? result.data : null;
+};
+
 export const southWestWaterDischargeAttributesSchema = z.object({
   ID: z.string().max(256).nullable(),
   company: z.string().max(256).nullable(),

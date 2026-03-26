@@ -39,3 +39,18 @@ if (
 }
 return 999 // Unknown Status
 `;
+
+// Scottish Water OVERFLOW_STATUS_ID:
+// 13 = Overflowing, 14 = Recent Overflow, 15 = No Overflows, 16 = No Data Available
+export const scottishWaterAlertStatusSymbolArcade = `
+if ($feature.OVERFLOW_STATUS_ID == 13) {
+    return 3 // Discharging (Overflowing)
+} else if ($feature.OVERFLOW_STATUS_ID == 14) {
+    return 2 // Recent Discharge (Recent Overflow)
+} else if ($feature.OVERFLOW_STATUS_ID == 15) {
+    return 0 // Not Discharging (No Overflows)
+} else if ($feature.OVERFLOW_STATUS_ID == 16) {
+    return 1 // Offline (No Data Available)
+}
+return 999 // Unknown Status
+`;

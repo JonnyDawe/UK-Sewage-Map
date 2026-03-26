@@ -1,10 +1,23 @@
-export type ApiType = 'stream' | 'thames';
+export type ApiType = 'stream' | 'thames' | 'scottishwater';
 
-export type WaterCompanyConfig = {
+export type ArcGISWaterCompanyConfig = {
   apiLayerId: string;
   dischargeUrl: string;
-  apiType: ApiType;
+  apiType: Extract<ApiType, 'stream' | 'thames'>;
 };
+
+export type ScottishWaterCompanyConfig = {
+  apiType: Extract<ApiType, 'scottishwater'>;
+  apiUrl: string;
+};
+
+export type WaterCompanyConfig = ArcGISWaterCompanyConfig | ScottishWaterCompanyConfig;
+
+export function isArcGISWaterCompanyConfig(
+  config: WaterCompanyConfig,
+): config is ArcGISWaterCompanyConfig {
+  return config.apiType === 'stream' || config.apiType === 'thames';
+}
 
 export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
   'Northumbrian Water': {
@@ -61,4 +74,8 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
       'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/southwest/southwest_now_incl_48hrs.geojson',
     apiType: 'stream',
   },
-} as const;
+  'Scottish Water': {
+    apiType: 'scottishwater',
+    apiUrl: 'https://api.scottishwater.co.uk/overflow-event-monitoring/v1/near-real-time',
+  },
+};

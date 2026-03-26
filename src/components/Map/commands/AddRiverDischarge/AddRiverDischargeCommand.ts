@@ -4,7 +4,11 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 import LineSymbol from '@arcgis/core/symbols/LineSymbol';
 
-import { waterCompanyConfig } from '@/constants/sewagemapdata';
+import {
+  ArcGISWaterCompanyConfig,
+  isArcGISWaterCompanyConfig,
+  waterCompanyConfig,
+} from '@/constants/sewagemapdata';
 import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 
 import { SewageMapLayerManagerActor } from '../../layermanagement/types';
@@ -27,21 +31,25 @@ export class AddRiverDischargeCommand implements MapCommand {
     return `Downstream Discharge - ${company}`;
   }
   private initializeLayers(): void {
-    this.mapLayers = Object.entries(waterCompanyConfig).map(([companyName, config]) => ({
-      layer: new GeoJSONLayer({
-        url: config.dischargeUrl,
-        copyright: 'Sewage Map',
-        renderer: new SimpleRenderer({
-          symbol: new LineSymbol({
-            color: '#733f2e',
-            width: '6px',
+    this.mapLayers = Object.entries(waterCompanyConfig)
+      .filter((entry): entry is [string, ArcGISWaterCompanyConfig] =>
+        isArcGISWaterCompanyConfig(entry[1]),
+      )
+      .map(([companyName, config]) => ({
+        layer: new GeoJSONLayer({
+          url: config.dischargeUrl,
+          copyright: 'Sewage Map',
+          renderer: new SimpleRenderer({
+            symbol: new LineSymbol({
+              color: '#733f2e',
+              width: '6px',
+            }),
           }),
+          id: this.generateLayerId(companyName),
+          title: this.generateLayerName(companyName),
         }),
-        id: this.generateLayerId(companyName),
-        title: this.generateLayerName(companyName),
-      }),
-      companyName,
-    }));
+        companyName,
+      }));
   }
 
   private animateDischargeRenderer(

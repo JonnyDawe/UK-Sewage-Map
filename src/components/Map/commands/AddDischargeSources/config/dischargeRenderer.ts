@@ -9,6 +9,7 @@ import { ERRORICON, GREENTICKICONSMALL, POOICON, UNKNOWNICON } from '@/constants
 
 import {
   otherWaterAlertStatusSymbolArcade,
+  scottishWaterAlertStatusSymbolArcade,
   thamesWaterAlertStatusSymbolArcade,
 } from './dischargeSourceRendererArcade';
 
@@ -120,6 +121,16 @@ export const thamesWaterAlertStatusRenderer = new UniqueValueRenderer({
  */
 export const otherWaterAlertStatusRenderer = new UniqueValueRenderer({
   valueExpression: otherWaterAlertStatusSymbolArcade,
+  uniqueValueGroups,
+  visualVariables: [sizeVariable],
+});
+
+/**
+ * Renderer for Scottish Water discharge sources.
+ * Uses unique value rendering based on OVERFLOW_STATUS_ID with scale-based symbol sizing.
+ */
+export const scottishWaterAlertStatusRenderer = new UniqueValueRenderer({
+  valueExpression: scottishWaterAlertStatusSymbolArcade,
   uniqueValueGroups,
   visualVariables: [sizeVariable],
 });
