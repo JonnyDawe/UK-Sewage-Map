@@ -288,7 +288,10 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
             { value: DischargeHistoryPeriod.StartOf2023, label: 'Entirety of 2023' },
             { value: DischargeHistoryPeriod.StartOf2024, label: 'Entirety of 2024' },
             { value: DischargeHistoryPeriod.StartOf2025, label: 'Entirety of 2025' },
-            { value: DischargeHistoryPeriod.StartOfCurrentYear, label: `Start of ${new Date().getFullYear()}` },
+            {
+              value: DischargeHistoryPeriod.StartOfCurrentYear,
+              label: `Start of ${new Date().getFullYear()}`,
+            },
           ]}
           value={selectedPeriod}
           onChange={(selectedPeriod) => {
@@ -372,7 +375,11 @@ function OfflineTimeline({ locationName }: { locationName: string }) {
     return <p>Failed to load offline monitor data.</p>;
   }
 
-  const locationData = processDataForLocation(historicOfflineDataJSON, locationName, selectedPeriod);
+  const locationData = processDataForLocation(
+    historicOfflineDataJSON,
+    locationName,
+    selectedPeriod,
+  );
   const { dischargeChartData, totalDischarge: totalOfflineDuration } = locationData;
 
   const offlineStartDate = getDischargeDateObject(
@@ -391,7 +398,10 @@ function OfflineTimeline({ locationName }: { locationName: string }) {
             { value: DischargeHistoryPeriod.StartOf2023, label: 'Entirety of 2023' },
             { value: DischargeHistoryPeriod.StartOf2024, label: 'Entirety of 2024' },
             { value: DischargeHistoryPeriod.StartOf2025, label: 'Entirety of 2025' },
-            { value: DischargeHistoryPeriod.StartOfCurrentYear, label: `Start of ${new Date().getFullYear()}` },
+            {
+              value: DischargeHistoryPeriod.StartOfCurrentYear,
+              label: `Start of ${new Date().getFullYear()}`,
+            },
           ]}
           value={selectedPeriod}
           onChange={(selectedPeriod) => {
