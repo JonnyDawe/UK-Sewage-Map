@@ -50,15 +50,24 @@ export const validateWaterCompanyDischargeAttributes = (
 // Scottish Water OVERFLOW_STATUS_ID values:
 // 13 - Overflowing, 14 - Recent Overflow, 15 - No Overflows, 16 - No Data Available
 
+// The API may return empty strings for numeric fields; treat them as null before coercing.
+const emptyStringToNull = (val: unknown) => (val === '' ? null : val);
+
 export const scottishWaterApiResultSchema = z.object({
   ASSET_ID: z.string().max(256).nullable(),
   ASSET_NAME: z.string().max(256).nullable(),
-  OVERFLOW_STATUS_ID: z.coerce.number().nullable(),
+  OVERFLOW_STATUS_ID: z.preprocess(emptyStringToNull, z.coerce.number().nullable()),
   RECEIVING_WATER: z.string().max(256).nullable(),
   OVERFLOW_START_DATETIME: z.string().nullable(),
   OVERFLOW_END_DATETIME: z.string().nullable(),
-  DISCHARGE_OVERFLOW_LOCATION_LATITUDE: z.coerce.number().nullable(),
-  DISCHARGE_OVERFLOW_LOCATION_LONGITUDE: z.coerce.number().nullable(),
+  DISCHARGE_OVERFLOW_LOCATION_LATITUDE: z.preprocess(
+    emptyStringToNull,
+    z.coerce.number().nullable(),
+  ),
+  DISCHARGE_OVERFLOW_LOCATION_LONGITUDE: z.preprocess(
+    emptyStringToNull,
+    z.coerce.number().nullable(),
+  ),
 });
 
 export type ScottishWaterApiResult = z.infer<typeof scottishWaterApiResultSchema>;

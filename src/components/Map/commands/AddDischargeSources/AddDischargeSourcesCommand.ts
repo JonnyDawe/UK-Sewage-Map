@@ -101,77 +101,124 @@ export class AddDischargeSourcesCommand implements MapCommand {
 
   private async createScottishWaterLayer(): Promise<__esri.FeatureLayer | null> {
     const scottishWaterConfig = waterCompanyConfig['Scottish Water'];
-    if (!scottishWaterConfig || scottishWaterConfig.apiType !== 'scottishwater') return null;
-
-    try {
-      const response = await fetch(scottishWaterConfig.apiUrl);
-      const data: unknown = await response.json();
-
-      const validated = validateScottishWaterApiResponse(data);
-      if (!validated) {
-        console.error('Scottish Water API response did not match expected schema');
-        return null;
-      }
-
-      const graphics = validated.results
-        .filter(
-          (item) =>
-            item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE != null &&
-            item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE != null,
-        )
-        .map(
-          (item, index) =>
-            new Graphic({
-              geometry: new Point({
-                longitude: item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE,
-                latitude: item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE,
-                spatialReference: { wkid: 4326 },
-              }),
-              attributes: {
-                OBJECTID: index,
-                ASSET_ID: item.ASSET_ID,
-                ASSET_NAME: item.ASSET_NAME,
-                OVERFLOW_STATUS_ID: item.OVERFLOW_STATUS_ID,
-                RECEIVING_WATER: item.RECEIVING_WATER,
-                OVERFLOW_START_DATETIME: item.OVERFLOW_START_DATETIME
-                  ? new Date(item.OVERFLOW_START_DATETIME).getTime()
-                  : null,
-                OVERFLOW_END_DATETIME: item.OVERFLOW_END_DATETIME
-                  ? new Date(item.OVERFLOW_END_DATETIME).getTime()
-                  : null,
-              },
-            }),
-        );
-
-      return new FeatureLayer({
-        title: 'Scottish Water',
-        id: this.generateLayerId('Scottish Water'),
-        source: graphics,
-        objectIdField: 'OBJECTID',
-        fields: [
-          new Field({ name: 'OBJECTID', type: 'oid' }),
-          new Field({ name: 'ASSET_ID', type: 'string' }),
-          new Field({ name: 'ASSET_NAME', type: 'string' }),
-          new Field({ name: 'OVERFLOW_STATUS_ID', type: 'integer' }),
-          new Field({ name: 'RECEIVING_WATER', type: 'string' }),
-          new Field({ name: 'OVERFLOW_START_DATETIME', type: 'date' }),
-          new Field({ name: 'OVERFLOW_END_DATETIME', type: 'date' }),
-        ],
-        outFields: ['*'],
-        renderer: scottishWaterAlertStatusRenderer,
-        popupTemplate: dischargePopupTemplate,
-        popupEnabled: true,
-        orderBy: [
-          {
-            valueExpression: scottishWaterAlertStatusSymbolArcade,
-            order: 'descending',
-          },
-        ],
-      });
-    } catch (error) {
-      console.error('Failed to load Scottish Water data:', error);
+    if (!scottishWaterConfig || scottishWaterConfig.apiType !== 'scottishwater') {
+      console.warn('[ScottishWater] No config found or apiType is not "scottishwater"');
       return null;
     }
+
+    console.log(`[ScottishWater] Step 1: Fetching data from ${scottishWaterConfig.apiUrl}`);
+
+    let response: Response;
+    try {
+      response = await fetch(scottishWaterConfig.apiUrl);
+    } catch (fetchError) {
+      console.error(
+        '[ScottishWater] Step 1 FAILED: fetch() threw an error (likely CORS or network)',
+        fetchError,
+      );
+      return null;
+    }
+
+    console.log(`[ScottishWater] Step 2: HTTP ${response.status} ${response.statusText}`);
+    if (!response.ok) {
+      console.error(`[ScottishWater] Step 2 FAILED: non-OK HTTP status ${response.status}`);
+      return null;
+    }
+
+    let data: unknown;
+    try {
+      data = await response.json();
+    } catch (jsonError) {
+      console.error('[ScottishWater] Step 3 FAILED: could not parse response as JSON', jsonError);
+      return null;
+    }
+
+    console.log('[ScottishWater] Step 3: JSON parsed successfully; validating schema...');
+    const validated = validateScottishWaterApiResponse(data);
+    if (!validated) {
+      console.error(
+        '[ScottishWater] Step 3 FAILED: schema validation failed. First 500 chars of raw response:',
+        JSON.stringify(data).slice(0, 500),
+      );
+      return null;
+    }
+
+    console.log(`[ScottishWater] Step 4: ${validated.results.length} records from API`);
+
+    const withCoords = validated.results.filter(
+      (item) =>
+        item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE != null &&
+        item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE != null,
+    );
+    const withoutCoords = validated.results.length - withCoords.length;
+    console.log(
+      `[ScottishWater] Step 4: ${withCoords.length} records have coordinates, ${withoutCoords} dropped (null lat/lon)`,
+    );
+
+    if (withCoords.length === 0) {
+      console.warn(
+        '[ScottishWater] Step 4 FAILED: no records with valid coordinates — layer will not be added',
+      );
+      return null;
+    }
+
+    const graphics = withCoords.map(
+      (item, index) =>
+        new Graphic({
+          geometry: new Point({
+            longitude: item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE!,
+            latitude: item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE!,
+            spatialReference: { wkid: 4326 },
+          }),
+          attributes: {
+            OBJECTID: index,
+            ASSET_ID: item.ASSET_ID,
+            ASSET_NAME: item.ASSET_NAME,
+            OVERFLOW_STATUS_ID: item.OVERFLOW_STATUS_ID,
+            RECEIVING_WATER: item.RECEIVING_WATER,
+            OVERFLOW_START_DATETIME: item.OVERFLOW_START_DATETIME
+              ? new Date(item.OVERFLOW_START_DATETIME).getTime()
+              : null,
+            OVERFLOW_END_DATETIME: item.OVERFLOW_END_DATETIME
+              ? new Date(item.OVERFLOW_END_DATETIME).getTime()
+              : null,
+          },
+        }),
+    );
+
+    console.log('[ScottishWater] Step 5: Sample graphic attributes:', graphics[0]?.attributes);
+    console.log('[ScottishWater] Step 5: Building FeatureLayer with', graphics.length, 'graphics');
+
+    const layer = new FeatureLayer({
+      title: 'Scottish Water',
+      id: this.generateLayerId('Scottish Water'),
+      source: graphics,
+      geometryType: 'point',
+      spatialReference: { wkid: 4326 },
+      objectIdField: 'OBJECTID',
+      fields: [
+        new Field({ name: 'OBJECTID', type: 'oid' }),
+        new Field({ name: 'ASSET_ID', type: 'string' }),
+        new Field({ name: 'ASSET_NAME', type: 'string' }),
+        new Field({ name: 'OVERFLOW_STATUS_ID', type: 'integer' }),
+        new Field({ name: 'RECEIVING_WATER', type: 'string' }),
+        new Field({ name: 'OVERFLOW_START_DATETIME', type: 'date' }),
+        new Field({ name: 'OVERFLOW_END_DATETIME', type: 'date' }),
+      ],
+      outFields: ['*'],
+      renderer: scottishWaterAlertStatusRenderer,
+      popupTemplate: dischargePopupTemplate,
+      popupEnabled: true,
+      orderBy: [
+        {
+          valueExpression: scottishWaterAlertStatusSymbolArcade,
+          order: 'descending',
+        },
+      ],
+    });
+
+    console.log('[ScottishWater] Step 6: FeatureLayer created — adding to map');
+    return layer;
   }
 
   async executeOnMap(map: EsriMap): Promise<ViewCommand> {
@@ -211,6 +258,11 @@ export class AddDischargeSourcesCommand implements MapCommand {
           visible: 'inherit',
         },
       });
+      console.log('[ScottishWater] Step 7: Layer added to map and registered with layer manager');
+    } else {
+      console.warn(
+        '[ScottishWater] createScottishWaterLayer() returned null — no Scottish Water layer on map',
+      );
     }
 
     return {

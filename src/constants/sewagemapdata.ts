@@ -76,6 +76,6 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
   },
   'Scottish Water': {
     apiType: 'scottishwater',
-    apiUrl: 'https://api.scottishwater.co.uk/overflow-event-monitoring/v1/near-real-time',
+    apiUrl: '/api/scottish-water',
   },
 };

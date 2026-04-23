@@ -14,6 +14,15 @@ export default defineConfig({
     tsconfigPaths(),
     TanStackRouterVite(),
   ],
+  server: {
+    proxy: {
+      '/api/scottish-water': {
+        target: 'https://api.scottishwater.co.uk',
+        changeOrigin: true,
+        rewrite: () => '/overflow-event-monitoring/v1/near-real-time',
+      },
+    },
+  },
   test: {
     globals: true,
     setupFiles: './src/test/setup.tsx',
