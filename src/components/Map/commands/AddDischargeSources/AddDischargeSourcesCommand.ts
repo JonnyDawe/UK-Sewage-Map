@@ -146,7 +146,12 @@ export class AddDischargeSourcesCommand implements MapCommand {
     console.log(`[ScottishWater] Step 4: ${validated.results.length} records from API`);
 
     const withCoords = validated.results.filter(
-      (item) =>
+      (
+        item,
+      ): item is typeof item & {
+        DISCHARGE_OVERFLOW_LOCATION_LATITUDE: number;
+        DISCHARGE_OVERFLOW_LOCATION_LONGITUDE: number;
+      } =>
         item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE != null &&
         item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE != null,
     );
@@ -166,8 +171,8 @@ export class AddDischargeSourcesCommand implements MapCommand {
       (item, index) =>
         new Graphic({
           geometry: new Point({
-            longitude: item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE!,
-            latitude: item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE!,
+            longitude: item.DISCHARGE_OVERFLOW_LOCATION_LONGITUDE,
+            latitude: item.DISCHARGE_OVERFLOW_LOCATION_LATITUDE,
             spatialReference: { wkid: 4326 },
           }),
           attributes: {

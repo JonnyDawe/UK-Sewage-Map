@@ -16,7 +16,8 @@ export default async function handler(): Promise<Response> {
         'Cache-Control': 'public, max-age=60, s-maxage=60',
       },
     });
-  } catch {
+  } catch (err) {
+    console.error('[ScottishWater] Proxy fetch failed:', err);
     return new Response(JSON.stringify({ error: 'Failed to fetch data from Scottish Water API' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
