@@ -4,11 +4,7 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 import LineSymbol from '@arcgis/core/symbols/LineSymbol';
 
-import {
-  ArcGISWaterCompanyConfig,
-  isArcGISWaterCompanyConfig,
-  waterCompanyConfig,
-} from '@/constants/sewagemapdata';
+import { WaterCompanyConfig, waterCompanyConfig } from '@/constants/sewagemapdata';
 import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 
 import { SewageMapLayerManagerActor } from '../../layermanagement/types';
@@ -32,8 +28,9 @@ export class AddRiverDischargeCommand implements MapCommand {
   }
   private initializeLayers(): void {
     this.mapLayers = Object.entries(waterCompanyConfig)
-      .filter((entry): entry is [string, ArcGISWaterCompanyConfig] =>
-        isArcGISWaterCompanyConfig(entry[1]),
+      .filter(
+        (entry): entry is [string, WaterCompanyConfig & { dischargeUrl: string }] =>
+          'dischargeUrl' in entry[1],
       )
       .map(([companyName, config]) => ({
         layer: new GeoJSONLayer({
