@@ -6,7 +6,10 @@ import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
 
 import { createDownstreamImpactPopupTemplate } from '@/components/DownstreamImpactPopup/popupfactory';
 import { ArcGISWaterCompanyConfig, isArcGISWaterCompanyConfig, waterCompanyConfig } from '@/constants/sewagemapdata';
-import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
+import {
+  MapCommand,
+  ViewCommand,
+} from '@/lib/arcgis/typings/commandtypes';
 
 import { SewageMapLayerManagerActor } from '../../layermanagement/types';
 
