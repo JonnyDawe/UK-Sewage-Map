@@ -57,8 +57,8 @@ export const scottishWaterApiResultSchema = z.object({
   RECEIVING_WATER: z.string().max(256).nullable(),
   OVERFLOW_START_DATETIME: z.string().nullable(),
   OVERFLOW_END_DATETIME: z.string().nullable(),
-  DISCHARGE_OVERFLOW_LOCATION_LATITUDE: z.number(),
-  DISCHARGE_OVERFLOW_LOCATION_LONGITUDE: z.number(),
+  DISCHARGE_OVERFLOW_LOCATION_LATITUDE: z.number().nullable(),
+  DISCHARGE_OVERFLOW_LOCATION_LONGITUDE: z.number().nullable(),
 });
 
 export type ScottishWaterApiResult = z.infer<typeof scottishWaterApiResultSchema>;
