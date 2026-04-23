@@ -19,7 +19,11 @@ export default defineConfig({
       '/api/scottish-water': {
         target: 'https://api.scottishwater.co.uk',
         changeOrigin: true,
-        rewrite: () => '/overflow-event-monitoring/v1/near-real-time',
+        rewrite: (path) =>
+          path.replace(
+            /^\/api\/scottish-water/,
+            '/overflow-event-monitoring/v1/near-real-time',
+          ),
       },
     },
   },
