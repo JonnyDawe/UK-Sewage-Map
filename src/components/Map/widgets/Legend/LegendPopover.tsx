@@ -17,10 +17,28 @@ const LegendIcon = styled.img`
   height: 24px;
 `;
 
+const DashedLine = styled.div`
+  width: 24px;
+  height: 6px;
+  background-color: #aa5d44;
+  border-top: 2px dashed #733f2e;
+  flex-shrink: 0;
+  border-radius: 2px;
+`;
+
 function LegendItem({ icon, label }: { icon: string; label: string }) {
   return (
     <Flex direction={'row'} gap={'2'} align={'center'}>
       <LegendIcon src={icon} alt={label} />
+      <Text>{label}</Text>
+    </Flex>
+  );
+}
+
+function LegendLineItem({ label }: { label: string }) {
+  return (
+    <Flex direction={'row'} gap={'2'} align={'center'}>
+      <DashedLine aria-hidden="true" />
       <Text>{label}</Text>
     </Flex>
   );
@@ -70,7 +88,11 @@ const LegendPopover = () => {
                 <LegendItem icon={ERRORICON} label="Recent Discharge" />
                 <LegendItem icon={GREENTICKICON} label="Not Discharging" />
                 <LegendItem icon={UNKNOWNICON} label="Offline" />
+                <LegendLineItem label="Downstream of Spill" />
               </Flex>
+              <Text size={'1'} color={'gray'} as={'p'} style={{ fontStyle: 'italic' }}>
+                Click any feature for more info
+              </Text>
             </Flex>
             <Popover.CloseCornerButton aria-label="Close">
               <SvgIcon name="icon-x" size={24}></SvgIcon>
