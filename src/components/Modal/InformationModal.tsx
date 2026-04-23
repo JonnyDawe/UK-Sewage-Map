@@ -84,9 +84,16 @@ const InformationModal = () => {
                         Storm Overflow Hub
                       </Link>{' '}
                       maintained by Water UK. Storm overflows release untreated, diluted sewage into
-                      the environment. Currently, only Thames Water provide an API to historical
-                      sewage spill data. We wrote an article about why water companies need to be
-                      more transparent with environmental models and data in{' '}
+                      the environment.{' '}
+                      <Link href="https://data.thameswater.co.uk/s/">Thames Water</Link> provide an
+                      API to historical sewage spill data. Near real-time overflow data for Scotland
+                      is sourced directly from{' '}
+                      <Link href="https://www.scottishwater.co.uk/Help-and-Resources/Open-Data/Overflow-Map-Data">
+                        Scottish Water
+                      </Link>{' '}
+                      (data used under open licence; Scottish Water must be cited as the source). We
+                      wrote an article about why water companies need to be more transparent with
+                      environmental models and data in{' '}
                       <Link href="https://theconversation.com/water-companies-now-have-to-release-live-sewage-spill-data-heres-why-more-transparency-is-the-key-to-cleaner-rivers-239444">
                         The Conversation.
                       </Link>
