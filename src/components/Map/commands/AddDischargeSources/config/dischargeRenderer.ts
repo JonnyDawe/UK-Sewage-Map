@@ -19,6 +19,7 @@ import {
  * - Discharging: Large poo icon (40x40)
  * - Not Discharging: Small green tick (20x20)
  * - Recent Discharge: Medium error icon (24x24)
+ * - Offline: Small unknown icon (20x20)
  * - Unknown Status: Small unknown icon (20x20)
  */
 const uniqueValueGroups = [
@@ -40,9 +41,14 @@ const uniqueValueGroups = [
         values: 2,
       }),
       new UniqueValueClass({
-        label: 'Unknown Status',
+        label: 'Offline',
         symbol: new PictureMarkerSymbol({ url: UNKNOWNICON, width: '20', height: '20' }),
         values: 1,
+      }),
+      new UniqueValueClass({
+        label: 'Unknown Status',
+        symbol: new PictureMarkerSymbol({ url: UNKNOWNICON, width: '20', height: '20' }),
+        values: 999,
       }),
     ],
   }),

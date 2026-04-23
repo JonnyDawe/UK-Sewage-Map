@@ -9,11 +9,12 @@ export default async function handler(): Promise<Response> {
   try {
     const response = await fetch(SCOTTISH_WATER_API_URL);
     const text = await response.text();
+    const contentType = response.headers.get('Content-Type') ?? 'application/json';
     return new Response(text, {
       status: response.status,
       headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=60, s-maxage=60',
+        'Content-Type': contentType,
+        'Cache-Control': response.ok ? 'public, max-age=60, s-maxage=60' : 'no-store',
       },
     });
   } catch (err) {

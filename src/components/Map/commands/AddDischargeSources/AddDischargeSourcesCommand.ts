@@ -99,6 +99,11 @@ export class AddDischargeSourcesCommand implements MapCommand {
     });
   }
 
+  private parseTimestamp(dateString: string): number | null {
+    const ts = new Date(dateString).getTime();
+    return Number.isNaN(ts) ? null : ts;
+  }
+
   private async createScottishWaterLayer(): Promise<__esri.FeatureLayer | null> {
     const scottishWaterConfig = waterCompanyConfig['Scottish Water'];
     if (!scottishWaterConfig || scottishWaterConfig.apiType !== 'scottishwater') return null;
@@ -145,10 +150,10 @@ export class AddDischargeSourcesCommand implements MapCommand {
               OVERFLOW_STATUS_ID: item.OVERFLOW_STATUS_ID,
               RECEIVING_WATER: item.RECEIVING_WATER,
               OVERFLOW_START_DATETIME: item.OVERFLOW_START_DATETIME
-                ? new Date(item.OVERFLOW_START_DATETIME).getTime()
+                ? this.parseTimestamp(item.OVERFLOW_START_DATETIME)
                 : null,
               OVERFLOW_END_DATETIME: item.OVERFLOW_END_DATETIME
-                ? new Date(item.OVERFLOW_END_DATETIME).getTime()
+                ? this.parseTimestamp(item.OVERFLOW_END_DATETIME)
                 : null,
             },
           }),
