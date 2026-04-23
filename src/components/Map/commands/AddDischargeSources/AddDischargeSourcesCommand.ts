@@ -55,6 +55,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
           },
           title: 'Thames Water',
           id: this.generateLayerId('Thames Water'),
+          copyright: 'Thames Water',
           outFields: ['*'],
           renderer: thamesWaterAlertStatusRenderer,
           popupTemplate: dischargePopupTemplate,
@@ -162,6 +163,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
       return new FeatureLayer({
         title: 'Scottish Water',
         id: this.generateLayerId('Scottish Water'),
+        copyright: 'Scottish Water',
         source: graphics,
         geometryType: 'point',
         spatialReference: { wkid: 4326 },
