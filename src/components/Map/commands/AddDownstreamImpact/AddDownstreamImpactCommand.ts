@@ -5,7 +5,7 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
 
 import { createDownstreamImpactPopupTemplate } from '@/components/DownstreamImpactPopup/popupfactory';
-import { ArcGISWaterCompanyConfig, isArcGISWaterCompanyConfig, waterCompanyConfig } from '@/constants/sewagemapdata';
+import { WaterCompanyConfig, waterCompanyConfig } from '@/constants/sewagemapdata';
 import {
   MapCommand,
   ViewCommand,
@@ -52,8 +52,8 @@ export class AddDownstreamImpactCommand implements MapCommand {
 
   private initializeLayers(): void {
     this.mapLayers = Object.entries(waterCompanyConfig)
-      .filter((entry): entry is [string, ArcGISWaterCompanyConfig] =>
-        isArcGISWaterCompanyConfig(entry[1]),
+      .filter((entry): entry is [string, WaterCompanyConfig & { infoUrl: string }] =>
+        'infoUrl' in entry[1],
       )
       .map(([companyName, config]) => ({
         layer: new GeoJSONLayer({

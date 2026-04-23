@@ -10,6 +10,7 @@ export type ArcGISWaterCompanyConfig = {
 export type ScottishWaterCompanyConfig = {
   apiType: Extract<ApiType, 'scottishwater'>;
   apiUrl: string;
+  infoUrl: string;
 };
 
 export type WaterCompanyConfig = ArcGISWaterCompanyConfig | ScottishWaterCompanyConfig;
@@ -96,5 +97,7 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
   'Scottish Water': {
     apiType: 'scottishwater',
     apiUrl: '/api/scottish-water',
+    infoUrl:
+      'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/scottish/scottish_info_now_incl_48hrs.geojson',
   },
 };
