@@ -33,3 +33,6 @@ npm-debug.log*
 .vercel
 .swc/plugins/*
 
+
+# build output
+/dist

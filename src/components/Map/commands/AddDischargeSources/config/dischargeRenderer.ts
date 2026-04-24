@@ -9,6 +9,7 @@ import { ERRORICON, GREENTICKICONSMALL, POOICON, UNKNOWNICON } from '@/constants
 
 import {
   otherWaterAlertStatusSymbolArcade,
+  scottishWaterAlertStatusSymbolArcade,
   thamesWaterAlertStatusSymbolArcade,
 } from './dischargeSourceRendererArcade';
 
@@ -18,6 +19,7 @@ import {
  * - Discharging: Large poo icon (40x40)
  * - Not Discharging: Small green tick (20x20)
  * - Recent Discharge: Medium error icon (24x24)
+ * - Offline: Small unknown icon (20x20)
  * - Unknown Status: Small unknown icon (20x20)
  */
 const uniqueValueGroups = [
@@ -39,9 +41,14 @@ const uniqueValueGroups = [
         values: 2,
       }),
       new UniqueValueClass({
-        label: 'Unknown Status',
+        label: 'Offline',
         symbol: new PictureMarkerSymbol({ url: UNKNOWNICON, width: '20', height: '20' }),
         values: 1,
+      }),
+      new UniqueValueClass({
+        label: 'Unknown Status',
+        symbol: new PictureMarkerSymbol({ url: UNKNOWNICON, width: '20', height: '20' }),
+        values: 999,
       }),
     ],
   }),
@@ -120,6 +127,16 @@ export const thamesWaterAlertStatusRenderer = new UniqueValueRenderer({
  */
 export const otherWaterAlertStatusRenderer = new UniqueValueRenderer({
   valueExpression: otherWaterAlertStatusSymbolArcade,
+  uniqueValueGroups,
+  visualVariables: [sizeVariable],
+});
+
+/**
+ * Renderer for Scottish Water discharge sources.
+ * Uses unique value rendering based on OVERFLOW_STATUS_ID with scale-based symbol sizing.
+ */
+export const scottishWaterAlertStatusRenderer = new UniqueValueRenderer({
+  valueExpression: scottishWaterAlertStatusSymbolArcade,
   uniqueValueGroups,
   visualVariables: [sizeVariable],
 });

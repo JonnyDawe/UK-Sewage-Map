@@ -11,8 +11,10 @@ import {
 } from 'date-fns';
 
 import {
+  ScottishWaterDischargeAttributes,
   SouthWestWaterDischargeAttributes,
   ThamesWaterDischargeAttributes,
+  validateScottishWaterDischargeAttributes,
   validateSouthWestWaterDischargeAttributes,
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
@@ -39,6 +41,9 @@ export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeDat
   const validatedWaterCompanyAttributes = validateWaterCompanyDischargeAttributes(
     graphic.attributes,
   );
+  const validatedScottishWaterAttributes = validateScottishWaterDischargeAttributes(
+    graphic.attributes,
+  );
 
   if (validatedThamesWaterAttributes) {
     return getRenderPropsFromThamesWaterAttributes(validatedThamesWaterAttributes);
@@ -46,6 +51,10 @@ export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeDat
 
   if (validatedSouthWestWaterAttributes) {
     return getRenderPropsFromSouthWestWaterAttributes(validatedSouthWestWaterAttributes);
+  }
+
+  if (validatedScottishWaterAttributes) {
+    return getRenderPropsFromScottishWaterAttributes(validatedScottishWaterAttributes);
   }
 
   if (validatedWaterCompanyAttributes) {
@@ -100,6 +109,33 @@ function getRenderPropsFromSouthWestWaterAttributes(
     },
     feeds: attributes.receivingWaterCourse?.toLowerCase() ?? '',
     location: '',
+  };
+}
+
+function getRenderPropsFromScottishWaterAttributes(
+  attributes: ScottishWaterDischargeAttributes,
+): DischargeData {
+  // OVERFLOW_STATUS_ID: 13 = Overflowing, 14 = Recent Overflow, 15 = No Overflows, 16 = No Data
+  const statusId = attributes.OVERFLOW_STATUS_ID;
+  const alertStatus: AlertStatus =
+    statusId === 13
+      ? 'Discharging'
+      : statusId === 14
+        ? 'Recent Discharge'
+        : statusId === 15
+          ? 'Not Discharging'
+          : 'Offline';
+
+  return {
+    id: attributes.ASSET_ID,
+    company: 'Scottish Water',
+    alertStatus,
+    dischargeInterval: {
+      start: attributes.OVERFLOW_START_DATETIME,
+      end: attributes.OVERFLOW_END_DATETIME,
+    },
+    feeds: attributes.RECEIVING_WATER?.toLowerCase() ?? '',
+    location: attributes.ASSET_NAME,
   };
 }
 

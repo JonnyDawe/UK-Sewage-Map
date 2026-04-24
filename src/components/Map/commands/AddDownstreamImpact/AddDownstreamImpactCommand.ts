@@ -5,8 +5,11 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
 
 import { createDownstreamImpactPopupTemplate } from '@/components/DownstreamImpactPopup/popupfactory';
-import { waterCompanyConfig } from '@/constants/sewagemapdata';
-import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
+import { WaterCompanyConfig, waterCompanyConfig } from '@/constants/sewagemapdata';
+import {
+  MapCommand,
+  ViewCommand,
+} from '@/lib/arcgis/typings/commandtypes';
 
 import { SewageMapLayerManagerActor } from '../../layermanagement/types';
 
@@ -48,20 +51,24 @@ export class AddDownstreamImpactCommand implements MapCommand {
   }
 
   private initializeLayers(): void {
-    this.mapLayers = Object.entries(waterCompanyConfig).map(([companyName, config]) => ({
-      layer: new GeoJSONLayer({
-        url: config.infoUrl,
-        copyright: 'Sewage Map',
-        renderer: transparentPointRenderer,
-        id: this.generateLayerId(companyName),
-        title: this.generateLayerName(companyName),
-        popupTemplate: createDownstreamImpactPopupTemplate(companyName),
-        popupEnabled: true,
-        fields: downstreamImpactFields,
-        outFields: ['*'],
-      }),
-      companyName,
-    }));
+    this.mapLayers = Object.entries(waterCompanyConfig)
+      .filter((entry): entry is [string, WaterCompanyConfig & { infoUrl: string }] =>
+        'infoUrl' in entry[1],
+      )
+      .map(([companyName, config]) => ({
+        layer: new GeoJSONLayer({
+          url: config.infoUrl,
+          copyright: 'Sewage Map',
+          renderer: transparentPointRenderer,
+          id: this.generateLayerId(companyName),
+          title: this.generateLayerName(companyName),
+          popupTemplate: createDownstreamImpactPopupTemplate(companyName),
+          popupEnabled: true,
+          fields: downstreamImpactFields,
+          outFields: ['*'],
+        }),
+        companyName,
+      }));
   }
 
   async executeOnMap(map: EsriMap): Promise<ViewCommand | void> {

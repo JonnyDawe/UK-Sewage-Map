@@ -1,11 +1,26 @@
-export type ApiType = 'stream' | 'thames';
+export type ApiType = 'stream' | 'thames' | 'scottishwater';
 
-export type WaterCompanyConfig = {
+export type ArcGISWaterCompanyConfig = {
   apiLayerId: string;
   dischargeUrl: string;
   infoUrl: string;
-  apiType: ApiType;
+  apiType: Extract<ApiType, 'stream' | 'thames'>;
 };
+
+export type ScottishWaterCompanyConfig = {
+  apiType: Extract<ApiType, 'scottishwater'>;
+  apiUrl: string;
+  dischargeUrl: string;
+  infoUrl: string;
+};
+
+export type WaterCompanyConfig = ArcGISWaterCompanyConfig | ScottishWaterCompanyConfig;
+
+export function isArcGISWaterCompanyConfig(
+  config: WaterCompanyConfig,
+): config is ArcGISWaterCompanyConfig {
+  return config.apiType === 'stream' || config.apiType === 'thames';
+}
 
 export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
   'Northumbrian Water': {
@@ -80,4 +95,12 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
       'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/southwest/southwest_info_now_incl_48hrs.geojson',
     apiType: 'stream',
   },
-} as const;
+  'Scottish Water': {
+    apiType: 'scottishwater',
+    apiUrl: '/api/scottish-water',
+    dischargeUrl:
+      'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/scottish/scottish_now_incl_48hrs.geojson',
+    infoUrl:
+      'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/scottish/scottish_info_now_incl_48hrs.geojson',
+  },
+};
