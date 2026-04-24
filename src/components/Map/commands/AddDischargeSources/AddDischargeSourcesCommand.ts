@@ -114,9 +114,10 @@ export class AddDischargeSourcesCommand implements MapCommand {
     welshWaterCompanyConfigs.forEach(([companyName, config]) => {
       this.layers.push({
         layer: new FeatureLayer({
-          title: companyName,
+          title: 'Welsh Water/Dŵr Cymru',
           id: this.generateLayerId(companyName),
           url: config.apiUrl,
+          copyright: 'Welsh Water/Dŵr Cymru',
           outFields: ['*'],
           renderer: welshWaterAlertStatusRenderer,
           popupTemplate: dischargePopupTemplate,
@@ -388,7 +389,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
         view.openPopup({ features });
         view.goTo({ target: features[0], zoom: 12 }, { animate: false });
       }
-    } else if (layer.title === 'Welsh Water') {
+    } else if (layer.title === 'Welsh Water/Dŵr Cymru') {
       const query = layer.createQuery();
       query.where = `DCWW_ID = '${escapedCsoId}'`;
       query.returnGeometry = true;

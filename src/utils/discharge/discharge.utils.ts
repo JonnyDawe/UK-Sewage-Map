@@ -166,7 +166,7 @@ function getRenderPropsFromWelshWaterAttributes(
 
   return {
     id: attributes.DCWW_ID,
-    company: 'Welsh Water',
+    company: 'Welsh Water/Dŵr Cymru',
     alertStatus: isDischarging
       ? 'Discharging'
       : isRecentDischarge

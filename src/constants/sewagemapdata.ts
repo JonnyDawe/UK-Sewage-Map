@@ -17,6 +17,8 @@ export type ScottishWaterCompanyConfig = {
 export type WelshWaterCompanyConfig = {
   apiType: Extract<ApiType, 'welshwater'>;
   apiUrl: string;
+  dischargeUrl: string;
+  infoUrl: string;
 };
 
 export type WaterCompanyConfig =
@@ -121,5 +123,9 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
     apiType: 'welshwater',
     apiUrl:
       'https://services3.arcgis.com/KLNF7YxtENPLYVey/arcgis/rest/services/Spill_Prod/FeatureServer/0',
+    dischargeUrl:
+      'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/welsh/welsh_now_incl_48hrs.geojson',
+    infoUrl:
+      'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/welsh/welsh_info_now_incl_48hrs.geojson',
   },
 };
