@@ -1,4 +1,4 @@
-export type ApiType = 'stream' | 'thames' | 'scottishwater';
+export type ApiType = 'stream' | 'thames' | 'scottishwater' | 'welshwater';
 
 export type ArcGISWaterCompanyConfig = {
   apiLayerId: string;
@@ -14,12 +14,26 @@ export type ScottishWaterCompanyConfig = {
   infoUrl: string;
 };
 
-export type WaterCompanyConfig = ArcGISWaterCompanyConfig | ScottishWaterCompanyConfig;
+export type WelshWaterCompanyConfig = {
+  apiType: Extract<ApiType, 'welshwater'>;
+  apiUrl: string;
+};
+
+export type WaterCompanyConfig =
+  | ArcGISWaterCompanyConfig
+  | ScottishWaterCompanyConfig
+  | WelshWaterCompanyConfig;
 
 export function isArcGISWaterCompanyConfig(
   config: WaterCompanyConfig,
 ): config is ArcGISWaterCompanyConfig {
   return config.apiType === 'stream' || config.apiType === 'thames';
+}
+
+export function isWelshWaterCompanyConfig(
+  config: WaterCompanyConfig,
+): config is WelshWaterCompanyConfig {
+  return config.apiType === 'welshwater';
 }
 
 export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
@@ -102,5 +116,10 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
       'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/scottish/scottish_now_incl_48hrs.geojson',
     infoUrl:
       'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/scottish/scottish_info_now_incl_48hrs.geojson',
+  },
+  'Welsh Water': {
+    apiType: 'welshwater',
+    apiUrl:
+      'https://services3.arcgis.com/KLNF7YxtENPLYVey/arcgis/rest/services/Spill_Prod/FeatureServer/0',
   },
 };

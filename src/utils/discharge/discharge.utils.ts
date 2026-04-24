@@ -18,7 +18,9 @@ import {
   validateSouthWestWaterDischargeAttributes,
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
+  validateWelshWaterDischargeAttributes,
   WaterCompanyDischargeAttributes,
+  WelshWaterDischargeAttributes,
 } from './schemas';
 import {
   AlertStatus,
@@ -44,6 +46,7 @@ export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeDat
   const validatedScottishWaterAttributes = validateScottishWaterDischargeAttributes(
     graphic.attributes,
   );
+  const validatedWelshWaterAttributes = validateWelshWaterDischargeAttributes(graphic.attributes);
 
   if (validatedThamesWaterAttributes) {
     return getRenderPropsFromThamesWaterAttributes(validatedThamesWaterAttributes);
@@ -55,6 +58,10 @@ export function getRenderPropsFromGraphic(graphic: __esri.Graphic): DischargeDat
 
   if (validatedScottishWaterAttributes) {
     return getRenderPropsFromScottishWaterAttributes(validatedScottishWaterAttributes);
+  }
+
+  if (validatedWelshWaterAttributes) {
+    return getRenderPropsFromWelshWaterAttributes(validatedWelshWaterAttributes);
   }
 
   if (validatedWaterCompanyAttributes) {
@@ -136,6 +143,41 @@ function getRenderPropsFromScottishWaterAttributes(
     },
     feeds: attributes.RECEIVING_WATER?.toLowerCase() ?? '',
     location: attributes.ASSET_NAME,
+  };
+}
+
+function getRenderPropsFromWelshWaterAttributes(
+  attributes: WelshWaterDischargeAttributes,
+): DischargeData {
+  const status = attributes.status?.toLowerCase().trim() ?? '';
+  const isDischarging = status === 'overflow operating';
+  const isExplicitlyRecent = status.includes('has in the last');
+
+  const startMs = attributes.start_date_time_discharge
+    ? new Date(attributes.start_date_time_discharge).getTime()
+    : null;
+  const endMs = attributes.stop_date_time_discharge
+    ? new Date(attributes.stop_date_time_discharge).getTime()
+    : null;
+
+  const isRecentDischarge =
+    isExplicitlyRecent ||
+    (!isDischarging && endMs != null && differenceInHours(new Date(), endMs) <= 48);
+
+  return {
+    id: attributes.DCWW_ID,
+    company: 'Welsh Water',
+    alertStatus: isDischarging
+      ? 'Discharging'
+      : isRecentDischarge
+        ? 'Recent Discharge'
+        : 'Not Discharging',
+    dischargeInterval: {
+      start: startMs,
+      end: endMs,
+    },
+    feeds: attributes.Receiving_Water?.toLowerCase() ?? '',
+    location: attributes.asset_name ?? '',
   };
 }
 
