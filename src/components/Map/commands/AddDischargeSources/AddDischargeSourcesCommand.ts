@@ -84,6 +84,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
           portalItem: {
             id: config.apiLayerId,
           },
+          minScale: 0,
           outFields: ['*'],
           renderer: otherWaterAlertStatusRenderer,
           popupTemplate: dischargePopupTemplate,
