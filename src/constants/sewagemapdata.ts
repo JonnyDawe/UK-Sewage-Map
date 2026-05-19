@@ -80,7 +80,7 @@ export const waterCompanyConfig: Record<string, WaterCompanyConfig> = {
     apiType: 'stream',
   },
   'Southern Water': {
-    apiLayerId: 'e45af5111aa943638d6988ba33eb444e',
+    apiLayerId: '7f5ee61ab15d4c79a3f708ccf448a810',
     dischargeUrl:
       'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/southern/southern_now_incl_48hrs.geojson',
     infoUrl:
