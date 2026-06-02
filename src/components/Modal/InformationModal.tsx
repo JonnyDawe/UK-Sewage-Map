@@ -85,9 +85,13 @@ const InformationModal = () => {
                         Storm Overflow Hub
                       </Link>{' '}
                       maintained by Water UK.{' '}
-                      <Link href="https://data.thameswater.co.uk/s/">Thames Water</Link> and{' '}
+                      <Link href="https://data.thameswater.co.uk/s/">Thames Water</Link>,{' '}
                       <Link href="https://www.scottishwater.co.uk/Help-and-Resources/Open-Data/Overflow-Map-Data">
                         Scottish Water
+                      </Link>{' '}
+                      and{' '}
+                      <Link href="https://corporate.dwrcymru.com/en/community/environment/storm-overflow-map">
+                        Welsh Water/Dŵr Cymru
                       </Link>{' '}
                       provide their own APIs which we use for their regions. We wrote an article
                       about why water companies need to be more transparent with environmental

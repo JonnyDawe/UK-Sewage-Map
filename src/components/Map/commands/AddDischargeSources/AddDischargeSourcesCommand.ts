@@ -5,13 +5,18 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Field from '@arcgis/core/layers/support/Field';
 import EsriMap from '@arcgis/core/Map';
 
-import { ArcGISWaterCompanyConfig, waterCompanyConfig } from '@/constants/sewagemapdata';
+import {
+  ArcGISWaterCompanyConfig,
+  waterCompanyConfig,
+  WelshWaterCompanyConfig,
+} from '@/constants/sewagemapdata';
 import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 import {
   validateScottishWaterApiResponse,
   validateScottishWaterDischargeAttributes,
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
+  validateWelshWaterDischargeAttributes,
 } from '@/utils/discharge/schemas';
 
 import { SewageMapLayerManagerActor } from '../../layermanagement/types';
@@ -20,11 +25,13 @@ import {
   otherWaterAlertStatusRenderer,
   scottishWaterAlertStatusRenderer,
   thamesWaterAlertStatusRenderer,
+  welshWaterAlertStatusRenderer,
 } from './config/dischargeRenderer';
 import {
   otherWaterAlertStatusSymbolArcade,
   scottishWaterAlertStatusSymbolArcade,
   thamesWaterAlertStatusSymbolArcade,
+  welshWaterAlertStatusSymbolArcade,
 } from './config/dischargeSourceRendererArcade';
 
 export class AddDischargeSourcesCommand implements MapCommand {
@@ -92,6 +99,33 @@ export class AddDischargeSourcesCommand implements MapCommand {
           orderBy: [
             {
               valueExpression: otherWaterAlertStatusSymbolArcade,
+              order: 'descending',
+            },
+          ],
+        }),
+        companyName,
+      });
+    });
+
+    const welshWaterCompanyConfigs = Object.entries(waterCompanyConfig).filter(
+      (entry): entry is [string, WelshWaterCompanyConfig] => entry[1].apiType === 'welshwater',
+    );
+
+    // Add Welsh Water layers (ArcGIS FeatureServer URL, welsh water status string schema)
+    welshWaterCompanyConfigs.forEach(([companyName, config]) => {
+      this.layers.push({
+        layer: new FeatureLayer({
+          title: 'Welsh Water/Dŵr Cymru',
+          id: this.generateLayerId(companyName),
+          url: config.apiUrl,
+          copyright: 'Welsh Water/Dŵr Cymru',
+          outFields: ['*'],
+          renderer: welshWaterAlertStatusRenderer,
+          popupTemplate: dischargePopupTemplate,
+          popupEnabled: true,
+          orderBy: [
+            {
+              valueExpression: welshWaterAlertStatusSymbolArcade,
               order: 'descending',
             },
           ],
@@ -292,13 +326,21 @@ export class AddDischargeSourcesCommand implements MapCommand {
           const scottishWaterAttributes = validateScottishWaterDischargeAttributes(
             graphic.attributes,
           );
+          const welshWaterAttributes = validateWelshWaterDischargeAttributes(graphic.attributes);
 
-          if (!thamesAttributes && !otherAttributes && !scottishWaterAttributes) return;
+          if (
+            !thamesAttributes &&
+            !otherAttributes &&
+            !scottishWaterAttributes &&
+            !welshWaterAttributes
+          )
+            return;
 
           const id =
             thamesAttributes?.PermitNumber ??
             otherAttributes?.Id ??
             scottishWaterAttributes?.ASSET_ID ??
+            welshWaterAttributes?.DCWW_ID ??
             '';
           this.setPathname(id, layerView.layer.title ?? '');
           await this.goToFeature(view, graphic);
@@ -341,6 +383,16 @@ export class AddDischargeSourcesCommand implements MapCommand {
     } else if (layer.title === 'Scottish Water') {
       const query = layer.createQuery();
       query.where = `ASSET_ID = '${escapedCsoId}'`;
+      query.returnGeometry = true;
+
+      const { features } = await layer.queryFeatures(query);
+      if (features.length > 0) {
+        view.openPopup({ features });
+        view.goTo({ target: features[0], zoom: 12 }, { animate: false });
+      }
+    } else if (layer.title === 'Welsh Water/Dŵr Cymru') {
+      const query = layer.createQuery();
+      query.where = `DCWW_ID = '${escapedCsoId}'`;
       query.returnGeometry = true;
 
       const { features } = await layer.queryFeatures(query);
