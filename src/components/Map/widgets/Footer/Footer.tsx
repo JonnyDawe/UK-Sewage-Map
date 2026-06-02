@@ -29,7 +29,7 @@ const TimeStampWrapper = styled(Flex)`
 
 function TimeStamp() {
   const { data, isLoading } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/downstream_impact/global_timestamp.txt',
+    'https://d2kt3jo7oib5qn.cloudfront.net/downstream_impact/global_timestamp.txt',
     fetchTimeStamp,
   );
 
