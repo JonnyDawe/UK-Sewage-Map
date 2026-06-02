@@ -253,12 +253,12 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
     isLoading,
     error,
   } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now.json',
+    'https://d2kt3jo7oib5qn.cloudfront.net/discharges_to_date/up_to_now.json',
     fetchHistoricDischargeData,
   );
 
   const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/timestamp.txt',
+    'https://d2kt3jo7oib5qn.cloudfront.net/discharges_to_date/timestamp.txt',
     fetchTimeStamp,
   );
 
@@ -358,12 +358,12 @@ function OfflineTimeline({ locationName }: { locationName: string }) {
     isLoading,
     error,
   } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now_offline.json',
+    'https://d2kt3jo7oib5qn.cloudfront.net/discharges_to_date/up_to_now_offline.json',
     fetchHistoricDischargeData,
   );
 
   const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/timestamp.txt',
+    'https://d2kt3jo7oib5qn.cloudfront.net/discharges_to_date/timestamp.txt',
     fetchTimeStamp,
   );
 
