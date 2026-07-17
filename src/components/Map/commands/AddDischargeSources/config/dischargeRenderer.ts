@@ -11,6 +11,7 @@ import {
   otherWaterAlertStatusSymbolArcade,
   scottishWaterAlertStatusSymbolArcade,
   thamesWaterAlertStatusSymbolArcade,
+  welshWaterAlertStatusSymbolArcade,
 } from './dischargeSourceRendererArcade';
 
 /**
@@ -137,6 +138,16 @@ export const otherWaterAlertStatusRenderer = new UniqueValueRenderer({
  */
 export const scottishWaterAlertStatusRenderer = new UniqueValueRenderer({
   valueExpression: scottishWaterAlertStatusSymbolArcade,
+  uniqueValueGroups,
+  visualVariables: [sizeVariable],
+});
+
+/**
+ * Renderer for Welsh Water discharge sources.
+ * Uses unique value rendering based on the status string field with scale-based symbol sizing.
+ */
+export const welshWaterAlertStatusRenderer = new UniqueValueRenderer({
+  valueExpression: welshWaterAlertStatusSymbolArcade,
   uniqueValueGroups,
   visualVariables: [sizeVariable],
 });

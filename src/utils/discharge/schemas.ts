@@ -132,3 +132,27 @@ export const validateSouthWestWaterDischargeAttributes = (
   }
   return result.data;
 };
+
+// Welsh Water status values (from status string field):
+// "Overflow Operating" = Currently discharging
+// "Overflow Not Operating (Has in the last 24 hours)" = Recent discharge
+// "Overflow Not Operating" = Not currently discharging (check stop_date_time_discharge for 48hr window)
+
+export const welshWaterDischargeAttributesSchema = z.object({
+  DCWW_ID: z.string().max(256).nullable(),
+  asset_name: z.string().max(256).nullable(),
+  status: z.string().max(256).nullable(),
+  start_date_time_discharge: z.string().nullable(),
+  stop_date_time_discharge: z.string().nullable(),
+  Receiving_Water: z.string().max(256).nullable(),
+  permit_number: z.string().max(256).nullable(),
+});
+
+export type WelshWaterDischargeAttributes = z.infer<typeof welshWaterDischargeAttributesSchema>;
+
+export const validateWelshWaterDischargeAttributes = (
+  attributes: unknown,
+): WelshWaterDischargeAttributes | null => {
+  const result = welshWaterDischargeAttributesSchema.safeParse(attributes);
+  return result.success ? result.data : null;
+};

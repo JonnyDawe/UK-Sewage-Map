@@ -54,3 +54,26 @@ if ($feature.OVERFLOW_STATUS_ID == 13) {
 }
 return 999 // Unknown Status
 `;
+
+// Welsh Water status string values:
+// "Overflow Operating" = Currently discharging
+// "Overflow Not Operating (Has in the last 24 hours)" = Recent discharge (within 48hr threshold)
+// "Overflow Not Operating" = Not discharging; check stop_date_time_discharge for 48hr window
+export const welshWaterAlertStatusSymbolArcade = `
+var status = Lower(Trim($feature.status));
+if (status == "overflow operating") {
+    return 3 // Discharging
+} else if (Find("has in the last", status) != -1) {
+    return 2 // Recent Discharge
+} else if (status == "overflow not operating") {
+    if (IsEmpty($feature.stop_date_time_discharge)) {
+        return 0
+    }
+    var stopDate = Date($feature.stop_date_time_discharge);
+    if (!IsEmpty(stopDate) && DateDiff(Now(), stopDate, 'hours') <= 48) {
+        return 2 // Recent Discharge
+    }
+    return 0 // Not Discharging
+}
+return 999 // Unknown Status
+`;

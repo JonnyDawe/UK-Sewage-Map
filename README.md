@@ -4,7 +4,7 @@
   <img src="public/favicon/favicon.svg" alt="UK Sewage Map Logo" width="100" height="132">
 </p>
 
-A real-time visualization tool showing river sections affected by sewage discharges from combined sewer overflows across the UK. The application combines Event Duration Monitoring (EDM) data with a basic hydrological model to track sewage discharges downstream along non-tidal river networks.
+A real-time visualization tool showing river sections affected by sewage discharges from combined sewer overflows across England, Scotland and Wales. The application combines Event Duration Monitoring (EDM) data with a basic hydrological model to track sewage discharges downstream along non-tidal river networks.
 
 [Live Site](https://www.sewagemap.co.uk) | [Design Files](https://www.figma.com/file/EOJLW1aVdvAh9sTzbQK1uk/App-UI?type=design&node-id=0%3A1&mode=design&t=JhhOq4y180yDKHd3-1)
 
@@ -102,7 +102,7 @@ npm run dev
 The application combines several data sources:
 
 ### Event Duration Monitoring (EDM)
-Real-time data is collected through Event Duration Monitoring by individual water companies, providing near-real time data on storm overflows. This data is accessed via the [Storm Overflow Hub](https://www.streamwaterdata.co.uk/pages/storm-overflows-data) maintained by Water UK. Storm overflows release untreated, diluted sewage into the environment. Currently, only Thames Water provides an API for accessing historical sewage spill data. For more context, read our article about [why water companies need to be more transparent](https://theconversation.com/water-companies-now-have-to-release-live-sewage-spill-data-heres-why-more-transparency-is-the-key-to-cleaner-rivers-239444) with environmental models and data.
+Real-time data is collected through Event Duration Monitoring by individual water companies across England, Scotland and Wales, providing near-real time data on storm overflows. This data is accessed via the [Storm Overflow Hub](https://www.streamwaterdata.co.uk/pages/storm-overflows-data) maintained by Water UK. Storm overflows release untreated, diluted sewage into the environment. [Thames Water](https://data.thameswater.co.uk/s/), [Scottish Water](https://www.scottishwater.co.uk/Help-and-Resources/Open-Data/Overflow-Map-Data) and [Welsh Water/Dŵr Cymru](https://corporate.dwrcymru.com/en/community/environment/storm-overflow-map) provide their own APIs which we use for their regions. For more context, read our article about [why water companies need to be more transparent](https://theconversation.com/water-companies-now-have-to-release-live-sewage-spill-data-heres-why-more-transparency-is-the-key-to-cleaner-rivers-239444) with environmental models and data.
 
 ### Other Data Sources
 - Center for Ecology and Hydrology's Integrated Hydrological Digital Terrain Model
