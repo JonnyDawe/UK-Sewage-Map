@@ -56,6 +56,7 @@ export class AddDischargeSourcesCommand implements MapCommand {
           title: 'Thames Water',
           id: this.generateLayerId('Thames Water'),
           copyright: 'Thames Water',
+          minScale: 0,
           outFields: ['*'],
           renderer: thamesWaterAlertStatusRenderer,
           popupTemplate: dischargePopupTemplate,
