@@ -106,8 +106,12 @@ export const validateScottishWaterDischargeAttributes = (
   return result.success ? result.data : null;
 };
 
+// South West Water's service (NEH_outlets_PROD) is the only 'stream' source that uses
+// lowercase-first field names. Note the id field is `Id`, matching the other companies,
+// while every other field differs in case — so this schema must not be assumed to be a
+// straight lowercasing of waterCompanyDischargeAttributesSchema.
 export const southWestWaterDischargeAttributesSchema = z.object({
-  ID: z.string().max(256).nullable(),
+  Id: z.string().max(256).nullable(),
   company: z.string().max(256).nullable(),
   status: z.number().nullable(), // -1: Offline, 0: Stop, 1: Start
   statusStart: z.number().nullable(), // esriFieldTypeDate

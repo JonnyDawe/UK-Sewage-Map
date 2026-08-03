@@ -94,7 +94,7 @@ function getRenderPropsFromSouthWestWaterAttributes(
     differenceInHours(new Date(), attributes.latestEventEnd) <= 48;
 
   return {
-    id: attributes.ID,
+    id: attributes.Id,
     company: attributes.company,
     alertStatus: isDischarging
       ? 'Discharging'
