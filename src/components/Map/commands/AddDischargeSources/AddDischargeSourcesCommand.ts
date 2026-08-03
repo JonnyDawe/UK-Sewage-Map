@@ -10,6 +10,7 @@ import { MapCommand, ViewCommand } from '@/lib/arcgis/typings/commandtypes';
 import {
   validateScottishWaterApiResponse,
   validateScottishWaterDischargeAttributes,
+  validateSouthWestWaterDischargeAttributes,
   validateThamesWaterDischargeAttributes,
   validateWaterCompanyDischargeAttributes,
 } from '@/utils/discharge/schemas';
@@ -293,13 +294,23 @@ export class AddDischargeSourcesCommand implements MapCommand {
           const scottishWaterAttributes = validateScottishWaterDischargeAttributes(
             graphic.attributes,
           );
+          const southWestWaterAttributes = validateSouthWestWaterDischargeAttributes(
+            graphic.attributes,
+          );
 
-          if (!thamesAttributes && !otherAttributes && !scottishWaterAttributes) return;
+          if (
+            !thamesAttributes &&
+            !otherAttributes &&
+            !scottishWaterAttributes &&
+            !southWestWaterAttributes
+          )
+            return;
 
           const id =
             thamesAttributes?.PermitNumber ??
             otherAttributes?.Id ??
             scottishWaterAttributes?.ASSET_ID ??
+            southWestWaterAttributes?.Id ??
             '';
           this.setPathname(id, layerView.layer.title ?? '');
           await this.goToFeature(view, graphic);
