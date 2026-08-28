@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { Blockquote, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import React from 'react';
 import { Chart } from 'react-google-charts';
-import useSWR from 'swr';
 
 import {
   calculateTotalDischargeLength,
@@ -19,6 +18,7 @@ import {
   DischargeHistoryPeriod,
 } from '../../../utils/discharge/types';
 import { InLineSelect } from '../../common/Select/InlineSelect';
+import { useDischargeHistory, useHistoryLastUpdated } from './useDischargeHistory';
 
 const CustomChart = styled(Chart)`
   svg {
@@ -140,7 +140,8 @@ function getEndDateOfInterest(period: DischargeHistoryPeriod) {
 }
 
 function processDataForLocation(
-  jsonData: DischargeHistoricalDataJSON,
+  // Undefined while the CSO's history file is still loading, or if it has none published.
+  jsonData: DischargeHistoricalDataJSON | undefined,
   locationName: string,
   selectedPeriod: DischargeHistoryPeriod,
 ) {
@@ -178,35 +179,6 @@ function processDataForLocation(
   };
 }
 
-async function fetchHistoricDischargeData(url: string) {
-  const res = await fetch(url);
-
-  // If the status code is not in the range 200-299,
-  // we still try to parse and throw it.
-  if (!res.ok) {
-    const error = new Error('An error occurred while fetching the historic discharge data.');
-    throw error;
-  }
-
-  return res.json();
-}
-
-// Fetch the last updated date of the historic discharge data
-// - This is stored in a .txt file
-const fetchTimeStamp = async (url: string): Promise<Date> => {
-  const res = await fetch(url);
-
-  // If the status code is not in the range 200-299,
-  // we still try to parse and throw it.
-  if (!res.ok) {
-    const error = new Error('An error occurred while fetching the Timestamp.');
-    throw error;
-  }
-
-  const dataString = await res.text();
-  return new Date(dataString);
-};
-
 function getHTMLContentForTooltip(discharge: { start: Date; end: Date }) {
   const startFormatted = getDischargeDateObject(discharge.start);
   return `<div
@@ -243,7 +215,13 @@ const TimeLineWrapper = styled.div`
   flex-direction: column;
   gap: 8px;
 `;
-function DischargeTimeline({ locationName }: { locationName: string }) {
+function DischargeTimeline({
+  locationName,
+  permitNumber,
+}: {
+  locationName: string;
+  permitNumber: string;
+}) {
   const [selectedPeriod, setSelectedPeriod] = React.useState<DischargeHistoryPeriod>(
     DischargeHistoryPeriod.Last6Months,
   );
@@ -252,15 +230,9 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
     data: historicDataJSON,
     isLoading,
     error,
-  } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now.json',
-    fetchHistoricDischargeData,
-  );
+  } = useDischargeHistory(permitNumber, 'discharge');
 
-  const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/timestamp.txt',
-    fetchTimeStamp,
-  );
+  const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useHistoryLastUpdated();
 
   if (isLoading || lastUpdatedLoading) {
     return <p>Loading...</p>;
@@ -348,7 +320,13 @@ function DischargeTimeline({ locationName }: { locationName: string }) {
   );
 }
 
-function OfflineTimeline({ locationName }: { locationName: string }) {
+function OfflineTimeline({
+  locationName,
+  permitNumber,
+}: {
+  locationName: string;
+  permitNumber: string;
+}) {
   const [selectedPeriod, setSelectedPeriod] = React.useState<DischargeHistoryPeriod>(
     DischargeHistoryPeriod.Last6Months,
   );
@@ -357,15 +335,9 @@ function OfflineTimeline({ locationName }: { locationName: string }) {
     data: historicOfflineDataJSON,
     isLoading,
     error,
-  } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/up_to_now_offline.json',
-    fetchHistoricDischargeData,
-  );
+  } = useDischargeHistory(permitNumber, 'offline');
 
-  const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useSWR(
-    'https://d1kmd884co9q6x.cloudfront.net/discharges_to_date/timestamp.txt',
-    fetchTimeStamp,
-  );
+  const { data: lastUpdatedDate, isLoading: lastUpdatedLoading } = useHistoryLastUpdated();
 
   if (isLoading || lastUpdatedLoading) {
     return <p>Loading...</p>;
@@ -462,9 +434,17 @@ const BulletPoint = styled.li`
   font-size: 14px;
 `;
 
-function HistoricDischarges({ company, locationName }: { company: string; locationName: string }) {
+function HistoricDischarges({
+  company,
+  locationName,
+  permitNumber,
+}: {
+  company: string;
+  locationName: string;
+  permitNumber: string;
+}) {
   if (company === 'Thames Water') {
-    return <DischargeTimeline locationName={locationName} />;
+    return <DischargeTimeline locationName={locationName} permitNumber={permitNumber} />;
   }
 
   const message =
@@ -507,12 +487,14 @@ function HistoricDischarges({ company, locationName }: { company: string; locati
 export function HistoricOfflinePeriods({
   company,
   locationName,
+  permitNumber,
 }: {
   company: string;
   locationName: string;
+  permitNumber: string;
 }) {
   if (company === 'Thames Water') {
-    return <OfflineTimeline locationName={locationName} />;
+    return <OfflineTimeline locationName={locationName} permitNumber={permitNumber} />;
   }
 
   const message =

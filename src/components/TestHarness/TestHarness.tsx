@@ -24,6 +24,7 @@ export function TestHarness() {
             },
             feeds: 'River Hart',
             locationName: 'Crondall',
+            permitNumber: 'CSSC.2450',
           }}
         ></PopUpBody>
       </PopupContainermock>
@@ -38,6 +39,7 @@ export function TestHarness() {
             },
             feeds: 'Basingstoke Canal',
             locationName: 'Elvetham Close',
+            permitNumber: 'TEMP.0917',
           }}
         ></PopUpBody>
       </PopupContainermock>
@@ -52,6 +54,7 @@ export function TestHarness() {
             },
             feeds: 'Fleet Brook',
             locationName: 'Avondale Rd',
+            permitNumber: 'TEMP.0376',
           }}
         ></PopUpBody>
       </PopupContainermock>
@@ -66,6 +69,7 @@ export function TestHarness() {
             },
             feeds: 'River Blackwater',
             locationName: 'Ash Vale',
+            permitNumber: 'TEMP.2354',
           }}
         ></PopUpBody>
       </PopupContainermock>

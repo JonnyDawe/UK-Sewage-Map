@@ -13,7 +13,8 @@ import { PopUpHeader } from './PopUpContent/PopUpHeader';
 export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }) {
   const container = document.createElement('div');
   const root = createRoot(container);
-  const { dischargeInterval, alertStatus, location, company } = getRenderPropsFromGraphic(graphic);
+  const { dischargeInterval, alertStatus, location, company, id } =
+    getRenderPropsFromGraphic(graphic);
 
   root.render(
     <React.StrictMode>
@@ -31,6 +32,7 @@ export function setEsriPopupHTMLContent({ graphic }: { graphic: __esri.Graphic }
             dischargeInterval={dischargeInterval}
             alertStatus={alertStatus}
             locationName={location ?? ''}
+            permitNumber={id ?? ''}
           ></PopUpBody>
         </AppTheme>
       </AppThemeProvider>

@@ -59,6 +59,7 @@ type DischargeMainContentType = {
   dischargeInterval: DischargeInterval;
   company: string;
   locationName: string;
+  permitNumber: string;
 };
 
 export function PopUpBody({
@@ -66,6 +67,7 @@ export function PopUpBody({
   dischargeInterval,
   company,
   locationName,
+  permitNumber,
 }: DischargeMainContentType) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -114,12 +116,20 @@ export function PopUpBody({
             </Tabs.Content>
             <Tabs.Content value="history">
               <DataCardWrapper>
-                <HistoricDischarges company={company} locationName={locationName} />
+                <HistoricDischarges
+                  company={company}
+                  locationName={locationName}
+                  permitNumber={permitNumber}
+                />
               </DataCardWrapper>
             </Tabs.Content>
             <Tabs.Content value="offline">
               <DataCardWrapper>
-                <HistoricOfflinePeriods company={company} locationName={locationName} />
+                <HistoricOfflinePeriods
+                  company={company}
+                  locationName={locationName}
+                  permitNumber={permitNumber}
+                />
               </DataCardWrapper>
             </Tabs.Content>
           </Box>
